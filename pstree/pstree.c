@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
         printf("\033[;41mscandir error!\033[0m\n");
     }
 
+    printf("%d%d%d\n", p_flag, n_flag, v_flag);
 
     return 0;
 }
