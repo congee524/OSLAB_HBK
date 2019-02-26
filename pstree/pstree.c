@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
                 printf("Have option: -n\n");
                 break;
             case 'V':
-                printf("Have option: -V\b");
+                printf("Have option: -V\n");
                 break;
             case '?':
                 printf("Unknown option: %c\n", (char)optopt);
