@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
     //printf("%s", namelist[6]->d_name);
 
     FILE *fp;
-    char pid_path[64];
+    char pid_path[64], str[128];
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 
         fp = fopen(pid_path, "r");
         while(!feof(fp)) {
-            fgets(str, 1024, fp);
+            fgets(str, 128, fp);
             printf("%s\n", str);
         }
         fclose(fp);
