@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
             }
             if ((tmp = my_get_id(str, "PPid")) != -1) {
                 ppid = tmp;
-                printf("ppid: %d\n", ppid);
+                // printf("ppid: %d\n", ppid);
             }
         }
         fclose(fp);
