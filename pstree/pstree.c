@@ -122,11 +122,14 @@ int main(int argc, char *argv[]) {
                 printf("ppid: %d\n", ppid);
             }
 
-            tmp = strlen(str);
-            k = j = 0;
+            // many wrong: space is in the 'a' to 'Z'
             if (strncmp(str, "Name", 4) == 0) {
+                tmp = strlen(str);
+                k = 4, j = 0;
                 printf("str: %s\n", str);
-                while(k < tmp && (str[k] < 'a' || str[k] > 'z')) {
+                while(k < tmp\
+                        && !(str[k] >= 'a' && str[k] <= 'z')\
+                        && !(str[k] >= 'A' && str[k] <= 'Z')) {
                     k++;
                 }
                 printf("len: %d, k: %d\n", tmp, k);
