@@ -101,8 +101,8 @@ int main(int argc, char *argv[]) {
     //printf("%s", namelist[6]->d_name);
 
     FILE *fp;
-    char pid_path[128], str[1024];
-    int pid, ppid, tmp;
+    char pid_path[128], name[128], str[1024];
+    int pid, ppid, tmp, i, j;
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
@@ -119,10 +119,20 @@ int main(int argc, char *argv[]) {
             }
             if ((tmp = my_get_id(str, "PPid")) != -1) {
                 ppid = tmp;
-                if (ppid == -1) {
-                    return 0;
+                printf("ppid: %d\n", ppid);
+            }
+
+            int i = 0, j = 0;
+            tmp = strlen(str);
+            if (strncmp(str, "Name", 4) == 0) {
+                while(i < tmp && (str[i] < 'a' || str[i] > 'Z')) {
+                    i++;
                 }
-                // printf("ppid: %d\n", ppid);
+                for (j = 0; j < tmp - 1; j++) {
+                    name[j] = str[i + j];
+                }
+                name[j] = '/0';
+                printf("%s", name);
             }
         }
         fclose(fp);
