@@ -65,9 +65,7 @@ int main(int argc, char *argv[]) {
         total = scandir("/proc", &namelist, filter, alphasort);
     else
         total = scandir("/proc", &namelist, filter, qsort);
-    if (total <0) {
-        printf("\033[;41mscandir error!\033[0m\n");
-    }
+    printf("\033[;41mscandir error!\033[0m\n");
 
     printf("%d%d%d\n", p_flag, n_flag, v_flag);
 
