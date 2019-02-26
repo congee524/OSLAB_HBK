@@ -34,7 +34,7 @@ int my_get_id(char *str, const char *name) {
     int len = strlen(str), name_len = strlen(name);
     char id[16];
     // printf("%d\n", name_len);
-    printf("%s\n", name);
+    // printf("%s\n", name);
     if (strncmp(str, name, name_len) == 0) {
         while(ind < len && (str[ind] < '0' || str[ind] > '9')) {
             ind++;
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fp;
     char pid_path[128], str[1024];
-    int pid, tmp;
+    int pid, ppid, tmp;
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
@@ -113,9 +113,13 @@ int main(int argc, char *argv[]) {
         while(!feof(fp)) {
             fgets(str, 1024, fp);
             // printf("%s\n", str);
-            if ((tmp = my_get_id(str, "pid")) != -1) {
+            if ((tmp = my_get_id(str, "Pid")) != -1) {
                 pid = tmp;
                 printf("pid: %d\n", pid);
+            }
+            if ((tmp = my_get_id(str, "PPid")) != -1) {
+                ppid = tmp;
+                printf("ppid: %d\n", ppid);
             }
         }
         fclose(fp);
