@@ -29,18 +29,18 @@ int filter(const struct dirent *dir) {
     return 0;
 }
 
-int my_getpid(char *str) {
+int my_get_id(char *str, const char *name) {
     int ind = 0;
-    int len = strlen(str);
-    char pid[16];
-    if (strncmp(str, "Pid", 3) == 0) {
+    int len = strlen(str), name_len = strlen(name);
+    char id[16];
+    if (strncmp(str, name, name_len) == 0) {
         while(ind < len && (str[ind] < '0' || str[ind] > '9')) {
             ind++;
         }
         for (int i = 0; i < len - 1; i++) {
-            pid[i] = str[ind + i];
+            id[i] = str[ind + i];
         }
-        return atoi(pid);
+        return atoi(id);
     } else {
         return -1;
     }
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
         while(!feof(fp)) {
             fgets(str, 1024, fp);
             // printf("%s\n", str);
-            if ((tmp = my_getpid(str)) != -1) {
+            if ((tmp = my_get_id(str, "pid")) != -1) {
                 pid = tmp;
                 printf("pid: %d\n", pid);
             }
