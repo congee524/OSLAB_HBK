@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     }
     assert(!argv[argc]); // always true
     int ch;
-    while((ch = getopt(argc, argv, "p:n:V:")) != -1) {
+    while((ch = getopt(argc, argv, "pnV")) != -1) {
         printf("optind: %d\n", optind);
         switch(ch) {
             case 'p':
