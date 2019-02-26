@@ -129,9 +129,9 @@ int main(int argc, char *argv[]) {
                 while(k < tmp && (str[k] < 'a' || str[k] > 'Z')) {
                     k++;
                 }
+                printf("len: %d, k: %d\n", tmp, k);
                 for (j = 0; k + j < tmp; j++) {
                     name[j] = str[k + j];
-                    printf("name: %s\n", name);
                 }
                 name[j] = '\0';
                 printf("name: %s\n", name);
