@@ -30,7 +30,7 @@ int filter(const struct dirent *dir) {
 }
 
 int my_getpid(char *str) {
-    int ind;
+    int ind = 0;
     int len = strlen(str);
     char pid[16];
     if (strncmp(str, "Pid", 3) == 0) {
