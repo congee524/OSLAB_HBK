@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <assert.h>
 #include <unistd.h>
+#include <getopt.h>
+
+static const char *shortopts = "pnV";
+
+struct option longopts[] = {
+    {"show-pids", no_argument, NULL, 'p'},
+    {"numeric-sort", no_argument, NULL, 'n'},
+    {"version", no_argument, NULL, 'V'},
+    {0, 0, 0, 0},
+};
 
 int main(int argc, char *argv[]) {
     printf("Hello, World!\n");
@@ -11,11 +21,11 @@ int main(int argc, char *argv[]) {
     }
     assert(!argv[argc]); // always true
     int ch;
-    while((ch = getopt(argc, argv, "pnV")) != -1) {
+    while((ch = getopt_long(argc, argv, shortopts, longopts, NULL)) != -1) {
         printf("optind: %d\n", optind);
         switch(ch) {
             case 'p':
-                printf("Have opotion: -p\n");
+                printf("Have option: -p\n");
                 break;
             case 'n':
                 printf("Have option: -n\n");
