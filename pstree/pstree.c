@@ -122,7 +122,6 @@ int main(int argc, char *argv[]) {
                 printf("ppid: %d\n", ppid);
             }
 
-            int i = 0, j = 0;
             tmp = strlen(str);
             if (strncmp(str, "Name", 4) == 0) {
                 while(i < tmp && (str[i] < 'a' || str[i] > 'Z')) {
