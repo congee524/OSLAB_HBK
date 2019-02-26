@@ -33,6 +33,7 @@ int my_get_id(char *str, const char *name) {
     int ind = 0;
     int len = strlen(str), name_len = strlen(name);
     char id[16];
+    printf("%d\n", name_len);
     if (strncmp(str, name, name_len) == 0) {
         while(ind < len && (str[ind] < '0' || str[ind] > '9')) {
             ind++;
