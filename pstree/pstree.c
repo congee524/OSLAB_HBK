@@ -29,6 +29,23 @@ int filter(const struct dirent *dir) {
     return 0;
 }
 
+int my_getpid(char *str) {
+    int ind;
+    int len = strlen(str);
+    char pid[16];
+    if (strncmp(str, "Pid", 3) == 0) {
+        while(ind < len && (str[ind] < '0' || str[ind] > '9')) {
+            ind++;
+        }
+        for (int i = 0; i < len - 1; i++) {
+            pid[i] = str[ind + i];
+        }
+        return atoi(pid);
+    } else {
+        return -1;
+    }
+}
+
 int main(int argc, char *argv[]) {
     struct dirent **namelist;
     // namelist struction: d_ino, d_off, d_reclen, d_type, d_name
@@ -82,7 +99,8 @@ int main(int argc, char *argv[]) {
     //printf("%s", namelist[6]->d_name);
 
     FILE *fp;
-    char pid_path[64], str[128];
+    char pid_path[128], str[1024];
+    int pid, ppid, tmp;
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
@@ -91,8 +109,12 @@ int main(int argc, char *argv[]) {
 
         fp = fopen(pid_path, "r");
         while(!feof(fp)) {
-            fgets(str, 128, fp);
-            printf("%s\n", str);
+            fgets(str, 1024, fp);
+            // printf("%s\n", str);
+            if ((tmp = my_getpid(str)) != -1) {
+                pid = tmp;
+                printf("pid: %d\n", pid);
+            }
         }
         fclose(fp);
     }
