@@ -81,12 +81,20 @@ int main(int argc, char *argv[]) {
 
     //printf("%s", namelist[6]->d_name);
 
+    FILE *fp;
     char pid_path[64];
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
         strcat(pid_path, "/status");
-        printf("%s\n", pid_path);
+        // printf("%s\n", pid_path);
+
+        fp = fopen(pid_path, "r");
+        while(!feof(fp)) {
+            fgets(str, 1024, fp);
+            printf("%s\n", str);
+        }
+        fclose(fp);
     }
     return 0;
 }
