@@ -66,13 +66,14 @@ int main(int argc, char *argv[]) {
     if (v_flag == 1) {
         printf("pstree(minilab) 0.1\n");
         printf("OSminilab, the supported arguments are:\n");
-        printf("-p(show-pids), -n(numeric-sort), -V(version).\n\n");
+        printf("-p(show-pids), -n(numeric-sort), -V(version).");
+        return 0;
     }
 
     int total;
     total = scandir("/proc", &namelist, filter, alphasort);
     if (total < 0) {
-        printf("\033[;41mscandir error!\033[0m\n");
+        printf("\033[;41mscandir error!\033[0m");
         return -1;
     } else {
         printf("\033[4mthe number of processes is %d.\033[0m\n\n", total);
