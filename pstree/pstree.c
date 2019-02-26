@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    printf("%s", namelist[4]->d_name);
+    printf("%s", namelist[6]->d_name);
 
     return 0;
 }
