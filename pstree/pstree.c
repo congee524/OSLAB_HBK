@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
             k = j = 0;
             if (strncmp(str, "Name", 4) == 0) {
                 printf("str: %s\n", str);
-                while(k < tmp && (str[k] < 'a' || str[k] > 'Z')) {
+                while(k < tmp && (str[k] < 'a' || str[k] > 'z')) {
                     k++;
                 }
                 printf("len: %d, k: %d\n", tmp, k);
