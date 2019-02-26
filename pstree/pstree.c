@@ -72,15 +72,20 @@ int main(int argc, char *argv[]) {
 
     int total;
     total = scandir("/proc", &namelist, filter, alphasort);
-    if (total > 0) {
+    if (total < 0) {
         printf("\033[31mscandir error!\033[0m");
         return -1;
     } else {
         printf("\033[4mtotal processes: %d.\033[0m\n\n", total);
     }
 
-
     //printf("%s", namelist[6]->d_name);
 
+    for (int i = 0; i < total; i++) {
+        strcpy(pid_path, "/proc/");
+        strcat(pid_path, namelist[i]->d_name);
+        strcat(pid_path, "/status");
+        print("%s\n", pid_path);
+    }
     return 0;
 }
