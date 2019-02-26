@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-
+// reference: blog.csdn.net/zhenjiangge/article/details/5121294
 static const char *shortopts = "pnV";
 
 struct option longopts[] = {
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     total = scandir("/proc", &namelist, filter, alphasort);
     printf("\033[;41mscandir error!\033[0m\n");
 
-    printf("%d%d%d%d\n", total, p_flag, n_flag, v_flag);
+    printf("%d\n%d%d%d\n", total, p_flag, n_flag, v_flag);
 
     return 0;
 }
