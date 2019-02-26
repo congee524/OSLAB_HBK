@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
     }
     assert(!argv[argc]); // always true
     int ch;
+    int aflag = 0;
     while((ch = getopt(argc, argv, "p:n:V:"))) {
         printf("optind: %d\n", optind);
         switch(ch) {
