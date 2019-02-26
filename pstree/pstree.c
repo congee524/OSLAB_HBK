@@ -81,6 +81,7 @@ int main(int argc, char *argv[]) {
 
     //printf("%s", namelist[6]->d_name);
 
+    char pid_path[64];
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
