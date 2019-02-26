@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     int total;
     total = scandir("/proc", &namelist, filter, alphasort);
     if (total > 0) {
-        printf("\033[31mscandir error!\033[0m");
+        printf("\033[31mscandir error!\033");
         return -1;
     } else {
         printf("\033[4mthe number of processes is %d.\033[0m\n\n", total);
