@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 
     if (v_flag == 1) {
         printf("pstree(minilab) 0.1\n");
-        printf("操作系统实验，支持的参数有\
+        printf("OSminilab, the supported arguments are\
                 \n-p(show-pids), -n(numeric-sort), -V(version).\n");
     }
 
