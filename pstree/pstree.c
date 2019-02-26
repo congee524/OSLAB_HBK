@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fp;
     char pid_path[128], str[1024];
-    int pid, ppid, tmp;
+    int pid, tmp;
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
