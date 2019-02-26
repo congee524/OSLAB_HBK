@@ -125,14 +125,15 @@ int main(int argc, char *argv[]) {
             tmp = strlen(str);
             k = j = 0;
             if (strncmp(str, "Name", 4) == 0) {
+                printf("str: %s\n", str);
                 while(k < tmp && (str[k] < 'a' || str[k] > 'Z')) {
                     k++;
                 }
                 for (j = 0; k + j < tmp; j++) {
                     name[j] = str[k + j];
                 }
-                printf("name: %s\n", name);
                 name[j] = '\0';
+                printf("name: %s\n", name);
             }
         }
         fclose(fp);
