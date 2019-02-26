@@ -32,7 +32,7 @@ int filter(const struct dirent *dir) {
 int my_get_id(char *str, const char *name) {
     int ind = 0;
     int len = strlen(str), name_len = strlen(name);
-    char id[16];
+    char id[128];
     // printf("%d\n", name_len);
     // printf("%s\n", name);
     if (strncmp(str, name, name_len) == 0) {
