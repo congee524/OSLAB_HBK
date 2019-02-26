@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 static const char *shortopts = "pnV";
 
