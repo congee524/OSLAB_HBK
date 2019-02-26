@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
                     name[j] = str[k + j];
                 }
                 name[j] = '\0';
-                printf("name: %s\n", name);
+                printf("name: %s", name);
             }
         }
         fclose(fp);
