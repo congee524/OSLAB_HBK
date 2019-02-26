@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <dirent.h>
 #include <string.h>
+#include <algorithm>
 
 static const char *shortopts = "pnV";
 
