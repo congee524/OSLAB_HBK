@@ -39,7 +39,7 @@ int my_get_id(char *str, const char *name) {
         while(ind < len && (str[ind] < '0' || str[ind] > '9')) {
             ind++;
         }
-        for (int i = 0; i < len - 1; i++) {
+        for (int i = 0; ind + i < len; i++) {
             id[i] = str[ind + i];
         }
         return atoi(id);
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fp;
     char pid_path[128], name[128], str[1024];
-    int pid, ppid, tmp, i, j;
+    int pid, ppid, tmp, j, k;
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
@@ -124,14 +124,14 @@ int main(int argc, char *argv[]) {
 
             tmp = strlen(str);
             if (strncmp(str, "Name", 4) == 0) {
-                while(i < tmp && (str[i] < 'a' || str[i] > 'Z')) {
-                    i++;
+                while(k < tmp && (str[k] < 'a' || str[k] > 'Z')) {
+                    k++;
                 }
-                for (j = 0; j < tmp - 1; j++) {
-                    name[j] = str[i + j];
+                for (j = 0; k + j < tmp; j++) {
+                    name[j] = str[k + j];
                 }
                 name[j] = '/0';
-                printf("%s", name);
+                printf("%s\n", name);
             }
         }
         fclose(fp);
