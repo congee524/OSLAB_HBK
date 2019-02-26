@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
         strcat(pid_path, "/status");
-        print("%s\n", pid_path);
+        printf("%s\n", pid_path);
     }
     return 0;
 }
