@@ -24,6 +24,7 @@ int filter(const struct dirent *dir) {
         else
             return 1;
     }
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
