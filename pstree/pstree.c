@@ -60,12 +60,23 @@ int main(int argc, char *argv[]) {
                 break;
         }
     }
+    printf("%d%d%d\n", p_flag, n_flag, v_flag);
+
+    if (v_flag == 1) {
+        printf("pstree(minilab) 0.1\n");
+        printf("操作系统实验，支持的参数有 \
+                -p(show-pids), -n(numeric-sort), -V(version).");
+    }
 
     int total;
     total = scandir("/proc", &namelist, filter, alphasort);
-    printf("\033[;41mscandir error!\033[0m\n");
+    if (total < 0) {
+        printf("\033[;41mscandir error!\033[0m\n");
+    } else {
+        printf("the number of processes are %d\n", total);
+    }
 
-    printf("%d\n%d%d%d\n", total, p_flag, n_flag, v_flag);
+
 
     return 0;
 }
