@@ -61,10 +61,7 @@ int main(int argc, char *argv[]) {
     }
 
     int total
-    if (n_flag == 1)
-        total = scandir("/proc", &namelist, filter, alphasort);
-    else
-        total = scandir("/proc", &namelist, filter, versionsort);
+    total = scandir("/proc", &namelist, filter, alphasort);
     printf("\033[;41mscandir error!\033[0m\n");
 
     printf("%d%d%d%d\n", total, p_flag, n_flag, v_flag);
