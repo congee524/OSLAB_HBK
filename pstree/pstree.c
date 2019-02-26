@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int total
+    int total;
     total = scandir("/proc", &namelist, filter, alphasort);
     printf("\033[;41mscandir error!\033[0m\n");
 
