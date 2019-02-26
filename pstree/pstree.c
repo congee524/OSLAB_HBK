@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
             }
 
             tmp = strlen(str);
+            k = j = 0;
             if (strncmp(str, "Name", 4) == 0) {
                 while(k < tmp && (str[k] < 'a' || str[k] > 'Z')) {
                     k++;
