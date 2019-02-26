@@ -131,8 +131,8 @@ int main(int argc, char *argv[]) {
                 for (j = 0; k + j < tmp; j++) {
                     name[j] = str[k + j];
                 }
-                name[j] = '\0';
                 printf("name: %s\n", name);
+                name[j] = '\0';
             }
         }
         fclose(fp);
