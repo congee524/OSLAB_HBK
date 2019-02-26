@@ -10,21 +10,17 @@ int main(int argc, char *argv[]) {
     }
     assert(!argv[argc]); // always true
     int ch;
-    int aflag = 0;
     while((ch = getopt(argc, argv, "p:n:V:"))) {
         printf("optind: %d\n", optind);
         switch(ch) {
             case 'p':
                 printf("Have opotion: -p\n");
-                aflag = 1;
                 break;
             case 'n':
                 printf("Have option: -n\n");
-                aflag = 1;
                 break;
             case 'V':
                 printf("Have option: -V\b");
-                aflag = 1;
                 break;
             case '?':
                 printf("Unknown option: %c\n", (char)optopt);
