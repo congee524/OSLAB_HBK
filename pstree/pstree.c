@@ -31,6 +31,7 @@ int filter(const struct dirent *dir) {
 
 int main(int argc, char *argv[]) {
     struct dirent **namelist;
+    // namelist struction: d_ino, d_off, d_reclen, d_type, d_name
 
     printf("Hello, World!\n");
     for (int i = 0; i < argc; i++) {
@@ -65,18 +66,20 @@ int main(int argc, char *argv[]) {
     if (v_flag == 1) {
         printf("pstree(minilab) 0.1\n");
         printf("OSminilab, the supported arguments are:\n");
-        printf("-p(show-pids), -n(numeric-sort), -V(version).\n");
+        printf("-p(show-pids), -n(numeric-sort), -V(version).\n\n");
     }
 
     int total;
     total = scandir("/proc", &namelist, filter, alphasort);
     if (total < 0) {
         printf("\033[;41mscandir error!\033[0m\n");
+        return -1;
     } else {
         printf("\033[4mthe number of processes is %d.\033[0m\n\n", total);
     }
 
 
+    printf("%s", namelist[4]->d_name);
 
     return 0;
 }
