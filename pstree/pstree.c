@@ -59,6 +59,19 @@ int get_id(char *str, const char *name) {
     }
 }
 
+void swap(pro_info *proc, int i, int j) {
+    pro_info tmp;
+    tmp.pid = proc[i].pid;
+    tmp.pid = proc[i].ppid;
+    strcpy(tmp.name, proc[i].name);
+    proc[i].pid = proc[j].pid;
+    proc[i].ppid = proc[j].ppid;
+    strcpy(proc[i].name, proc[j].name);
+    proc[j].pid = tmp.pid;
+    proc[j].ppid = tmp.ppid;
+    strcpy(proc[j].name, tmp.name);
+}
+
 void print_tree(pro_info *proc, int ppid, int pa) {
     for (int i = 0; i < total; i++) {
         if (proc[i].flag == 0 && proc[i].ppid == ppid) {
@@ -71,7 +84,7 @@ void print_tree(pro_info *proc, int ppid, int pa) {
                 if (p_flag == 1) {
                     printf("├───%s(%d)\n", proc[i].name, proc[i].pid);
                 } else {
-                    printf("├───%si\n", proc[i].name);
+                    printf("├───%s\n", proc[i].name);
                 }
             }
             print_tree(proc, proc[i].pid, proc[i].pa);
@@ -181,6 +194,17 @@ int main(int argc, char *argv[]) {
         cnt++;
     }
     // printf("total: %d\ncnt: %d\nexample: %d", total, cnt, proc[4].pid);
+
+    if (n_flag == 1) {
+        for (int i = 0; i < total - 1; i++) {
+            for (int j = i + 1; j < total; j++) {
+                if (proc[i].pid > proc[j].pid) {
+                    swap(proc, i, j);
+                }
+            }
+        }
+    }
+
     print_tree(proc, 0, 0);
     return 0;
 }
