@@ -69,9 +69,9 @@ void print_tree(pro_info *proc, int ppid, int pa) {
             }
             if (proc[i].pid > 0) {
                 if (p_flag == 1) {
-                    printf("├───%s(%d)", proc[i].name, proc[i].pid);
+                    printf("├───%s(%d)\n", proc[i].name, proc[i].pid);
                 } else {
-                    printf("├───%s", proc[i].name);
+                    printf("├───%si\n", proc[i].name);
                 }
             }
             print_tree(proc, proc[i].pid, proc[i].pa);
@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) {
         strcpy(proc[cnt].name, name);
         cnt++;
     }
-    printf("total: %d\ncnt: %d\nexample: %d", total, cnt, proc[4].pid);
+    // printf("total: %d\ncnt: %d\nexample: %d", total, cnt, proc[4].pid);
     print_tree(proc, 0, 0);
     return 0;
 }
