@@ -9,6 +9,12 @@
 // reference: blog.csdn.net/zhenjiangge/article/details/5121294
 static const char *shortopts = "pnV";
 
+typedef struct pro_info {
+    int pid;
+    int ppid;
+    char name[128];
+}pro_info;
+
 struct option longopts[] = {
     {"show-pids", no_argument, NULL, 'p'},
     {"numeric-sort", no_argument, NULL, 'n'},
@@ -50,6 +56,7 @@ int my_get_id(char *str, const char *name) {
 
 int main(int argc, char *argv[]) {
     struct dirent **namelist;
+    pro_info proc[1024];
     // namelist struction: d_ino, d_off, d_reclen, d_type, d_name
 
     printf("Hello, World!\n");
@@ -102,7 +109,7 @@ int main(int argc, char *argv[]) {
 
     FILE *fp;
     char pid_path[128], name[128], str[1024];
-    int pid, ppid, tmp, j, k;
+    int pid, ppid, tmp, j, k, cnt = 0;
     for (int i = 0; i < total; i++) {
         strcpy(pid_path, "/proc/");
         strcat(pid_path, namelist[i]->d_name);
@@ -132,7 +139,7 @@ int main(int argc, char *argv[]) {
                         && !(str[k] >= 'A' && str[k] <= 'Z')) {
                     k++;
                 }
-                printf("len: %d, k: %d\n", tmp, k);
+                // printf("len: %d, k: %d\n", tmp, k);
                 for (j = 0; k + j < tmp; j++) {
                     name[j] = str[k + j];
                 }
@@ -142,6 +149,11 @@ int main(int argc, char *argv[]) {
             }
         }
         fclose(fp);
+        proc[cnt].pid = pid;
+        proc[cnt].ppid = ppid;
+        strcpy(proc[cnt].name, name);
+        cnt++;
     }
+    printf("cnt: %d\nexample: %d", cnt, proc[4].pid);
     return 0;
 }
