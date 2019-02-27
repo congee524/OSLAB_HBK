@@ -154,6 +154,6 @@ int main(int argc, char *argv[]) {
         strcpy(proc[cnt].name, name);
         cnt++;
     }
-    printf("cnt: %d\nexample: %d", cnt, proc[4].pid);
+    printf("total: %d\ncnt: %d\nexample: %d", total, cnt, proc[4].pid);
     return 0;
 }
