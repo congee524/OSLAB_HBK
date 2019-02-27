@@ -62,7 +62,7 @@ int get_id(char *str, const char *name) {
 void swap(pro_info *proc, int i, int j) {
     pro_info tmp;
     tmp.pid = proc[i].pid;
-    tmp.pid = proc[i].ppid;
+    tmp.ppid = proc[i].ppid;
     strcpy(tmp.name, proc[i].name);
     proc[i].pid = proc[j].pid;
     proc[i].ppid = proc[j].ppid;
