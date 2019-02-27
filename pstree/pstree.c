@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
                 break;
         }
     }
-    printf("%d%d%d\n", p_flag, n_flag, v_flag);
+    // printf("%d%d%d\n", p_flag, n_flag, v_flag);
 
     if (v_flag == 1) {
         printf("pstree(minilab) 0.1\n");
