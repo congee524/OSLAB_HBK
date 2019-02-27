@@ -7,12 +7,17 @@
 #include <stdlib.h>
 #include <ctype.h>
 // reference: blog.csdn.net/zhenjiangge/article/details/5121294
+
+int p_flag = 0, n_flag = 0, v_flag = 0, total = 0;
+
 static const char *shortopts = "pnV";
 
 typedef struct pro_info {
     int pid;
     int ppid;
     char name[128];
+    int flag;
+    int pa;
 }pro_info;
 
 struct option longopts[] = {
@@ -35,7 +40,7 @@ int filter(const struct dirent *dir) {
     return 0;
 }
 
-int my_get_id(char *str, const char *name) {
+int get_id(char *str, const char *name) {
     int ind = 0;
     int len = strlen(str), name_len = strlen(name);
     char id[128];
@@ -54,19 +59,41 @@ int my_get_id(char *str, const char *name) {
     }
 }
 
+void print_tree(pro_info *proc, int ppid, int pa) {
+    for (int i = 0; i < total; i++) {
+        if (proc[i].flag == 0 && proc[i].ppid == ppid) {
+            proc[i].pa = pa + 1;
+            proc[i].flag = 1;
+            for (int j = 0; j < pa; j++) {
+                printf("    ");
+            }
+            if (proc[i].pid > 0) {
+                if (p_flag == 1) {
+                    printf("|--%s(%d)\n", proc[i].name, proc[i].pid);
+                } else {
+                    printf("|--%s\n", proc[i].name);
+                }
+            }
+            print_tree(proc, proc[i].pid, proc[i].pa);
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     struct dirent **namelist;
     pro_info proc[1024];
     // namelist struction: d_ino, d_off, d_reclen, d_type, d_name
 
     printf("Hello, World!\n");
+    /*
     for (int i = 0; i < argc; i++) {
         assert(argv[i]); // always true
         printf("argv[%d] = %s\n", i, argv[i]);
     }
+    */
     assert(!argv[argc]); // always true
 
-    int ch, p_flag = 0, n_flag = 0, v_flag = 0;
+    int ch;
     while((ch = getopt_long(argc, argv, shortopts, longopts, NULL)) != -1) {
         printf("optind: %d\n", optind);
         switch(ch) {
@@ -96,7 +123,6 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    int total;
     total = scandir("/proc", &namelist, filter, alphasort);
     if (total < 0) {
         printf("\033[31mscandir error!\033[0m");
@@ -120,13 +146,13 @@ int main(int argc, char *argv[]) {
         while(!feof(fp)) {
             fgets(str, 1024, fp);
             // printf("%s\n", str);
-            if ((tmp = my_get_id(str, "Pid")) != -1) {
+            if ((tmp = get_id(str, "Pid")) != -1) {
                 pid = tmp;
-                printf("pid: %d\n", pid);
+                // printf("pid: %d\n", pid);
             }
-            if ((tmp = my_get_id(str, "PPid")) != -1) {
+            if ((tmp = get_id(str, "PPid")) != -1) {
                 ppid = tmp;
-                printf("ppid: %d\n", ppid);
+                // printf("ppid: %d\n", ppid);
             }
 
             // many wrong: space is in the 'a' to 'Z'
@@ -144,8 +170,8 @@ int main(int argc, char *argv[]) {
                     name[j] = str[k + j];
                 }
                 name[j] = '\0';
-                printf("%s", str);
-                printf("name: %s", name);
+                // printf("%s", str);
+                // printf("name: %s", name);
             }
         }
         fclose(fp);
@@ -155,5 +181,6 @@ int main(int argc, char *argv[]) {
         cnt++;
     }
     printf("total: %d\ncnt: %d\nexample: %d", total, cnt, proc[4].pid);
+    print_tree(proc, 0, 0);
     return 0;
 }
