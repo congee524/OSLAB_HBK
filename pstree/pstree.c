@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 
     int ch;
     while((ch = getopt_long(argc, argv, shortopts, longopts, NULL)) != -1) {
-        printf("optind: %d\n", optind);
+        // printf("optind: %d\n", optind);
         switch(ch) {
             case 'p':
                 // printf("Have option: -p\n");
