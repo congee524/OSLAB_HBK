@@ -156,6 +156,7 @@ int main(int argc, char *argv[]) {
         // printf("%s\n", pid_path);
 
         fp = fopen(pid_path, "r");
+        if (fp == NULL) continue;
         while(!feof(fp)) {
             fgets(str, 1024, fp);
             // printf("%s\n", str);
