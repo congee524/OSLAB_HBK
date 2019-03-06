@@ -12,7 +12,6 @@ int main() {
     init_screen();
     splash();
 
-
     while (1) {
         read_key2();
 
@@ -61,7 +60,9 @@ void splash() {
         for (int y = 0; y * SIDE <= h; y++) {
             if ((x & 1) ^ (y & 1)) {
                 // draw_rect(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
-                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
+                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0x708090); // white
+            } else {
+                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0x778899);
             }
         }
     }
