@@ -8,7 +8,7 @@ int main() {
     // Operating system is a C program
     _ioe_init();
     init_screen();
-    splash();
+    //splash();
 
 
     while (1) {
