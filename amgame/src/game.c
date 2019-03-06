@@ -4,7 +4,8 @@ void init_screen();
 void splash();
 void read_key2();
 
-// int pre_x, pre_y;
+int pre_x, pre_y;
+int w, h;
 
 int main() {
     // Operating system is a C program
@@ -12,6 +13,7 @@ int main() {
     init_screen();
     splash();
 
+    pre_x = pre_y = 7;
     while (1) {
         read_key2();
 
@@ -30,11 +32,13 @@ void read_key2() {
     if (event.keycode != _KEY_NONE && event.keydown) {
         puts("Key pressed: ");
         puts(key_names[event.keycode]);
+        printf(" %d", event.keycode);
         puts("\n");
+        // if (event.keycode == )
+        // move_cursor()
     }
 }
 
-int w, h;
 
 void init_screen() {
     _DEV_VIDEO_INFO_t info = {0};
