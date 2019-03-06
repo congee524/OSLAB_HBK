@@ -2,23 +2,25 @@
 
 void init_screen();
 void splash();
-void read_key();
+void read_key2();
+
+// int pre_x, pre_y;
 
 int main() {
     // Operating system is a C program
     _ioe_init();
     init_screen();
-    //splash();
+    splash();
 
 
     while (1) {
-        read_key();
+        read_key2();
 
     }
     return 0;
 }
 
-void read_key() {
+void read_key2() {
     _DEV_INPUT_KBD_t event = { .keycode = _KEY_NONE };
 #define KEYNAME(key) \
     [_KEY_##key] = #key,
@@ -42,7 +44,7 @@ void init_screen() {
     h = info.height;
 }
 
-void draw_rect(int x, int y, int w, int h, uint32_t color) {
+void draw_rect2(int x, int y, int w, int h, uint32_t color) {
     uint32_t pixels[w * h]; // WARNING: allocated on stack
     _DEV_VIDEO_FBCTL_t event = {
         .x = x, .y = y, .w = w, .h = h, .sync = 1,
@@ -59,7 +61,7 @@ void splash() {
         for (int y = 0; y * SIDE <= h; y++) {
             if ((x & 1) ^ (y & 1)) {
                 // draw_rect(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
-                draw_rect(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
+                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
             }
         }
     }
