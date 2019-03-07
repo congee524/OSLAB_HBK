@@ -40,26 +40,30 @@ int main() {
 }
 
 void move_cursor(int key) {
+    int flag = 0;
     if (key == 30 || key == 73) {
         if (pre_y > 0) {
             pre_y--;
-            splash();
+            flag = 1;
         }
     } else if (key == 44 || key == 74) {
         if (pre_y < 14) {
             pre_y++;
-            splash();
+            flag = 1;
         }
     } else if (key == 43 || key == 75) {
         if (pre_x > 0) {
             pre_x--;
-            splash();
+            flag = 1;
         }
     } else if (key == 45 || key == 76) {
         if (pre_x < 14) {
             pre_x++;
-            splash();
+            flag = 1;
         }
+    }
+    if (flag == 1) {
+        splash();
     }
 }
 
