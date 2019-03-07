@@ -29,10 +29,10 @@ int main() {
     init_background();
     pre_x = pre_y = INIT_POS;
     player = BLACK;
-    int frames = 0;
+    // int frames = 0;
     while (1) {
         splash();
-        frames ++;
+        // frames ++;
         read_key2();
         /*
         if (frames % CURSOR_PER_SECOND == 0) {
