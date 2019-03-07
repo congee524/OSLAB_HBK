@@ -6,7 +6,7 @@ void read_key2();
 void draw_rect2();
 void init_background();
 
-#define LEN 25
+#define LEN 15
 #define HZ 100
 #define CURSOR_PER_SECOND 30000000
 
