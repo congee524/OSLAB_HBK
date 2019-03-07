@@ -10,13 +10,17 @@ void chess();
 #define LEN 15
 #define HZ 100
 #define CURSOR_PER_SECOND 4000
-#define WHITE 1
 #define BLACK 0
+#define WHITE 1
+#define GREY 2
+#define LGRAY 3
+#define SGREY 4
+#define LSGRAY 5
 #define INIT_POS 7
 
 int pre_x, pre_y, player;
 int w, h;
-uint32_t bg[LEN][LEN], pg[2];
+uint32_t bg[LEN][LEN], pg[6];
 
 int main() {
     // Operating system is a C program
@@ -121,7 +125,11 @@ void splash() {
     for (int x = 0; x < LEN; x++) {
         for (int y = 0; y < LEN; y++) {
             if (x == pre_x && y == pre_y) {
-                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0xbebebe);
+                if (bg[x][y] == pg[WHITE] || bg[x][y] == pg[BLACK]) {
+                    draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, pg[LGRAY]);
+                } else {
+                    draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, pg[GREY]);
+                }
             } else {
                 draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
             }
@@ -143,16 +151,21 @@ void splash() {
 }
 
 void init_background() {
+    pg[WHITE] = 0xffffff;
+    pg[BLACK] = 0x000000;
+    pg[SGREY] = 0x708090;
+    pg[LSGRAY] = 0x778899;
+    pg[GREY] = 0xbebebe;
+    pg[LGRAY] = 0xd3d3d3;
+
     for (int x = 0; x < LEN; x++) {
         for (int y = 0; y < LEN; y++) {
             if ((x & 1) ^ (y & 1)) {
-                bg[x][y] = 0x708090;
+                bg[x][y] = pg[SGREY];
             } else {
-                bg[x][y] = 0x778899;
+                bg[x][y] = pg[LSGRAY];
             }
             draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
         }
     }
-    pg[WHITE] = 0xffffff;
-    pg[BLACK] = 0x000000;
 }
