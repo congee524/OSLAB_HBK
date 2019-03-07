@@ -25,6 +25,7 @@ int main() {
         splash();
         frames ++;
         read_key2();
+        /*
         if (frames % CURSOR_PER_SECOND == 0) {
             draw_rect2(pre_x * SIDE, pre_y * SIDE, SIDE, SIDE, 0xffffff);
         } else if (frames % CURSOR_PER_SECOND == CURSOR_PER_SECOND / 2) {
@@ -35,36 +36,34 @@ int main() {
                 draw_rect2(pre_x * SIDE, pre_y * SIDE, SIDE, SIDE, 0x778899);
             }
         }
+        */
     }
     return 0;
 }
 
 void move_cursor(int key) {
-    int flag = 0;
     if (key == 30 || key == 73) {
         if (pre_y > 0) {
             pre_y--;
-            flag = 1;
         }
     } else if (key == 44 || key == 74) {
         if (pre_y < 14) {
             pre_y++;
-            flag = 1;
         }
     } else if (key == 43 || key == 75) {
         if (pre_x > 0) {
             pre_x--;
-            flag = 1;
         }
     } else if (key == 45 || key == 76) {
         if (pre_x < 14) {
             pre_x++;
-            flag = 1;
         }
     }
+    /*
     if (flag == 1) {
         splash();
     }
+    */
 }
 
 void read_key2() {
@@ -108,9 +107,11 @@ void draw_rect2(int x, int y, int w, int h, uint32_t color) {
 void splash() {
     for (int x = 0; x < LEN; x++) {
         for (int y = 0; y < LEN; y++) {
-            //if (x != pre_x && y != pre_y) {
+            if (x != pre_x && y != pre_y) {
                 draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
-            //}
+            } else {
+                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0xbebebe);
+            }
         }
     }
 
