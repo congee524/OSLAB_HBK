@@ -76,8 +76,10 @@ void move_cursor(int key) {
 }
 
 void chess() {
-    bg[pre_x][pre_y] = pg[player];
-    player ^= 1;
+    if (bg[pre_x][pre_y] != pg[BLACK] && bg[pre_x][pre_y] != pg[WHITE]) {
+        bg[pre_x][pre_y] = pg[player];
+        player ^= 1;
+    }
 }
 
 void read_key2() {
