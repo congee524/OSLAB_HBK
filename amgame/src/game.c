@@ -5,21 +5,26 @@ void splash();
 void read_key2();
 void draw_rect2();
 void init_background();
+void chess();
 
 #define LEN 15
 #define HZ 100
 #define CURSOR_PER_SECOND 4000
+#define WHITE 1
+#define BLACK 0
+#define INIT_POS 7
 
-int pre_x, pre_y;
+int pre_x, pre_y, player;
 int w, h;
-uint32_t bg[LEN][LEN];
+uint32_t bg[LEN][LEN], pg[2];
 
 int main() {
     // Operating system is a C program
     _ioe_init();
     init_screen();
     init_background();
-    pre_x = pre_y = 7;
+    pre_x = pre_y = INIT_POS;
+    player = BLACK;
     int frames = 0;
     while (1) {
         splash();
@@ -66,6 +71,11 @@ void move_cursor(int key) {
     */
 }
 
+void chess() {
+    bg[pre_x][pre_y] = pg[player];
+    player ^= 1;
+}
+
 void read_key2() {
     _DEV_INPUT_KBD_t event = { .keycode = _KEY_NONE };
 #define KEYNAME(key) \
@@ -80,6 +90,9 @@ void read_key2() {
         printf(" %d", event.keycode);
         puts("\n");
         move_cursor(event.keycode);
+        if(event.keycode == 70) {
+            chess();
+        }
         printf("pre_x: %d, pre_y: %d\n", pre_x, pre_y);
     }
 }
@@ -140,4 +153,6 @@ void init_background() {
             draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
         }
     }
+    pg[WHITE] = 0xffffff;
+    pg[BLACK] = 0x000000;
 }
