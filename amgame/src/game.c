@@ -43,18 +43,22 @@ void move_cursor(int key) {
     if (key == 30 || key == 73) {
         if (pre_y > 0) {
             pre_y--;
+            splash();
         }
     } else if (key == 44 || key == 74) {
         if (pre_y < 14) {
             pre_y++;
+            splash();
         }
     } else if (key == 43 || key == 75) {
         if (pre_x > 0) {
             pre_x--;
+            splash();
         }
     } else if (key == 45 || key == 76) {
         if (pre_x < 14) {
             pre_x++;
+            splash();
         }
     }
 }
