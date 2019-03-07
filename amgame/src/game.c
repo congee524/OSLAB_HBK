@@ -19,7 +19,6 @@ int main() {
     _ioe_init();
     init_screen();
     init_background();
-
     pre_x = pre_y = 7;
     int frames = 0;
     while (1) {
@@ -129,6 +128,7 @@ void init_background() {
             } else {
                 bg[x][y] = 0x778899;
             }
+            draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
         }
     }
 }
