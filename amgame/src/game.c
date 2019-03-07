@@ -3,6 +3,10 @@
 void init_screen();
 void splash();
 void read_key2();
+void draw_rect2();
+
+#define HZ 100
+#define CURSOR_PER_SECOND 4
 
 int pre_x, pre_y;
 int w, h;
@@ -14,9 +18,20 @@ int main() {
     splash();
 
     pre_x = pre_y = 7;
+    int frames = 0;
     while (1) {
+        frames ++;
         read_key2();
-
+        if (frames % (HZ / CURSOR_PER_SECOND) == 0) {
+            draw_rect2(pre_x * SIDE, pre_y * SIDE, SIDE, SIDE, 0xffffff);
+        } else if (frames % (HZ / CURSOR_PER_SECOND) == 2) {
+            if ((pre_x & 1) ^ (pre_y & 1)) {
+                // draw_rect(x * SIDE, y * SIDE, SIDE, SIDE, 0xffffff); // white
+                draw_rect2(pre_x * SIDE, pre_y * SIDE, SIDE, SIDE, 0x708090); // white
+            } else {
+                draw_rect2(pre_x * SIDE, pre_y * SIDE, SIDE, SIDE, 0x778899);
+            }
+        }
     }
     return 0;
 }
