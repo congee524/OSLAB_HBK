@@ -8,7 +8,7 @@ void init_background();
 
 #define LEN 15
 #define HZ 100
-#define CURSOR_PER_SECOND 2000
+#define CURSOR_PER_SECOND 4000
 
 int pre_x, pre_y;
 int w, h;
