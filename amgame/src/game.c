@@ -6,7 +6,7 @@ void read_key2();
 void draw_rect2();
 
 #define HZ 100
-#define CURSOR_PER_SECOND 2000000
+#define CURSOR_PER_SECOND 200000000
 
 int pre_x, pre_y;
 int w, h;
