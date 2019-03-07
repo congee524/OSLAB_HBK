@@ -4,22 +4,26 @@ void init_screen();
 void splash();
 void read_key2();
 void draw_rect2();
+void init_background();
 
+#define LEN 25
 #define HZ 100
 #define CURSOR_PER_SECOND 30000000
 
 int pre_x, pre_y;
 int w, h;
+uint32_t bg[LEN][LEN];
 
 int main() {
     // Operating system is a C program
     _ioe_init();
     init_screen();
-    splash();
+    init_background();
 
     pre_x = pre_y = 7;
     int frames = 0;
     while (1) {
+        splash();
         frames ++;
         read_key2();
         if (frames % CURSOR_PER_SECOND == 0) {
@@ -95,6 +99,15 @@ void draw_rect2(int x, int y, int w, int h, uint32_t color) {
 }
 
 void splash() {
+    for (int x = 0; x < LEN; x++) {
+        for (int y = 0; y < LEN; y++) {
+            if (x != pre_x && y != pre_y) {
+                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
+            }
+        }
+    }
+
+    /*
     for (int x = 0; x * SIDE <= w; x ++) {
         for (int y = 0; y * SIDE <= h; y++) {
             if ((x & 1) ^ (y & 1)) {
@@ -102,6 +115,19 @@ void splash() {
                 draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0x708090); // white
             } else {
                 draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0x778899);
+            }
+        }
+    }
+    */
+}
+
+void init_background() {
+    for (int x = 0; x < LEN; x++) {
+        for (int y = 0; y < LEN; y++) {
+            if ((x & 1) ^ (y & 1)) {
+                bg[x][y] = 0x708090;
+            } else {
+                bg[x][y] = 0x778899;
             }
         }
     }
