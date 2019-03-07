@@ -107,10 +107,10 @@ void draw_rect2(int x, int y, int w, int h, uint32_t color) {
 void splash() {
     for (int x = 0; x < LEN; x++) {
         for (int y = 0; y < LEN; y++) {
-            if (x != pre_x && y != pre_y) {
-                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
-            } else {
+            if (x == pre_x && y == pre_y) {
                 draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, 0xbebebe);
+            } else {
+                draw_rect2(x * SIDE, y * SIDE, SIDE, SIDE, bg[x][y]);
             }
         }
     }
