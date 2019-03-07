@@ -2,8 +2,10 @@
 #include <amdev.h>
 #include <SDL2/SDL.h>
 
-#define W 400
-#define H 300
+//#define W 400
+//#define H 300
+#define W 360
+#define H 360
 #define FPS 30
 
 static inline uint32_t pixel(uint8_t r, uint8_t g, uint8_t b) {
