@@ -20,42 +20,73 @@ struct co {
 #define STACKDIR - // set - for downwards
 #define STACKSIZE (1 << 12)
 static struct co coroutine[MAXTHREAD];
-static int co_cnt; // to record the num of coroutine
+static int current;
+// static int co_cnt; // to record the num of coroutine
 static void *tos; // top of stack
 
 
 void co_init() {
-    co_cnt = 0;
+    current = 0;
+    return;
 }
 
 struct co* co_start(const char *name, func_t func, void *arg) {
-    if (co_cnt >= MAXTHREAD) {
+    int pre;
+    for (pre = 0; pre < MAXTHREAD; pre++) {
+        if (coroutine[pre].used == false) {
+            break;
+        }
+    }
+    if (pre == MAXTHREAD) {
         printf("NO ENOUGH THREADS!\n");
         assert(0);
     }
 
-    strcpy(coroutine[co_cnt].name, name);
+    strcpy(coroutine[pre].name, name);
     // coroutine[co_cnt].name = name;
-    coroutine[co_cnt].func = func;
-    coroutine[co_cnt].used = true;
+    coroutine[pre].func = func;
+    coroutine[pre].used = true;
 
     if (tos == NULL) {
         tos = (void *)&arg;
     }
     tos += STACKDIR STACKSIZE;
     char arg_n[STACKDIR(tos - (void *)&arg)];
-    coroutine[co_cnt].coarg = arg_n;
+    coroutine[pre].coarg = arg_n;
 
-    co_cnt++;
+    /*
+    if (setjmp(coroutine[pre].env)) {
+        return (struct co*)(coroutine + pre);
+    }
+    */
+
+    current = pre;
     func(arg); // Test #2 hangs
-    return (struct co*)(coroutine + (co_cnt - 1));
+    return (struct co*)(coroutine + pre);
 }
 
 void co_yield() {
+    int go;
+    for (go = 0; go < MAXTHREAD; go++) {
+        if (coroutine[go].used == true && go != current) {
+            break;
+        }
+    }
+    if (go == MAXTHREAD) {
+        printf("NO ACCESSIBLE COROUTINE!\n");
+        return;
+    }
+
+    if (setjmp(coroutine[current].env)) {
+        return;
+    }
+
+    current = go;
+    longjmp(coroutine[go].env, 1);
 }
 
 void co_wait(struct co *thd) {
-    memset()
-    co_cnt--;
+    memset(thd, 0, sizeof(struct co));
+    return;
 }
 
