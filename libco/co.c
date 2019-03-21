@@ -2,6 +2,9 @@
 #include "co.h"
 
 struct co {
+    char *name;
+    func_t func;
+
 };
 
 void co_init() {
