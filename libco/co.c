@@ -56,7 +56,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 
     current = pre;
 
-    if (setjmp(coroutine[pre].env)) {
+    if (!setjmp(coroutine[pre].env)) {
         return (struct co*)(coroutine + pre);
     }
 
