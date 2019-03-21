@@ -58,10 +58,10 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 
     if (setjmp(coroutine[pre].env)) {
         return (struct co*)(coroutine + pre);
+    } else {
+        func(arg);
     }
-
-
-    func(arg); // Test #2 hangs
+    // func(arg); // Test #2 hangs
     return (struct co*)(coroutine + pre);
 }
 
