@@ -54,13 +54,13 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     char arg_n[STACKDIR(tos - (void *)&arg)];
     coroutine[pre].coarg = arg_n;
 
-    /*
+    current = pre;
+
     if (setjmp(coroutine[pre].env)) {
         return (struct co*)(coroutine + pre);
     }
-    */
 
-    current = pre;
+
     func(arg); // Test #2 hangs
     return (struct co*)(coroutine + pre);
 }
