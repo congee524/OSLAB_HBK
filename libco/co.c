@@ -56,7 +56,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 
     current = pre;
 
-    if (!setjmp(coroutine[pre].env)) {
+    if (setjmp(coroutine[pre].env)) {
         return (struct co*)(coroutine + pre);
     }
 
@@ -68,7 +68,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 void co_yield() {
     int go;
     for (go = 0; go < MAXTHREAD; go++) {
-        if (coroutine[go].used == true && go != current) {
+        if (coroutine[go].used == true) {
             break;
         }
     }
