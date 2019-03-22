@@ -120,7 +120,7 @@ void co_wait(struct co *thd) {
             if (current->stack == NULL) {
                 printf("!!!!!!\n");
                 current->stack = malloc(STACKSIZE);
-                current->stack -= STACKSIZE;
+                //current->stack -= STACKSIZE;
             }
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
