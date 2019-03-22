@@ -11,7 +11,7 @@
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 #define MAX_CO 10
-#define STACKSIZE (1 << 12)
+#define STACKSIZE (1 << 20)
 
 #if defined(__i386__)
     #define SP "%%esp"
