@@ -115,6 +115,7 @@ void co_yield() {
 
 void co_wait(struct co *thd) {
     printf("\nNOTICE! %s\n", thd->name);
+    printf("STATE %d\n", thd->state);
     if (setjmp(retbuf)) {
         printf("\nNOTICE RET !!!\n");
         free(current->stack);
