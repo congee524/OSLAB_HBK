@@ -129,7 +129,7 @@ void co_wait(struct co *thd) {
         return;
     }
 
-    printf("STATE %d\n", thd->state);
+    //printf("STATE %d\n", thd->state);
     switch(thd->state) {
         case COROUTINE_SUSPEND:
             break;
