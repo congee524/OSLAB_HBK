@@ -76,8 +76,8 @@ struct co* co_start(const char *name, func_t func, void *arg) {
                      "g"(current->stack) :
                      SP_C);
         printf("2\n");
-        coroutine[pre].state = COROUTINE_RUNNING;
-        coroutine[pre].func(coroutine[pre].coarg);
+        current->state = COROUTINE_RUNNING;
+        current->func(coroutine[pre].coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
     } else {
