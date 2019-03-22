@@ -175,7 +175,7 @@ void co_wait(struct co *thd) {
                break;
                */
         default:
-            printf("Wrong State!\n");
+            printf("Wrong State %d!\n", thd->state);
             assert(0);
     }
 
