@@ -29,13 +29,13 @@ struct co {
     jmp_buf buf; // to save the state of present function
     int state; // record the state of routine
     void *coarg;
-    uint8_t stack[4096];
-    uint8_t stack_backup[4096];
+    uint8_t stack[STACKSIZE];
+    uint8_t stack_backup[STACKSIZE];
 };
 
 #define MAX_CO 10
 // #define STACKDIR - // set - for downwards
-// #define STACKSIZE (1 << 12)
+#define STACKSIZE (1 << 20)
 static struct co coroutine[MAX_CO];
 static struct co *current;
 // static int co_cnt; // to record the num of coroutine
