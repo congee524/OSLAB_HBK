@@ -115,7 +115,7 @@ void co_wait(struct co *thd) {
     if (setjmp(retbuf)) {
         return;
     }
-    printf("\nNOTICE!\n");
+    //printf("\nNOTICE!\n");
 
     if (thd == NULL) {
         printf("EMPTY THD!\n");
