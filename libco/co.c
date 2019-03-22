@@ -119,6 +119,7 @@ void co_wait(struct co *thd) {
                 current = thd;
             }
             if (current->stack == NULL) {
+                printf("!!!!!!\n");
                 current->stack = malloc(STACKSIZE);
                 current->stack -= STACKSIZE;
             }
