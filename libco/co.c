@@ -172,6 +172,7 @@ void co_wait(struct co *thd) {
             longjmp(current->buf, 1);
             break;
         default:
+            printf("COROUTINE_RUNNING\n");
             printf("Wrong State %d!\n", thd->state);
             assert(0);
     }
