@@ -118,8 +118,8 @@ void co_wait(struct co *thd) {
     printf("STATE %d\n", thd->state);
     if (setjmp(retbuf)) {
         printf("\nNOTICE RET !!!\n");
-        free(current->stack);
-        free(current->stack_backup);
+        //free(current->stack);
+        //free(current->stack_backup);
         memset(current, 0, sizeof(struct co));
         return;
     }
@@ -168,6 +168,8 @@ void co_wait(struct co *thd) {
                break;
                */
         case COROUTINE_SUSPEND:
+            current->state = COROUTINE_RUNNING;
+            longjmp(current->buf, 1);
             break;
         case COROUTINE_RUNNING:
             longjmp(current->buf, 1);
