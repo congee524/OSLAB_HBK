@@ -66,8 +66,8 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].state = COROUTINE_READY;
 
     if (setjmp(coroutine[pre].buf)) {
-        printf("***\n");
         if (coroutine[pre].stack == NULL) {
+        printf("***\n");
             coroutine[pre].stack = malloc(STACKSIZE);
             coroutine[pre].stack -= STACKSIZE;
         }
