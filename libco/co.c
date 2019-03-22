@@ -22,12 +22,12 @@ struct co {
 };
 
 #define MAX_CO 10
-#define STACKDIR - // set - for downwards
-#define STACKSIZE (1 << 12)
+// #define STACKDIR - // set - for downwards
+// #define STACKSIZE (1 << 12)
 static struct co coroutine[MAX_CO];
 static struct co *current;
 // static int co_cnt; // to record the num of coroutine
-static void *tos; // top of stack
+// static void *tos; // top of stack
 
 
 void co_init() {
