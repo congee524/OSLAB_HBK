@@ -89,11 +89,11 @@ void co_yield() {
     if (!setjmp(current->buf)) {
         current->state = COROUTINE_SUSPEND;
         //    printf("###\n");
-        while(1) {
+        while(;; ) {
             go++;
             if(go==MAX_CO)go=0;
-            if (coroutine[go].state != COROUTINE_DEAD
-                    && coroutine[go].state != COROUTINE_RUNNING) {
+            if (coroutine[go].state != COROUTINE_DEAD){
+                   // && coroutine[go].state != COROUTINE_RUNNING) {
                 break;
             }
         }
