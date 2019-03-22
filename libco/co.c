@@ -106,6 +106,7 @@ void co_wait(struct co *thd) {
     int state = thd->state;
     switch(state) {
         case COROUTINE_READY:
+            printf("1\n");
             if (current == NULL) {
                 current = thd;
             }
