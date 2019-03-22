@@ -69,7 +69,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
         if (current->stack == NULL) {
         //    printf("***\n");
             current->stack = malloc(STACKSIZE);
-            current->stack += (STACKSIZE >> 1);
+            current->stack += STACKSIZE;
         }
         asm volatile("mov " SP ", %0; mov %1, " SP :
                      "=g"(current->stack_backup) :
@@ -126,7 +126,7 @@ void co_wait(struct co *thd) {
             if (current->stack == NULL) {
             //    printf("!!!!!!\n");
                 current->stack = malloc(STACKSIZE);
-                current->stack += (STACKSIZE >> 1);
+                current->stack += STACKSIZE;
             }
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
