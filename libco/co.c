@@ -145,6 +145,7 @@ void co_wait(struct co *thd) {
                          SP_C);
             // printf("2\n");
             thd->func(thd->coarg);
+            printf("finish one!\n");
             /*
                asm volatile("mov " SP ", %0; mov %1, " SP :
                "=g"(thd->stack) :
