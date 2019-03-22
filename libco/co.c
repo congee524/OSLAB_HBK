@@ -40,6 +40,7 @@ static struct co coroutine[MAX_CO];
 static struct co *current;
 // static int co_cnt; // to record the num of coroutine
 // static void *tos; // top of stack
+static jmp_buf retbuf;
 
 void co_init() {
     current = NULL;
@@ -80,7 +81,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     } else {
         return &coroutine[pre];
     }
-    return &coroutine[pre];
+    longjmp(retbuf, 1);
 }
 
 void co_yield() {
@@ -109,6 +110,10 @@ void co_yield() {
 }
 
 void co_wait(struct co *thd) {
+    if (setjmp(retbuf)) {
+        return;
+    }
+
     if (thd == NULL) {
         printf("EMPTY THD!\n");
         return;
