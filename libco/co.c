@@ -116,6 +116,7 @@ void co_yield() {
 void co_wait(struct co *thd) {
     printf("\nNOTICE!!!!\n");
     if (setjmp(retbuf)) {
+        printf("\nNOTICE RET !!!\n");
         free(current->stack);
         free(current->stack_backup);
         memset(current, 0, sizeof(struct co));
