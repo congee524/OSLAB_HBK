@@ -153,6 +153,7 @@ void co_wait(struct co *thd) {
                SP_C);
                */
             asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
+            printf("???\n");
             break;
             /*
                case COROUTINE_SUSPEND:
