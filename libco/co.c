@@ -121,10 +121,9 @@ void co_wait(struct co *thd) {
         return;
     }
 
-    printf("state %d\n", thd->state);
     switch(thd->state) {
         case COROUTINE_READY:
-            //    printf("1\n");
+                printf("1\n");
             if (current != NULL) {
                 if (current->state == COROUTINE_RUNNING) {
                     current->state = COROUTINE_SUSPEND;
