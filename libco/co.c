@@ -11,7 +11,7 @@
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 #define MAX_CO 10
-#define STACKSIZE (1 << 20)
+#define STACKSIZE (1 << 12)
 
 #if defined(__i386__)
     #define SP "%%esp"
@@ -31,8 +31,8 @@ struct co {
     jmp_buf buf; // to save the state of present function
     int state; // record the state of routine
     void *coarg;
-    uint8_t stack[STACKSIZE];
-    uint8_t stack_backup[STACKSIZE];
+    void *stack;
+    void *stack_backup;
 };
 
 // #define STACKDIR - // set - for downwards
@@ -74,7 +74,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     */
     // func(arg); // Test #2 hangs
 
-    return (struct co*)(coroutine + pre);
+    return &coroutine[pre];
 }
 
 void co_yield() {
@@ -110,6 +110,8 @@ void co_wait(struct co *thd) {
             if (current == NULL) {
                 current = thd;
             }
+            current->stack = malloc(STACKSIZE);
+            current->stack -= STACKSIZE;
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
