@@ -114,6 +114,7 @@ void co_wait(struct co *thd) {
         return;
     }
 
+    printf("\nNOTICE!\n");
     if (thd == NULL) {
         printf("EMPTY THD!\n");
         return;
