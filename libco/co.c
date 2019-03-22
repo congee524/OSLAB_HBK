@@ -65,15 +65,11 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].coarg = arg;
     coroutine[pre].state = COROUTINE_READY;
 
-    /*
     if (setjmp(coroutine[pre].buf)) {
-        return current;
+        func(arg); // Test #2 hangs
     } else {
-       func(arg);
+       return &coroutine[pre];
     }
-    */
-    // func(arg); // Test #2 hangs
-
     return &coroutine[pre];
 }
 
