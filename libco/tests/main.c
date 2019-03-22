@@ -15,18 +15,18 @@ static int get_count() {
 }
 
 static void work_loop(void *arg) {
-    printf("3\n");
+    //printf("3\n");
     const char *s = (const char*)arg;
-    printf("%s\n", s);
-    printf("4\n");
+    //printf("%s\n", s);
+    //printf("4\n");
     for (int i = 0; i < 100; ++i) {
-        printf("5\n");
+        //printf("5\n");
         printf("%s%d  ", s, get_count());
-        printf("6\n");
+        //printf("6\n");
         add_count();
-        printf("7\n");
+        //printf("7\n");
         co_yield();
-        printf("have yield, i: %d\n", i);
+        //printf("have yield, i: %d\n", i);
     }
 }
 
@@ -40,7 +40,7 @@ static void test_1() {
     struct co *thd2 = co_start("thread-2", work, "Y");
 
     co_wait(thd1);
-    puts("thd1 finish\n");
+    //puts("thd1 finish\n");
     co_wait(thd2);
 
     printf("\n");

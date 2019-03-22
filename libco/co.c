@@ -67,19 +67,19 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].stack += STACKSIZE;
 
     if (setjmp(coroutine[pre].buf)) {
-            printf("***\n");
+            //printf("***\n");
                 asm volatile("mov " SP ", %0; mov %1, " SP :
                              "=g"(current->stack_backup) :
                              "g"(current->stack) :
                              SP_C);
-        printf("9\n");
+        //printf("9\n");
         current->func(current->coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
     } else {
         return &coroutine[pre];
     }
-    printf("33\n");
+    //printf("33\n");
     current->state = COROUTINE_SUSPEND;
     longjmp(retbuf, 1);
 }
@@ -97,14 +97,14 @@ void co_yield() {
                 break;
             }
         }
-        printf("8\n");
+        //printf("8\n");
         if (go == MAX_CO) {
             printf("NO ACCESSIBLE COROUTINE!\n");
             return;
         }
         // printf("the upper arg: %s\n", (char *)current->coarg);
         current = &coroutine[go];
-        printf("go %d\n", go);
+        //printf("go %d\n", go);
         current->state = COROUTINE_RUNNING;
         // printf("the lower arg: %s\n", (char *)current->coarg);
         longjmp(coroutine[go].buf, 1);
@@ -114,10 +114,10 @@ void co_yield() {
 }
 
 void co_wait(struct co *thd) {
-    printf("\nNOTICE! %s\n", thd->name);
-    printf("STATE %d\n", thd->state);
+    //printf("\nNOTICE! %s\n", thd->name);
+    //printf("STATE %d\n", thd->state);
     if (setjmp(retbuf)) {
-        printf("\nNOTICE RET !!!\n");
+        //printf("\nNOTICE RET !!!\n");
         //free(current->stack);
         //free(current->stack_backup);
         memset(current, 0, sizeof(struct co));
@@ -138,7 +138,7 @@ void co_wait(struct co *thd) {
             longjmp(current->buf, 1);
             break;
         default:
-            printf("COROUTINE_RUNNING\n");
+            //printf("COROUTINE_RUNNING\n");
             printf("Wrong State %d!\n", thd->state);
             assert(0);
     }
