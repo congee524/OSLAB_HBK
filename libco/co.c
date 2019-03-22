@@ -66,10 +66,10 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].state = COROUTINE_READY;
 
     if (setjmp(coroutine[pre].buf)) {
-        if (coroutine[pre].stack == NULL) {
+        if (current->stack == NULL) {
             printf("***\n");
-            coroutine[pre].stack = malloc(STACKSIZE);
-            coroutine[pre].stack += (STACKSIZE >> 1);
+            current->stack = malloc(STACKSIZE);
+            current->stack += (STACKSIZE >> 1);
         }
         asm volatile("mov " SP ", %0; mov %1, " SP :
                      "=g"(current->stack_backup) :
