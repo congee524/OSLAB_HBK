@@ -151,9 +151,9 @@ void co_wait(struct co *thd) {
             assert(0);
     }
 
-    //free(thd->stack);
-    //free(thd->stack_backup);
-    //free(thd);
+    free(thd->stack);
+    free(thd->stack_backup);
+    memset(thd, 0, sizeof(thd));
     return;
 }
 
