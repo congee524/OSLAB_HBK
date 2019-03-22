@@ -26,6 +26,7 @@ static void work_loop(void *arg) {
         add_count();
         printf("7\n");
         co_yield();
+        printf("have yield\n");
     }
 }
 
