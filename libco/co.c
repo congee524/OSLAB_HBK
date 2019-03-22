@@ -11,7 +11,6 @@
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 #define MAX_CO 10
-#define NAMESIZE 128
 #define STACKSIZE (1 << 12)
 
 #if defined(__i386__)
@@ -27,7 +26,7 @@
 #endif
 
 struct co {
-    char name[NAMESIZE];
+    char name[128];
     func_t func;
     jmp_buf buf; // to save the state of present function
     int state; // record the state of routine
@@ -133,7 +132,7 @@ void co_wait(struct co *thd) {
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
                             SP_C);
-            // printf("2\n");
+            //printf("2\n");
             current->state = COROUTINE_RUNNING;
             current->func(current->coarg);
             /*
