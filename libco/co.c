@@ -67,7 +67,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 
     if (setjmp(coroutine[pre].buf)) {
         if (current->stack == NULL) {
-            printf("***\n");
+        //    printf("***\n");
             current->stack = malloc(STACKSIZE);
             current->stack += (STACKSIZE >> 1);
         }
@@ -75,7 +75,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
                      "=g"(current->stack_backup) :
                      "g"(current->stack) :
                      SP_C);
-        printf("2\n");
+        // printf("2\n");
         current->state = COROUTINE_RUNNING;
         current->func(current->coarg);
         // func(arg); // Test #2 hangs
@@ -88,7 +88,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 
 void co_yield() {
     if (!setjmp(current->buf)) {
-        printf("###\n");
+    //    printf("###\n");
         int go;
         for (go = 0; go < MAX_CO; go++) {
             if (coroutine[go].state != COROUTINE_DEAD
@@ -101,10 +101,10 @@ void co_yield() {
             return;
         }
         current->state = COROUTINE_SUSPEND;
-        printf("the upper arg: %s\n", (char *)current->coarg);
+        // printf("the upper arg: %s\n", (char *)current->coarg);
         current = &coroutine[go];
         current->state = COROUTINE_RUNNING;
-        printf("the lower arg: %s\n", (char *)current->coarg);
+        // printf("the lower arg: %s\n", (char *)current->coarg);
         longjmp(coroutine[go].buf, 1);
     } else {
         return;
@@ -119,12 +119,12 @@ void co_wait(struct co *thd) {
 
     switch(thd->state) {
         case COROUTINE_READY:
-            printf("1\n");
+        //    printf("1\n");
             if (current == NULL) {
                 current = thd;
             }
             if (current->stack == NULL) {
-                printf("!!!!!!\n");
+            //    printf("!!!!!!\n");
                 current->stack = malloc(STACKSIZE);
                 current->stack += (STACKSIZE >> 1);
             }
@@ -132,7 +132,7 @@ void co_wait(struct co *thd) {
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
                             SP_C);
-            printf("2\n");
+            // printf("2\n");
             current->state = COROUTINE_RUNNING;
             current->func(current->coarg);
             /*
