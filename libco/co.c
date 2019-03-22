@@ -93,6 +93,7 @@ void co_yield() {
 
 void co_wait(struct co *thd) {
     if (thd == NULL) {
+        printf("EMPTY THD!\n");
         return;
     }
 
