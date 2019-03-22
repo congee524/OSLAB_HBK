@@ -115,14 +115,12 @@ void co_wait(struct co *thd) {
     if (setjmp(retbuf)) {
         return;
     }
-    //printf("\nNOTICE!\n");
 
     if (thd == NULL) {
         printf("EMPTY THD!\n");
         return;
     }
 
-    printf("11\n");
     switch(thd->state) {
         case COROUTINE_READY:
             //    printf("1\n");
