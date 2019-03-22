@@ -76,6 +76,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
                      "g"(current->stack) :
                      SP_C);
         printf("2\n");
+        coroutine[pre].state = COROUTINE_RUNNING;
         coroutine[pre].func(coroutine[pre].coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
@@ -99,7 +100,8 @@ void co_yield() {
             printf("NO ACCESSIBLE COROUTINE!\n");
             return;
         }
-        current = coroutine + go;
+        current->state = COROUTINE_SUSPEND;
+        current = &coroutine[go];
         longjmp(coroutine[go].buf, 1);
     } else {
         return;
@@ -128,6 +130,7 @@ void co_wait(struct co *thd) {
                             "g"(current->stack) :
                             SP_C);
             printf("2\n");
+            current->state = COROUTINE_RUNNING;
             current->func(current->coarg);
             /*
             asm volatile("mov " SP ", %0; mov %1, " SP :
