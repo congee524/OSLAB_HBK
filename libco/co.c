@@ -172,14 +172,17 @@ void co_wait(struct co *thd) {
                return;
                break;
                */
+        case COROUTINE_RUNNING:
+            longjmp(current->buf, 1);
+            break;
         default:
             printf("Wrong State %d!\n", thd->state);
             assert(0);
     }
 
-    free(thd->stack);
-    free(thd->stack_backup);
-    memset(thd, 0, sizeof(struct co));
+    // free(thd->stack);
+    // free(thd->stack_backup);
+    memset(current, 0, sizeof(struct co));
     return;
 }
 
