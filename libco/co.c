@@ -141,12 +141,13 @@ void co_wait(struct co *thd) {
             current = thd;
             thd->state = COROUTINE_RUNNING;
             printf("44\n");
-            asm volatile("mov " SP ", %0; mov %1, " SP :
+            /*asm volatile("mov " SP ", %0; mov %1, " SP :
                          "=g"(thd->stack_backup) :
                          "g"(thd->stack) :
                          SP_C);
             // printf("2\n");
-            thd->func(thd->coarg);
+            thd->func(thd->coarg);*/
+            longjmp(thd->buf, 1);
             printf("finish one!\n");
             /*
                asm volatile("mov " SP ", %0; mov %1, " SP :
@@ -168,8 +169,6 @@ void co_wait(struct co *thd) {
                break;
                */
         case COROUTINE_SUSPEND:
-            current->state = COROUTINE_RUNNING;
-            longjmp(current->buf, 1);
             break;
         case COROUTINE_RUNNING:
             longjmp(current->buf, 1);
