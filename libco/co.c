@@ -155,7 +155,9 @@ void co_wait(struct co *thd) {
             asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
             printf("???\n");
             free(thd->stack);
+            printf("free stack\n");
             free(thd->stack_backup);
+            printf("free stack_backup\n");
             memset(thd, 0, sizeof(struct co));
             return;
             break;
