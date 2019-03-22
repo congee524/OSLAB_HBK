@@ -86,8 +86,8 @@ struct co* co_start(const char *name, func_t func, void *arg) {
 }
 
 void co_yield() {
-    printf("###\n");
     if (!setjmp(current->buf)) {
+        printf("###\n");
         int go;
         for (go = 0; go < MAX_CO; go++) {
             if (coroutine[go].state != COROUTINE_DEAD
