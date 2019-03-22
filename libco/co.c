@@ -11,7 +11,7 @@
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 #define MAX_CO 10
-#define STACKSIZE (1 << 20)
+#define STACKSIZE (1 << 12)
 
 #if defined(__i386__)
     #define SP "%%esp"
@@ -152,7 +152,10 @@ void co_wait(struct co *thd) {
             assert(0);
     }
 
+    free(thd->name);
+    free(thd->coarg);
     free(thd->stack);
+    free(thd->stack_backup);
     free(thd);
     return;
 }
