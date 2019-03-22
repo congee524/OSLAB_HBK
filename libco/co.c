@@ -167,8 +167,10 @@ void co_wait(struct co *thd) {
                return;
                break;
                */
+        case COREOUTINE_SUSPEND:
+            longjmp(current->buf, 1);
+            break;
         case COROUTINE_RUNNING:
-            printf("####\n");
             longjmp(current->buf, 1);
             break;
         default:
