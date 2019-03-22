@@ -58,7 +58,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     char arg_n[STACKDIR(tos - (void *)&arg)];
     coroutine[pre].coarg = arg_n;
 
-    current = &coroutine[pre];
+    current = coroutine + pre;
 
     if (setjmp(coroutine[pre].buf)) {
         return current;
