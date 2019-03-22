@@ -73,7 +73,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
                              "=g"(coroutine[pre].stack_backup) :
                              "g"(coroutine[pre].stack) :
                              SP_C);
-        // printf("2\n");
+        printf("9\n");
         coroutine[pre].state = COROUTINE_RUNNING;
         coroutine[pre].func(coroutine[pre].coarg);
         // func(arg); // Test #2 hangs
