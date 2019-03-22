@@ -115,6 +115,9 @@ void co_yield() {
 
 void co_wait(struct co *thd) {
     if (setjmp(retbuf)) {
+        free(current->stack);
+        free(current->stack_backup);
+        memset(current, 0, sizeof(struct co));
         return;
     }
 
