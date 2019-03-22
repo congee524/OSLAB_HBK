@@ -20,9 +20,9 @@
 #endif
 
 #if defined(__i386__)
-    #define SP_C "%esp"
+#define SP_C "%esp"
 #elif defined(__x86_64__)
-    #define SP_C "%rsp"
+#define SP_C "%rsp"
 #endif
 
 struct co {
@@ -40,7 +40,7 @@ static struct co coroutine[MAX_CO];
 static struct co *current;
 // static int co_cnt; // to record the num of coroutine
 // static void *tos; // top of stack
-
+static jmp_buf retbuf;
 
 void co_init() {
     current = NULL;
@@ -64,31 +64,31 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].func = func;
     coroutine[pre].coarg = arg;
     coroutine[pre].state = COROUTINE_READY;
+    coroutine[pre].stack = malloc(STACKSIZE);
+    coroutine[pre].stack += STACKSIZE;
 
     if (setjmp(coroutine[pre].buf)) {
-        if (current->stack == NULL) {
         //    printf("***\n");
-            current->stack = malloc(STACKSIZE);
-            current->stack += STACKSIZE;
-        }
-        asm volatile("mov " SP ", %0; mov %1, " SP :
-                     "=g"(current->stack_backup) :
-                     "g"(current->stack) :
-                     SP_C);
+                asm volatile("mov " SP ", %0; mov %1, " SP :
+                             "=g"(coroutine[pre].stack_backup) :
+                             "g"(coroutine[pre].stack) :
+                             SP_C);
         // printf("2\n");
-        current->state = COROUTINE_RUNNING;
-        current->func(current->coarg);
+        coroutine[pre].state = COROUTINE_RUNNING;
+        coroutine[pre].func(coroutine[pre].coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
     } else {
-       return &coroutine[pre];
+        return &coroutine[pre];
     }
-    return &coroutine[pre];
+    printf("33\n");
+    current->state = COROUTINE_SUSPEND;
+    longjmp(retbuf, 1);
 }
 
 void co_yield() {
     if (!setjmp(current->buf)) {
-    //    printf("###\n");
+        //    printf("###\n");
         int go;
         for (go = 0; go < MAX_CO; go++) {
             if (coroutine[go].state != COROUTINE_DEAD
@@ -112,47 +112,52 @@ void co_yield() {
 }
 
 void co_wait(struct co *thd) {
+    if (setjmp(retbuf)) {
+        return;
+    }
+
     if (thd == NULL) {
         printf("EMPTY THD!\n");
         return;
     }
 
+    printf("state %d\n", thd->state);
     switch(thd->state) {
         case COROUTINE_READY:
-        //    printf("1\n");
-            if (current == NULL) {
-                current = thd;
+            //    printf("1\n");
+            if (current != NULL) {
+                if (current->state == COROUTINE_RUNNING) {
+                    current->state = COROUTINE_SUSPEND;
+                }
             }
-            if (current->stack == NULL) {
-            //    printf("!!!!!!\n");
-                current->stack = malloc(STACKSIZE);
-                current->stack += STACKSIZE;
-            }
+
+            current = thd;
+            thd->state = COROUTINE_RUNNING;
             asm volatile("mov " SP ", %0; mov %1, " SP :
-                            "=g"(current->stack_backup) :
-                            "g"(current->stack) :
-                            SP_C);
+                         "=g"(thd->stack_backup) :
+                         "g"(thd->stack) :
+                         SP_C);
             //printf("2\n");
-            current->state = COROUTINE_RUNNING;
-            current->func(current->coarg);
-            asm volatile("mov " SP ", %0; mov %1, " SP :
-                            "=g"(current->stack) :
-                            "g"(current->stack_backup) :
-                            SP_C);
-            // asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
+            thd->func(thd->coarg);
+            /*
+               asm volatile("mov " SP ", %0; mov %1, " SP :
+               "=g"(thd->stack) :
+               "g"(thd->stack_backup) :
+               SP_C);
+               */
+            asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
             break;
-        /*
-        case COROUTINE_SUSPEND:
-            return;
-            break;
-            */
+            /*
+               case COROUTINE_SUSPEND:
+               return;
+               break;
+               */
         default:
             printf("Wrong State!\n");
             assert(0);
     }
 
     free(thd->stack);
-    free(thd->stack_backup);
     memset(thd, 0, sizeof(struct co));
     return;
 }
