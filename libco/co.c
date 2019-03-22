@@ -11,6 +11,18 @@
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 
+#if defined(__i386__)
+    #define SP "%%esp"
+#elif defined(__x86_64__)
+    #define SP "%%rsp"
+#endif
+
+#if defined(__i386__)
+    #define SP_C "%esp"
+#elif defined(__x86_64__)
+    #define SP_C "%rsp"
+#endif
+
 struct co {
     char name[128];
     func_t func;
@@ -100,14 +112,14 @@ void co_wait(struct co *thd) {
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
-                            "%esp");
+                            SP_C);
             current->func(current->coarg);
             /*
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack) :
                             "g"(current->stack_backup));
                 */
-            asm volatile("mov %0," SP : : "g"(current->stack_backup) : "%esp");
+            asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
             break;
         /*
         case COROUTINE_SUSPEND:
