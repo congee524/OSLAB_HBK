@@ -120,32 +120,26 @@ void co_wait(struct co *thd) {
     switch(thd->state) {
         case COROUTINE_READY:
         //    printf("1\n");
-            if (current != NULL) {
-                if (current->state == COROUTINE_RUNNING) {
-                    current->state = COROUTINE_SUSPEND;
-                }
+            if (current == NULL) {
+                current = thd;
             }
-
-            if (thd->stack == NULL) {
+            if (current->stack == NULL) {
             //    printf("!!!!!!\n");
-                thd->stack = malloc(STACKSIZE);
-                thd->stack += STACKSIZE;
+                current->stack = malloc(STACKSIZE);
+                current->stack += STACKSIZE;
             }
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
                             SP_C);
             //printf("2\n");
-            current = thd;
-            thd->state = COROUTINE_RUNNING;
-            thd->func(current->coarg);
-            /*
+            current->state = COROUTINE_RUNNING;
+            current->func(current->coarg);
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack) :
                             "g"(current->stack_backup) :
                             SP_C);
-            */
-            asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
+            // asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
             break;
         /*
         case COROUTINE_SUSPEND:
