@@ -151,7 +151,7 @@ void co_wait(struct co *thd) {
             assert(0);
     }
 
-    free(thd->stack);
+    // free(thd->stack);
     // free(thd->stack_backup);
     free(thd);
     return;
