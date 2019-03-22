@@ -114,6 +114,7 @@ void co_wait(struct co *thd) {
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
                             SP_C);
+            printf("2\n");
             current->func(current->coarg);
             /*
             asm volatile("mov " SP ", %0; mov %1, " SP :
