@@ -68,7 +68,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].stack += STACKSIZE;
 
     if (setjmp(coroutine[pre].buf)) {
-        //    printf("***\n");
+            printf("***\n");
                 asm volatile("mov " SP ", %0; mov %1, " SP :
                              "=g"(coroutine[pre].stack_backup) :
                              "g"(coroutine[pre].stack) :
