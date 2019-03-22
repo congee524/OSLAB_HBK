@@ -131,13 +131,13 @@ void co_wait(struct co *thd) {
                 thd->stack = malloc(STACKSIZE);
                 thd->stack += STACKSIZE;
             }
+            current = thd;
+            thd->state = COROUTINE_RUNNING;
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(thd->stack_backup) :
                             "g"(thd->stack) :
                             SP_C);
             //printf("2\n");
-            current = thd;
-            thd->state = COROUTINE_RUNNING;
             thd->func(thd->coarg);
             /*
             asm volatile("mov " SP ", %0; mov %1, " SP :
