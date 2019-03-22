@@ -101,8 +101,9 @@ void co_yield() {
             return;
         }
         current->state = COROUTINE_SUSPEND;
+        printf("the upper arg: %s\n", (char *)current->coarg);
         current = &coroutine[go];
-        printf("the arg: %s\n", (char *)current->coarg);
+        printf("the lower arg: %s\n", (char *)current->coarg);
         longjmp(coroutine[go].buf, 1);
     } else {
         return;
