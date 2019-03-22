@@ -167,7 +167,7 @@ void co_wait(struct co *thd) {
                return;
                break;
                */
-        case COREOUTINE_SUSPEND:
+        case COROUTINE_SUSPEND:
             longjmp(current->buf, 1);
             break;
         case COROUTINE_RUNNING:
