@@ -70,12 +70,12 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     if (setjmp(coroutine[pre].buf)) {
             printf("***\n");
                 asm volatile("mov " SP ", %0; mov %1, " SP :
-                             "=g"(coroutine[pre].stack_backup) :
-                             "g"(coroutine[pre].stack) :
+                             "=g"(current->stack_backup) :
+                             "g"(current->stack) :
                              SP_C);
         printf("9\n");
-        coroutine[pre].state = COROUTINE_RUNNING;
-        coroutine[pre].func(coroutine[pre].coarg);
+        current->state = COROUTINE_RUNNING;
+        current->func(current->coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
     } else {
