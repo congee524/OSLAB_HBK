@@ -86,10 +86,10 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     longjmp(retbuf, 1);
 }
 
+int go=0;
 void co_yield() {
     if (!setjmp(current->buf)) {
         //    printf("###\n");
-        static int go=0;
         for (; go < MAX_CO; go++) {
             if (coroutine[go].state != COROUTINE_DEAD
                     && coroutine[go].state != COROUTINE_RUNNING) {
