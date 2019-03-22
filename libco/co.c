@@ -153,7 +153,7 @@ void co_wait(struct co *thd) {
 
     free(thd->stack);
     free(thd->stack_backup);
-    memset(thd, 0, sizeof(thd));
+    memset(thd, 0, sizeof(struct co));
     return;
 }
 
