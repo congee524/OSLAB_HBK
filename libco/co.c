@@ -129,6 +129,7 @@ void co_wait(struct co *thd) {
         return;
     }
 
+    printf("STATE %d\n", thd->state);
     switch(thd->state) {
         case COROUTINE_READY:
             if (current != NULL) {
@@ -159,13 +160,7 @@ void co_wait(struct co *thd) {
                 free(current->stack);
             }
             */
-            printf("free stack\n");
             asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
-            printf("???\n");
-            //free(current->stack_backup);
-            printf("free stack_backup\n");
-            // memset(thd, 0, sizeof(struct co));
-            return;
             break;
             /*
                case COROUTINE_SUSPEND:
