@@ -110,10 +110,11 @@ void co_yield() {
 }
 
 void co_wait(struct co *thd) {
+    /*
     if (setjmp(retbuf)) {
         return;
     }
-
+*/
     printf("\nNOTICE!\n");
 
     if (thd == NULL) {
