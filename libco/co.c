@@ -96,6 +96,7 @@ void co_yield() {
                 break;
             }
         }
+        printf("8\n");
         if (go == MAX_CO) {
             printf("NO ACCESSIBLE COROUTINE!\n");
             return;
