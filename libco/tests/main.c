@@ -21,6 +21,7 @@ static void work_loop(void *arg) {
     for (int i = 0; i < 100; ++i) {
         printf("5\n");
         printf("%s%d  ", s, get_count());
+        printf("6\n");
         add_count();
         co_yield();
     }
