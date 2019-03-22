@@ -34,6 +34,7 @@ struct co {
     void *stack;
     void *stack_backup;
 };
+jmp_buf ret_buf;
 
 // #define STACKDIR - // set - for downwards
 static struct co coroutine[MAX_CO];
@@ -78,6 +79,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
         current->func(current->coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
+        longjmp(ret_buf,1);
     } else {
        return &coroutine[pre];
     }
@@ -110,6 +112,7 @@ void co_yield() {
 }
 
 void co_wait(struct co *thd) {
+    if(setjmp(ret_buf))return;
     if (thd == NULL) {
         printf("EMPTY THD!\n");
         return;
