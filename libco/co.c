@@ -81,6 +81,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     } else {
         return &coroutine[pre];
     }
+    printf("33\n");
     current->state = COROUTINE_SUSPEND;
     longjmp(retbuf, 1);
 }
