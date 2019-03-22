@@ -97,7 +97,7 @@ void co_wait(struct co *thd) {
             if (current == NULL) {
                 current = thd;
             }
-            asm volatile("mov " :SP ", %0; mov %1, " :SP :
+            asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
                             "%esp");
@@ -107,7 +107,7 @@ void co_wait(struct co *thd) {
                             "=g"(current->stack) :
                             "g"(current->stack_backup));
                 */
-            asm volatile("mov %0," :SP : : "g"(current->stack_backup) : "%esp");
+            asm volatile("mov %0," SP : : "g"(current->stack_backup) : "%esp");
             break;
         /*
         case COROUTINE_SUSPEND:
