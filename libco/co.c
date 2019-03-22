@@ -7,7 +7,6 @@
 #include "co.h"
 
 #define COROUTINE_DEAD 0
-#define COROUTINE_READY 1
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 #define MAX_CO 10
@@ -74,7 +73,6 @@ struct co* co_start(const char *name, func_t func, void *arg) {
                              "g"(current->stack) :
                              SP_C);
         printf("9\n");
-        current->state = COROUTINE_RUNNING;
         current->func(current->coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
@@ -86,11 +84,13 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     longjmp(retbuf, 1);
 }
 
-void co_yield() {
 int go=0;
+void co_yield() {
     if (!setjmp(current->buf)) {
+        current->state = COROUTINE_SUSPEND;
         //    printf("###\n");
-        for (; go < MAX_CO; go++) {
+        for (;; go++) {
+            if(go==MAX_CO)go=0;
             if (coroutine[go].state != COROUTINE_DEAD
                     && coroutine[go].state != COROUTINE_RUNNING) {
                 break;
@@ -101,7 +101,6 @@ int go=0;
             printf("NO ACCESSIBLE COROUTINE!\n");
             return;
         }
-        current->state = COROUTINE_SUSPEND;
         // printf("the upper arg: %s\n", (char *)current->coarg);
         current = &coroutine[go];
         printf("go %d\n", go);
@@ -146,6 +145,7 @@ void co_wait(struct co *thd) {
     // free(thd->stack);
     // free(thd->stack_backup);
     memset(current, 0, sizeof(struct co));
+    assert(current->state==COROUTINE_DEAD);
     return;
 }
 
