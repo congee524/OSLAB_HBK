@@ -173,6 +173,7 @@ void co_wait(struct co *thd) {
                break;
                */
         case COROUTINE_RUNNING:
+            printf("####\n");
             longjmp(current->buf, 1);
             break;
         default:
