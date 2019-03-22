@@ -81,6 +81,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     } else {
         return &coroutine[pre];
     }
+    current->state = COROUTINE_SUSPEND;
     longjmp(retbuf, 1);
 }
 
@@ -110,11 +111,9 @@ void co_yield() {
 }
 
 void co_wait(struct co *thd) {
-    /*
     if (setjmp(retbuf)) {
         return;
     }
-*/
     printf("\nNOTICE!\n");
 
     if (thd == NULL) {
@@ -122,6 +121,7 @@ void co_wait(struct co *thd) {
         return;
     }
 
+    printf("11\n");
     switch(thd->state) {
         case COROUTINE_READY:
             //    printf("1\n");
