@@ -120,9 +120,10 @@ void co_wait(struct co *thd) {
     switch(thd->state) {
         case COROUTINE_READY:
         //    printf("1\n");
-            if (current == NULL || current->state == COROUTINE_DEAD) {
-                current = thd;
+            if (current->state == COROUTINE_RUNNING) {
+                current->state = COROUTINE_SUSPEND;
             }
+
             if (thd->stack == NULL) {
             //    printf("!!!!!!\n");
                 thd->stack = malloc(STACKSIZE);
@@ -133,6 +134,7 @@ void co_wait(struct co *thd) {
                             "g"(current->stack) :
                             SP_C);
             //printf("2\n");
+            current = thd;
             thd->state = COROUTINE_RUNNING;
             thd->func(current->coarg);
             /*
