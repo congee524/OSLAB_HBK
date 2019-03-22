@@ -50,6 +50,9 @@ void co_init() {
 struct co* co_start(const char *name, func_t func, void *arg) {
     int pre;
     for (pre = 0; pre < MAX_CO; pre++) {
+        if (coroutine[pre].state == COROUTINE_SUSPEND){
+            memset(&coroutine[pre], 0, sizeof(struct co));
+        }
         if (coroutine[pre].state == COROUTINE_DEAD) {
             break;
         }
@@ -163,7 +166,7 @@ void co_wait(struct co *thd) {
             printf("???\n");
             //free(current->stack_backup);
             printf("free stack_backup\n");
-            memset(thd, 0, sizeof(struct co));
+            // memset(thd, 0, sizeof(struct co));
             return;
             break;
             /*
