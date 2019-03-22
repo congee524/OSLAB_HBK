@@ -66,7 +66,18 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].state = COROUTINE_READY;
 
     if (setjmp(coroutine[pre].buf)) {
-        func(arg); // Test #2 hangs
+        if (coroutine[pre].stack == NULL) {
+            coroutine[pre].stack = malloc(STACKSIZE);
+            coroutine[pre].stack -= STACKSIZE;
+        }
+        asm volatile("mov " SP ", %0; mov %1, " SP :
+                     "=g"(current->stack_backup) :
+                     "g"(current->stack) :
+                     SP_C);
+        printf("2\n");
+        coroutine[pre].func(coroutine[pre].coarg);
+        // func(arg); // Test #2 hangs
+        asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
     } else {
        return &coroutine[pre];
     }
@@ -106,8 +117,10 @@ void co_wait(struct co *thd) {
             if (current == NULL) {
                 current = thd;
             }
-            current->stack = malloc(STACKSIZE);
-            current->stack -= STACKSIZE;
+            if (current->stack == NULL) {
+                current->stack = malloc(STACKSIZE);
+                current->stack -= STACKSIZE;
+            }
             asm volatile("mov " SP ", %0; mov %1, " SP :
                             "=g"(current->stack_backup) :
                             "g"(current->stack) :
