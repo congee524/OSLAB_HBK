@@ -63,7 +63,7 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     // coroutine[co_cnt].name = name;
     coroutine[pre].func = func;
     coroutine[pre].coarg = arg;
-    coroutine[pre].state = COROUTINE_READY;
+    coroutine[pre].state = COROUTINE_RUNNING;
     coroutine[pre].stack = malloc(STACKSIZE);
     coroutine[pre].stack += STACKSIZE;
 
@@ -86,8 +86,8 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     longjmp(retbuf, 1);
 }
 
-int go=0;
 void co_yield() {
+int go=0;
     if (!setjmp(current->buf)) {
         //    printf("###\n");
         for (; go < MAX_CO; go++) {
@@ -131,43 +131,6 @@ void co_wait(struct co *thd) {
 
     printf("STATE %d\n", thd->state);
     switch(thd->state) {
-        case COROUTINE_READY:
-            if (current != NULL) {
-                if (current->state == COROUTINE_RUNNING) {
-                    current->state = COROUTINE_SUSPEND;
-                }
-            }
-
-            current = thd;
-            thd->state = COROUTINE_RUNNING;
-            printf("44\n");
-            /*asm volatile("mov " SP ", %0; mov %1, " SP :
-                         "=g"(thd->stack_backup) :
-                         "g"(thd->stack) :
-                         SP_C);
-            // printf("2\n");
-            thd->func(thd->coarg);*/
-            longjmp(thd->buf, 1);
-            printf("finish one!\n");
-            /*
-               asm volatile("mov " SP ", %0; mov %1, " SP :
-               "=g"(thd->stack) :
-               "g"(thd->stack_backup) :
-               SP_C);
-            */
-
-            /*
-            if (current->stack != NULL) {
-                free(current->stack);
-            }
-            */
-            asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
-            break;
-            /*
-               case COROUTINE_SUSPEND:
-               return;
-               break;
-               */
         case COROUTINE_SUSPEND:
             break;
         case COROUTINE_RUNNING:
