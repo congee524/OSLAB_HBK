@@ -153,7 +153,9 @@ void co_wait(struct co *thd) {
                SP_C);
             */
 
-            free(current->stack);
+            if (current->stack != NULL) {
+                free(current->stack);
+            }
             printf("free stack\n");
             asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
             printf("???\n");
