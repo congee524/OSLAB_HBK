@@ -7,10 +7,12 @@
 #include "co.h"
 
 #define COROUTINE_DEAD 0
+// #define COROUTINE_READY 1 no need
 #define COROUTINE_RUNNING 2
 #define COROUTINE_SUSPEND 3
 #define MAX_CO 10
 #define STACKSIZE (1 << 12)
+#define NAMESIZE 128
 
 #if defined(__i386__)
     #define SP "%%esp"
@@ -19,13 +21,13 @@
 #endif
 
 #if defined(__i386__)
-#define SP_C "%esp"
+    #define SP_C "%esp"
 #elif defined(__x86_64__)
-#define SP_C "%rsp"
+    #define SP_C "%rsp"
 #endif
 
 struct co {
-    char name[128];
+    char name[NAMESIZE];
     func_t func;
     jmp_buf buf; // to save the state of present function
     int state; // record the state of routine
@@ -40,6 +42,7 @@ static struct co *current;
 // static int co_cnt; // to record the num of coroutine
 // static void *tos; // top of stack
 static jmp_buf retbuf;
+static int go = 0;
 
 void co_init() {
     current = NULL;
@@ -67,49 +70,46 @@ struct co* co_start(const char *name, func_t func, void *arg) {
     coroutine[pre].stack += STACKSIZE;
 
     if (setjmp(coroutine[pre].buf)) {
-            //printf("***\n");
-                asm volatile("mov " SP ", %0; mov %1, " SP :
-                             "=g"(current->stack_backup) :
-                             "g"(current->stack) :
-                             SP_C);
+        //printf("***\n");
+        asm volatile("mov " SP ", %0; mov %1, " SP :
+                "=g"(current->stack_backup) :
+                "g"(current->stack) :
+                SP_C);
         //printf("9\n");
         current->func(current->coarg);
         // func(arg); // Test #2 hangs
         asm volatile("mov %0," SP : : "g"(current->stack_backup) : SP_C);
+        current->state = COROUTINE_SUSPEND;
+        longjmp(retbuf, 1);
     } else {
         return &coroutine[pre];
     }
-    //printf("33\n");
-    current->state = COROUTINE_SUSPEND;
-    longjmp(retbuf, 1);
+    printf("should not reach here!\n");
+    return NULL;
 }
 
-int go=0;
 void co_yield() {
     if (!setjmp(current->buf)) {
         current->state = COROUTINE_SUSPEND;
         //    printf("###\n");
         while(1) {
             go++;
-            if(go==MAX_CO)go=0;
-            if (coroutine[go].state != COROUTINE_DEAD){
-                   // && coroutine[go].state != COROUTINE_RUNNING) {
-                break;
-            }
+            go = (go == MAX_CO) ? 0 : go;
+            // coroutine[go].state != COROUTINE_RUNNING) {
+            if (coroutine[go].state != COROUTINE_DEAD){ break;}
         }
         //printf("8\n");
         if (go == MAX_CO) {
             printf("NO ACCESSIBLE COROUTINE!\n");
             return;
         }
+
         // printf("the upper arg: %s\n", (char *)current->coarg);
         current = &coroutine[go];
         //printf("go %d\n", go);
         current->state = COROUTINE_RUNNING;
         // printf("the lower arg: %s\n", (char *)current->coarg);
         longjmp(coroutine[go].buf, 1);
-    } else {
-        return;
     }
 }
 
