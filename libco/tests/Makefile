@@ -10,7 +10,7 @@ libco:
 	@cd .. && make -s
 
 libco-test-64: main.c libco
-	gcc -I.. -L.. -m64 main.c -o libco-test-64 -lco-64
+	gcc -g -I.. -L.. -m64 main.c -o libco-test-64 -lco-64
 
 libco-test-32: main.c libco
 	gcc -I.. -L.. -m32 main.c -o libco-test-32 -lco-32

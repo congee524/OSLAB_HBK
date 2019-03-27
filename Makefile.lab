@@ -2,6 +2,7 @@
 
 submit:
 	@cd $(dir $(abspath $(lastword $(MAKEFILE_LIST)))) && \
+	  export STUID=171240513 && export STUNAME=黄秉焜 && \
 	  curl -sS 'http://moon.nju.edu.cn/%7ejyy/teach/submit.sh' | bash
 
 git:
