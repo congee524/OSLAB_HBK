@@ -115,7 +115,7 @@ static void kfree(void *ptr) {
   if (pre == NULL) {
     printf("No such memory space!\n");
     spin_unlock(&alloc_lk);
-    assert(0);
+    // assert(0);
     return;
   }
   pre->free = 1;
