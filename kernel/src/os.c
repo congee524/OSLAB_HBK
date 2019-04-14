@@ -1,7 +1,7 @@
 #include <common.h>
 #include <klib.h>
 
-#define max_test 20
+#define max_test 11000
 static void *s[4][max_test] = {};
 static void l1_test0() {
   srand(uptime());
