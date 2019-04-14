@@ -23,6 +23,7 @@ static void *sbrk(intptr_t increment) {
 static t_block extend_heap(t_block last, size_t size) {
   t_block pre;
   pre = sbrk(0);
+  printf("extend %p\n", pre);
   if (sbrk(BLOCK_SIZE + size) == (void *)-1) {
     return NULL;
   } else {
