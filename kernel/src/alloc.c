@@ -23,7 +23,7 @@ static void *sbrk(intptr_t increment) {
 static t_block extend_heap(t_block last, size_t size) {
   t_block pre;
   pre = sbrk(0);
-  printf("extend %p\n", pre);
+  // printf("extend %p\n", pre);
   if (sbrk(BLOCK_SIZE + size) == (void *)-1) {
     return NULL;
   } else {
@@ -33,8 +33,6 @@ static t_block extend_heap(t_block last, size_t size) {
     if (last) {
       last->next = pre;
     }
-    printf("test free %d\n", pre->free);
-    printf("test next %p\n", pre->next);
     return pre;
   }
 }
@@ -43,10 +41,9 @@ static t_block find_block(t_block *last, size_t size) {
   t_block pre = base;
   while (pre && !((pre->free == 1) && (pre->size) >= size)) {
     // "*last" point the address of the pointer "last"
-    printf("!!!!!!!\n");
     *last = pre;
     pre = pre->next;
-    printf("pre to next at %p\n", pre);
+    // printf("pre to next at %p\n", pre);
   }
   return pre;
 }
@@ -88,9 +85,11 @@ static void *kalloc(size_t size) {
     last = base;
     pre = find_block(&last, size);
     if (pre) {
+      /*
       printf("FIND! %p\n", pre);
       printf("but NULL %p\n", NULL);
       pre == NULL ? printf("yes\n") : printf("no\n");
+      */
       if (pre->size - size > (BLOCK_SIZE + 8)) {
         split_block(pre, size);
       }
@@ -118,11 +117,11 @@ static void kfree(void *ptr) {
     assert(0);
     return;
   }
-  printf("ptr at %p\n", ptr);
+  // printf("ptr at %p\n", ptr);
   t_block last = base, pre = base;
   while (pre && ((void *)&pre->data != ptr)) {
     last = pre;
-    printf("pre now at %p\n", &pre->data);
+    // printf("pre now at %p\n", &pre->data);
     pre = pre->next;
   }
   if (pre == NULL) {
