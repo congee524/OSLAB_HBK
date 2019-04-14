@@ -8,9 +8,10 @@
 spinlock_t alloc_lk;
 void *base = NULL;
 
-typedef struct s_block {
+typedef struct s_block *t_block;
+struct s_block {
   size_t size;
   t_block next;
   int free;
   char data;  // denote the first byte of the memory block
-} * t_block;
+};
