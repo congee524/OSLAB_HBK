@@ -1,4 +1,6 @@
 #include <kernel.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static void* s[4][11451] = {};
 static void test() {
