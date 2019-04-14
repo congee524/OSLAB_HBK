@@ -99,7 +99,6 @@ static void *kalloc(size_t size) {
 }
 
 static void kfree(void *ptr) {
-  ptr -= BLOCK_SIZE;
   spin_lock(&alloc_lk);
   // TODO()
   if (base == NULL) {
@@ -109,7 +108,7 @@ static void kfree(void *ptr) {
     return;
   }
   t_block last, pre = base;
-  while (pre && (pre != ptr)) {
+  while (pre && (&pre->data != ptr)) {
     last = pre;
     pre = pre->next;
   }
