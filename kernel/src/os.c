@@ -21,13 +21,17 @@ void l1_test1() {
   int i;
   for (i = 0; i < 100; ++i) {
     space[i] = pmm->alloc(rand() % ((1 << 10) - 1));
+    printf("space %d get %p\n", i, space[i])
   }
   for (i = 0; i < 1000; ++i) {
     int temp = rand() % 10;
+    printf("space %d return %p\n", temp, space[temp]);
     pmm->free(space[temp]);
     space[temp] = pmm->alloc(rand() & ((1 << 10) - 1));
+    printf("space %d get %p\n", temp, space[temp])
   }
   for (i = 0; i < 100; ++i) {
+    printf("space %d return %p\n", i, space[i]);
     pmm->free(space[i]);
   }
 }
