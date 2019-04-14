@@ -1,3 +1,5 @@
+#include <kernel.h>
+
 // write all current CPU cached values to memory
 #define barrier() asm volatile("" ::: "memory")
 
