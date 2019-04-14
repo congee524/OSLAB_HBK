@@ -24,7 +24,7 @@ void l1_test1() {
     space[i] = pmm->alloc(rand() % ((1 << 10) - 1));
     printf("space %d get %p\n", i, space[i]);
   }
-  for (i = 0; i < 1000; ++i) {
+  for (i = 0; i < 10; ++i) {
     int temp = rand() % 10;
     printf("space %d return %p\n", temp, space[temp]);
     pmm->free(space[temp]);
