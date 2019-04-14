@@ -47,7 +47,6 @@ static t_block find_block(t_block *last, size_t size) {
     *last = pre;
     pre = pre->next;
     printf("pre to next at %p\n", pre);
-    printf("pre->free %d\n", pre->free);
   }
   return pre;
 }
