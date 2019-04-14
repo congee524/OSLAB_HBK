@@ -38,7 +38,7 @@ static t_block extend_heap(t_block last, size_t size) {
 
 static t_block find_block(t_block *last, size_t size) {
   t_block pre = base;
-  if (pre && !(pre->free && b->size >= size)) {
+  if (pre && !(pre->free && pre->size >= size)) {
     // "*last" point the address of the pointer "last"
     *last = pre;
     pre = pre->next;
