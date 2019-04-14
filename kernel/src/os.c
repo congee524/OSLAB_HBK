@@ -1,7 +1,6 @@
 #include <common.h>
 #include <klib.h>
 
-/*
 #define max_test 20
 static void *s[4][max_test] = {};
 static void l1_test0() {
@@ -14,8 +13,8 @@ static void l1_test0() {
   }
   printf("SUCCESS ON CPU %d", _cpu());
 }
-*/
 
+/*
 void l1_test1() {
   int maxx = 10;
   void *space[maxx];
@@ -37,6 +36,7 @@ void l1_test1() {
   }
   printf("SUCCESS!!!!!\n");
 }
+*/
 
 static void os_init() { pmm->init(); }
 
@@ -50,7 +50,7 @@ static void hello() {
 
 static void os_run() {
   hello();
-  l1_test1();
+  l1_test0();
   _intr_write(1);
   while (1) {
     _yield();
