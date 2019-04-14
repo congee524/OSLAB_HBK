@@ -17,7 +17,7 @@ static void *sbrk(intptr_t increment) {
     pm_pre -= increment;
     return (void *)-1;
   }
-  return pm_pre;
+  return (void *)pm_pre;
 }
 
 static t_block extend_heap(t_block last, size_t size) {
