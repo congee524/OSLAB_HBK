@@ -15,7 +15,7 @@ static void l1_test0() {
   printf("SUCCESS ON CPU %d", _cpu());
 }
 */
-
+/*
 void l1_test1() {
   int maxx = 100;
   void *space[maxx];
@@ -37,6 +37,7 @@ void l1_test1() {
   }
   printf("SUCCESS!!!!!\n");
 }
+*/
 
 static void os_init() { pmm->init(); }
 
