@@ -104,7 +104,7 @@ static void kfree(void *ptr) {
   // TODO()
   if (base == NULL) {
     printf("wrong memory space!\n");
-    spin_lock(&alloc_lk);
+    spin_unlock(&alloc_lk);
     assert(0);
     return;
   }
@@ -115,7 +115,7 @@ static void kfree(void *ptr) {
   }
   if (pre == NULL) {
     printf("No such memory space!\n");
-    spin_lock(&alloc_lk);
+    spin_unlock(&alloc_lk);
     assert(0);
     return;
   }
