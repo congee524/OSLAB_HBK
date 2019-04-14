@@ -2,12 +2,22 @@
 #include <common.h>
 #include <klib.h>
 
-static uintptr_t pm_start, pm_end;
+static uintptr_t pm_start, pm_end, pm_pre;
 
 static void pmm_init() {
   // need to adjust the code according to the _heap.start and end!!!!
   pm_start = (uintptr_t)_heap.start;
   pm_end = (uintptr_t)_heap.end;
+  pm_pre = pm_start;
+}
+
+static void *sbrk(intptr_t increment) {
+  pm_pre += increment;
+  if (pm_pre > pm_end || pm_pre < pm_start) {
+    pm_pre -= increment;
+    return (void *)-1;
+  }
+  return pm_pre;
 }
 
 static t_block extend_heap(t_block last, size_t size) {
@@ -46,6 +56,12 @@ static void split_block(t_block pre, size_t size) {
   pre->size = size;
 }
 
+static void merge_block(t_block pre) {
+  pre->size += (pre->next->size + BLOCK_SIZE);
+  pre->next->free = 0;
+  pre->next = pre->next->next;
+}
+
 static void *kalloc(size_t size) {
   spin_lock(&alloc_lk);
   // TODO()
@@ -56,6 +72,7 @@ static void *kalloc(size_t size) {
   if (base == NULL) {
     pre = extend_heap(last, size);
     if (pre == NULL) {
+      spin_unlock(&alloc_lk);
       return NULL;
     } else {
       base = pre;
@@ -71,6 +88,7 @@ static void *kalloc(size_t size) {
     } else {
       pre = extend_heap(last, size);
       if (pre == NULL) {
+        spin_unlock(&alloc_lk);
         return NULL;
       }
     }
@@ -83,9 +101,32 @@ static void *kalloc(size_t size) {
 static void kfree(void *ptr) {
   spin_lock(&alloc_lk);
   // TODO()
-  t_block pre = ptr;
+  if (base == NULL) {
+    printf("wrong memory space!\n");
+    spin_lock(&alloc_lk);
+    assert(0);
+    return;
+  }
+  t_block last, pre = base;
+  while (pre && (pre != ptr)) {
+    last = pre;
+    pre = pre->next;
+  }
+  if (pre == NULL) {
+    printf("No such memory space!\n");
+    spin_lock(&alloc_lk);
+    assert(0);
+    return;
+  }
   pre->free = 1;
+  if (pre != base && last->free == 1) {
+    merge_block(last);
+  }
+  if (pre->next != NULL && pre->next->free == 1) {
+    merge_block(pre);
+  }
   spin_unlock(&alloc_lk);
+  return;
 }
 
 MODULE_DEF(pmm){
