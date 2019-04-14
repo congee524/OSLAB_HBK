@@ -9,11 +9,11 @@ static void hello() {
   }
   _putc("12345678"[_cpu()]);
   _putc('\n');
+  l1_test0();
 }
 
 static void os_run() {
   hello();
-  l1_test0();
   _intr_write(1);
   while (1) {
     _yield();
