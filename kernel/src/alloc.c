@@ -48,7 +48,7 @@ static t_block find_block(t_block *last, size_t size) {
 
 static void split_block(t_block pre, size_t size) {
   t_block new;
-  new = &pre->data + size;
+  new = (t_block)(&pre->data + size);
   new->size = b->size - size - BLOCK_SIZE;
   new->free = 1;
   new->next = pre->next;
