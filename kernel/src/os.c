@@ -1,6 +1,7 @@
 #include <common.h>
 #include <klib.h>
 
+/*
 #define max_test 20
 static void *s[4][max_test] = {};
 static void l1_test0() {
@@ -13,6 +14,7 @@ static void l1_test0() {
   }
   printf("SUCCESS ON CPU %d", _cpu());
 }
+*/
 
 void l1_test1() {
   void *space[100];
