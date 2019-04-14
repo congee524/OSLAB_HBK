@@ -71,6 +71,7 @@ static void *kalloc(size_t size) {
   size = align4(size);
   if (base == NULL) {
     pre = extend_heap(last, size);
+    printf("base !\n");
     if (pre == NULL) {
       printf("base Need more memory!\n");
       spin_unlock(&alloc_lk);

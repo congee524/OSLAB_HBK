@@ -17,9 +17,10 @@ static void l1_test0() {
 */
 
 void l1_test1() {
-  void *space[100];
+  int maxx = 10;
+  void *space[maxx];
   int i;
-  for (i = 0; i < 100; ++i) {
+  for (i = 0; i < maxx; ++i) {
     space[i] = pmm->alloc(rand() % ((1 << 10) - 1));
     printf("space %d get %p\n", i, space[i]);
   }
@@ -30,7 +31,7 @@ void l1_test1() {
     space[temp] = pmm->alloc(rand() & ((1 << 10) - 1));
     printf("space %d get %p\n", temp, space[temp]);
   }
-  for (i = 0; i < 100; ++i) {
+  for (i = 0; i < maxx; ++i) {
     printf("space %d return %p\n", i, space[i]);
     pmm->free(space[i]);
   }
