@@ -5,7 +5,7 @@
 
 static void* s[4][11451] = {};
 static void l1_test0() {
-  srand(uptime());
+  srand((unsigned int)time(NULL));
   for (int i = 0; i < 11451; ++i) {
     s[_cpu()][i] = pmm->alloc(rand() % (1024));
   }
