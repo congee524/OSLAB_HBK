@@ -84,6 +84,7 @@ static void *kalloc(size_t size) {
     last = base;
     pre = find_block(&last, size);
     if (pre) {
+      printf("FIND! %p\n", pre);
       if (pre->size - size > (BLOCK_SIZE + 8)) {
         split_block(pre, size);
       }
