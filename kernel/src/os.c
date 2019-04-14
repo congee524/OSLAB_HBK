@@ -1,6 +1,18 @@
 #include <common.h>
 #include <klib.h>
 
+static void *s[4][11451] = {};
+static void l1_test0() {
+  srand(uptime());
+  for (int i = 0; i < 11451; ++i) {
+    s[_cpu()][i] = pmm->alloc(rand() % (1024));
+  }
+  for (int i = 0; i < 11451; ++i) {
+    pmm->free(s[_cpu()][i]);
+  }
+  printf("SUCCESS ON CPU %d", _cpu());
+}
+
 static void os_init() { pmm->init(); }
 
 static void hello() {
@@ -9,11 +21,11 @@ static void hello() {
   }
   _putc("12345678"[_cpu()]);
   _putc('\n');
-  l1_test0();
 }
 
 static void os_run() {
   hello();
+  l1_test0();
   _intr_write(1);
   while (1) {
     _yield();
