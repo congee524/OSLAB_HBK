@@ -1,13 +1,14 @@
 #include <common.h>
 #include <klib.h>
 
-static void *s[4][11451] = {};
+#define max_test 20
+static void *s[4][max_test] = {};
 static void l1_test0() {
   srand(uptime());
-  for (int i = 0; i < 11451; ++i) {
+  for (int i = 0; i < max_test; ++i) {
     s[_cpu()][i] = pmm->alloc(rand() % (1024));
   }
-  for (int i = 0; i < 11451; ++i) {
+  for (int i = 0; i < max_test; ++i) {
     pmm->free(s[_cpu()][i]);
   }
   printf("SUCCESS ON CPU %d", _cpu());
