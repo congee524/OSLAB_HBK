@@ -14,6 +14,22 @@ static void l1_test0() {
   printf("SUCCESS ON CPU %d", _cpu());
 }
 
+void l1_test1() {
+  void *space[100];
+  int i;
+  for (i = 0; i < 100; ++i) {
+    space[i] = pmm->alloc(rand() % ((1 << 10) - 1));
+  }
+  for (i = 0; i < 1000; ++i) {
+    int temp = rand() % 10;
+    pmm->free(space[temp]);
+    space[temp] = pmm->alloc(rand() & ((1 << 10) - 1));
+  }
+  for (i = 0; i < 100; ++i) {
+    pmm->free(space[i]);
+  }
+}
+
 static void os_init() { pmm->init(); }
 
 static void hello() {
@@ -26,7 +42,7 @@ static void hello() {
 
 static void os_run() {
   hello();
-  l1_test0();
+  if (_cpu() == 0) l1_test1();
   _intr_write(1);
   while (1) {
     _yield();
