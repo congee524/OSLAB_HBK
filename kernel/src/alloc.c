@@ -111,7 +111,7 @@ static void kfree(void *ptr) {
   t_block last = base, pre = base;
   while (pre && ((void *)&pre->data != ptr)) {
     last = pre;
-    printf("pre now at %p\n", pre);
+    printf("pre now at %p\n", &pre->data);
     pre = pre->next;
   }
   if (pre == NULL) {
