@@ -34,6 +34,7 @@ static t_block extend_heap(t_block last, size_t size) {
       last->next = pre;
     }
     printf("test free %d\n", pre->free);
+    printf("test next %p\n", pre->next);
     return pre;
   }
 }
