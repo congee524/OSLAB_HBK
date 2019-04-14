@@ -1,6 +1,4 @@
 #include <kernel.h>
-#include <my_spinlock.h>
-#include <unistd.h>
 
 #define BLOCK_SIZE 12
 // align the size by 4 byte
