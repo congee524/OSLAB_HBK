@@ -35,6 +35,7 @@ void l1_test1() {
     printf("space %d return %p\n", i, space[i]);
     pmm->free(space[i]);
   }
+  printf("SUCCESS!!!!!\n");
 }
 
 static void os_init() { pmm->init(); }
