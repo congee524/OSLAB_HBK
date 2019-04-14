@@ -50,7 +50,7 @@ static void hello() {
 
 static void os_run() {
   hello();
-  if (_cpu() == 0) l1_test1();
+  l1_test1();
   _intr_write(1);
   while (1) {
     _yield();
