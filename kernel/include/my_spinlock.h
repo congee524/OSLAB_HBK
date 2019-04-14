@@ -7,7 +7,7 @@
 #define cpu_relax() asm volatile("pause\n" ::: "memory")
 
 typedef struct {
-  volatile unsigned int lock;
+  volatile intptr_t lock;
 } spinlock_t;
 
 // _atomic_xchg() in abstract_machine/am/am.h
