@@ -107,7 +107,7 @@ static void kfree(void *ptr) {
     assert(0);
     return;
   }
-  t_block last, pre = base;
+  t_block last = base, pre = base;
   while (pre && (&pre->data != ptr)) {
     last = pre;
     pre = pre->next;
