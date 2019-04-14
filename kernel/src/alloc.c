@@ -107,15 +107,17 @@ static void kfree(void *ptr) {
     assert(0);
     return;
   }
+  printf("ptr at %p\n", ptr);
   t_block last = base, pre = base;
   while (pre && ((void *)&pre->data != ptr)) {
     last = pre;
+    printf("pre now at %p\n", pre);
     pre = pre->next;
   }
   if (pre == NULL) {
     printf("No such memory space!\n");
     spin_unlock(&alloc_lk);
-    // assert(0);
+    assert(0);
     return;
   }
   pre->free = 1;
