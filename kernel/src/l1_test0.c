@@ -1,9 +1,10 @@
 #include <kernel.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 static void* s[4][11451] = {};
-static void test() {
+static void l1_test0() {
   srand(uptime());
   for (int i = 0; i < 11451; ++i) {
     s[_cpu()][i] = pmm->alloc(rand() % (1024));

@@ -13,7 +13,7 @@ static void hello() {
 
 static void os_run() {
   hello();
-  test();
+  l1_test0();
   _intr_write(1);
   while (1) {
     _yield();
