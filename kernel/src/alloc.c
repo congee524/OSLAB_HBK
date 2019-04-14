@@ -83,6 +83,8 @@ static void *kalloc(size_t size) {
 static void kfree(void *ptr) {
   spin_lock(&alloc_lk);
   // TODO()
+  t_block pre = ptr;
+  pre->free = 1;
   spin_unlock(&alloc_lk);
 }
 
