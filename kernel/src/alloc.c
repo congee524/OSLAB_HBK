@@ -44,6 +44,7 @@ static t_block find_block(t_block *last, size_t size) {
     printf("!!!!!!!\n");
     *last = pre;
     pre = pre->next;
+    printf("pre to next at %p\n", pre);
   }
   return pre;
 }
