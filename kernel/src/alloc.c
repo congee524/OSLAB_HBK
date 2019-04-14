@@ -41,7 +41,7 @@ static t_block extend_heap(t_block last, size_t size) {
 
 static t_block find_block(t_block *last, size_t size) {
   t_block pre = base;
-  if (pre != NULL && !((pre->free == 1) && (pre->size) >= size)) {
+  while (pre != NULL && !((pre->free == 1) && (pre->size) >= size)) {
     // "*last" point the address of the pointer "last"
     printf("!!!!!!!\n");
     *last = pre;
@@ -88,7 +88,7 @@ static void *kalloc(size_t size) {
   } else {
     last = base;
     pre = find_block(&last, size);
-    if (NULL != pre) {
+    if (pre) {
       printf("FIND! %p\n", pre);
       printf("but NULL %p\n", NULL);
       pre == NULL ? printf("yes\n") : printf("no\n");
