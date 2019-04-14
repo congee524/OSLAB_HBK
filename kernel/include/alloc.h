@@ -1,3 +1,4 @@
+#include <kernel.h>
 #include <my_spinlock.h>
 #include <sys/types.h>
 #include <unistd.h>
