@@ -104,12 +104,12 @@ int main(int argc, char* argv[]) {
           memcpy(match, buffer + pmatch_time[i].rm_so, len);
           printf("%s\n", match);
         }
-        memset(buffer, '\0', 1024);
-        */
+      }
+    */
+      memset(buffer, '\0', 1024);
     }
+    waitpid((pid_t)pid, &status, 0);
   }
-  waitpid((pid_t)pid, &status, 0);
-}
 
-return 0;
+  return 0;
 }
