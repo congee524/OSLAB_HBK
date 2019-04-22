@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     char errbuf[1024];
     char match[100];
     regex_t reg_func, reg_time;
-    int err, nm = 1;
+    int err = 0, nm = 1;
     regmatch_t pmatch_func[nm];
     regmatch_t pmatch_time[nm];
 
