@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
   } else {
     close(fildes[1]);
 
-    /*
     char* pat_func = "^[a-zA-Z0-9_]{2,}";
     char* pat_time = "<[0-9.]{2,}>";
     char errbuf[1024];
@@ -61,11 +60,11 @@ int main(int argc, char* argv[]) {
       regerror(err, &reg_time, errbuf, sizeof(errbuf));
       printf("err:%s\n", errbuf);
     }
-*/
+
     char buffer[1024] = {0};
     while (fgets(buffer, 1023, stdin)) {
       printf("%s", buffer);
-      /*
+
       err = regexec(&reg_func, buffer, nm, pmatch_func, 0);
       if (err == REG_NOMATCH) {
         printf("no match\n");
@@ -105,7 +104,6 @@ int main(int argc, char* argv[]) {
           printf("%s\n", match);
         }
       }
-    */
     }
     waitpid((pid_t)pid, &status, 0);
   }
