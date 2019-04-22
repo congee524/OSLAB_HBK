@@ -108,7 +108,8 @@ int main(int argc, char* argv[]) {
         }
         */
     char buffer[1024] = {0};
-    while (fgets(buffer, 1023, stdin))
+    int len;
+    while ((len = read(fildes[0], buffer, 1023)) > 0)
       ;
     waitpid((pid_t)pid, &status, 0);
   }
