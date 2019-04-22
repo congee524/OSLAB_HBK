@@ -159,7 +159,7 @@ int main(int argc, char* argv[]) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
     }
     */
-    fflush(STDOUT_FILENO);
+    fflush(stdout);
     waitpid((pid_t)pid, &status, 0);
   }
 
