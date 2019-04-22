@@ -44,7 +44,6 @@ int main(int argc, char* argv[]) {
     while ((len = read(fildes[0], buffer, 1023)) > 0) {
       buffer[len] = '\0';
       printf("%s\n", buffer);
-      printf("hahahaha!!!!!!\n");
     }
     waitpid((pid_t)pid, &status, 0);
   }
