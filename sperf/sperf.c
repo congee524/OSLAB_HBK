@@ -159,8 +159,7 @@ int main(int argc, char* argv[]) {
     */
 
     for (int i = 0; i < cnt; i++) {
-      printf("%s: %.2f\% \n", func_time[i].name,
-             func_time[i].t * 100.0 / tot_time);
+      printf("%s: %.2f%", func_time[i].name, func_time[i].t * 100.0 / tot_time);
     }
   }
 
