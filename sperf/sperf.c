@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
     int cnt = 0;
     char M_time[32];
     double tt;
+    double tot_t = 0;
 
     if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
       regerror(err, &reg_func, errbuf, sizeof(errbuf));
@@ -143,14 +144,15 @@ int main(int argc, char* argv[]) {
       }
       if (!flag) {
         strcpy(func_time[cnt].name, match_func);
-        func_time[cnt].t = 0;
+        func_time[cnt].t = tt;
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
+      tot_t += tt;
     }
 
     for (int i = 0; i < cnt; i++) {
-      printf("%s: %lf\n", func_time[i].name, func_time[i].t);
+      printf("%s: %.2lf\n", func_time[i].name, func_time[i].t);
     }
     waitpid((pid_t)pid, &status, 0);
   }
