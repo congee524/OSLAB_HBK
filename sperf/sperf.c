@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  char st_argv[argc + 2];
+  char* st_argv[argc + 2];
   st_argv[0] = "strace";
   st_argv[1] = "-T";
   for (int i = 1; i < argc; i++) {
