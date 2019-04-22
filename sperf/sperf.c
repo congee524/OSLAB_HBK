@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
       }
       tt = atof(M_time);
       tot_tt += tt;
-      printf("%lf\n", tot_tt);
+      printf("%f\n", tot_tt);
       int flag = 0;
       for (int i = 0; i < cnt; i++) {
         if (strcmp(func_time[i].name, match_func) == 0) {
