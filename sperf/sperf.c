@@ -109,8 +109,7 @@ int main(int argc, char* argv[]) {
         */
     char buffer[1024] = {0};
     int len;
-    while ((len = read(STDIN_FILENO, buffer, 1023)) > 0)
-      ;
+    while ((len = read(STDIN_FILENO, buffer, 1023)) > 0) printf("\n!!!!\n\n");
     waitpid((pid_t)pid, &status, 0);
   }
 
