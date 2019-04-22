@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
     close(fildes[0]);
     close(STDOUT_FILENO);
     execvp("strace", st_argv);
-    exit(0);
+    // exit(0);
   } else {
     dup2(fildes[0], STDIN_FILENO);
     // dup2(STDIN_FILENO, fildes[0]);
