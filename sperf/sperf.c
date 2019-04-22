@@ -15,8 +15,8 @@ int main(int argc, char* argv[]) {
 
   int status;
 
-  int pfd[2];
-  if (pipe(pfd) < 0) {
+  int fildes[2];
+  if (pipe(fildes) != 0) {
     printf("create pipe failed!\n");
     return -1;
   }
@@ -33,19 +33,18 @@ int main(int argc, char* argv[]) {
   ls_argvp[0] = "-l";
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(pfd[1], STDOUT_FILENO);
-    close(pfd[0]);
+    dup2(fildes[1], stdout);
+    close(fildes[0]);
     execvp("ls", ls_argvp);
     exit(0);
   } else {
+    close(fildes[1]);
     char buffer[1024] = {0};
-    close(pfd[1]);
     int len;
-    while ((len = read(pfd[0], buffer, 1023)) > 0) {
+    while ((len = read(fildes[0], buffer, 1023)) > 0) {
       buffer[len] = '\0';
       printf("%s\n", buffer);
     }
-
     waitpid((pid_t)pid, &status, 0);
   }
 
