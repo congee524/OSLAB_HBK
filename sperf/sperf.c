@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 
       for (int i = 0; i < nm && pmatch_time[i].rm_so != -1; i++) {
         int len = pmatch_time[i].rm_eo - pmatch_time[i].rm_so;
-        printf("\nlen: %d\n", len);
+        // printf("\nlen: %d\n", len);
         if (len) {
           memset(match, '\0', sizeof(match));
           memcpy(match, buffer + pmatch_time[i].rm_so, len);
