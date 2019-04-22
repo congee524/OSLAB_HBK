@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
