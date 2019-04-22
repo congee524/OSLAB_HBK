@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
         assert(cnt <= MAX_FUNC);
       }
       printf("%lf\n", tt);
-      tot_tt += tt;
+      // tot_tt += tt;
     }
 
     /*
