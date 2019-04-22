@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
   } else {
     close(fildes[1]);
     char buffer[1024] = {0};
-    int len;
     while (fgets(buffer, 1023, fildes[0])) {
       printf("%s\n", buffer);
     }
