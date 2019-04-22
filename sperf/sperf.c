@@ -133,7 +133,7 @@ int main(int argc, char* argv[]) {
         M_time[i - 1] = match_time[i];
       }
       tt = atof(M_time);
-      printf("%ld\n", tt);
+      printf("%lf\n", tt);
       int flag = 0;
       for (int i = 0; i < cnt; i++) {
         if (strcmp(func_time[i].name, match_func) == 0) {
