@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
 
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(fildes[1], 2);
+    dup2(fildes[1], stdin);
     close(fildes[0]);
     execvp("strace", st_argv);
     exit(0);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
       printf("%s", buffer);
     }
     */
-    while (fgets(buffer, 1023, 2)) {
+    while (fgets(buffer, 1023, stdin)) {
       printf("%s", buffer);
     }
     waitpid((pid_t)pid, &status, 0);
