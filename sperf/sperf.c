@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
   if (pid == 0) {
     dup2(pfd[1], STDOUT_FILENO);
     close(pfd[0]);
-    execvp("ls", NULL);
+    execvp("ls", "-l");
     exit(0);
   } else {
     char buffer[1024] = {0};
