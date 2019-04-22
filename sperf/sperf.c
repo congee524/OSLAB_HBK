@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
-      printf("%lf\n", tt);
+      // printf("%lf\n", tt);
       // tot_tt += tt;
     }
 
