@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
   if (pid == 0) {
     // dup2(fildes[1], 2);
     // close(fildes[0]);
-    execvp("/etc/ls", st_argv);
+    execv("/etc/ls", st_argv);
     exit(0);
   } else {
     /*
