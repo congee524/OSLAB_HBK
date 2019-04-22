@@ -20,6 +20,12 @@ int main(int argc, char* argv[]) {
 
   int status;
 
+  FILE* fp;
+
+  if ((fp = fopen(argv[1], "r")) == NULL) {
+    printf("can't open %s\n", argv[1]);
+  }
+
   int fildes[2];
   if (pipe(fildes) != 0) {
     printf("create pipe failed!\n");
@@ -43,7 +49,7 @@ int main(int argc, char* argv[]) {
   } else {
     close(fildes[1]);
     char buffer[1024] = {0};
-    while (fgets(buffer, 1023, fildes[0])) {
+    while (fgets(buffer, 1023, fp)) {
       printf("%s\n", buffer);
     }
     waitpid((pid_t)pid, &status, 0);
