@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
     close(fildes[1]);
     char buffer[1024] = {0};
     int len;
-    while ((len = fgets(buffer, 1023, fildes[0])) > 0) {
+    while (fgets(buffer, 1023, fildes[0])) {
       printf("%s\n", buffer);
     }
     waitpid((pid_t)pid, &status, 0);
