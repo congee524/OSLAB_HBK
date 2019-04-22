@@ -10,7 +10,7 @@
 #define MAX_FUNC 256
 
 typedef struct {
-  char name[32];
+  char name[128];
   double t;
 } f_t;
 
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
     char* pat_func = "^[a-zA-Z0-9_]{2,}";
     char* pat_time = "<[0-9.]{2,}>";
     char errbuf[1024];
-    char match_func[32];
+    char match_func[128];
     char match_time[32];
     regex_t reg_func, reg_time;
     int err = 0, nm = 1;
@@ -149,10 +149,15 @@ int main(int argc, char* argv[]) {
       }
     }
 
+    /*
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf\n", func_time[i].name, func_time[i].t);
     }
+    */
     waitpid((pid_t)pid, &status, 0);
+    for (int i = 0; i < cnt; i++) {
+      printf("%s: %lf\n", func_time[i].name, func_time[i].t);
+    }
   }
 
   return 0;
