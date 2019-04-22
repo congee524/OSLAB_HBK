@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         */
     char buffer[1024] = {0};
     int len;
-    while ((len = read(fildes[0], buffer, 1023)) > 0)
+    while ((len = read(fildes[1], buffer, 1023)) > 0)
       ;
     waitpid((pid_t)pid, &status, 0);
   }
