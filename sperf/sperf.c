@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     char buffer[1024] = {0};
     while (fgets(buffer, 1023, stdout)) {
-      // printf("%s", buffer);
+      printf("%s", buffer);
 
       err = regexec(&reg_func, buffer, nm, pmatch_func, 0);
       if (err == REG_NOMATCH) {
