@@ -61,50 +61,52 @@ int main(int argc, char* argv[]) {
       printf("err:%s\n", errbuf);
     }
 
-    char buffer[1024] = {0};
-    while (fgets(buffer, 1023, stdout)) {
-      // printf("%s", buffer);
+    /*
+        char buffer[1024] = {0};
+        while (fgets(buffer, 1023, stdout)) {
+          // printf("%s", buffer);
 
-      err = regexec(&reg_func, buffer, nm, pmatch_func, 0);
-      if (err == REG_NOMATCH) {
-        printf("no match\n");
-        exit(-1);
-      } else if (err) {
-        regerror(err, &reg_func, errbuf, sizeof(errbuf));
-        printf("err:%s\n", errbuf);
-        exit(-1);
-      }
+          err = regexec(&reg_func, buffer, nm, pmatch_func, 0);
+          if (err == REG_NOMATCH) {
+            printf("no match\n");
+            exit(-1);
+          } else if (err) {
+            regerror(err, &reg_func, errbuf, sizeof(errbuf));
+            printf("err:%s\n", errbuf);
+            exit(-1);
+          }
 
-      err = regexec(&reg_time, buffer, nm, pmatch_time, 0);
-      if (err == REG_NOMATCH) {
-        printf("no match\n");
-        exit(-1);
-      } else if (err) {
-        regerror(err, &reg_time, errbuf, sizeof(errbuf));
-        printf("err:%s\n", errbuf);
-        exit(-1);
-      }
+          err = regexec(&reg_time, buffer, nm, pmatch_time, 0);
+          if (err == REG_NOMATCH) {
+            printf("no match\n");
+            exit(-1);
+          } else if (err) {
+            regerror(err, &reg_time, errbuf, sizeof(errbuf));
+            printf("err:%s\n", errbuf);
+            exit(-1);
+          }
 
-      for (int i = 0; i < nm && pmatch_func[i].rm_so != -1; i++) {
-        int len = pmatch_func[i].rm_eo - pmatch_func[i].rm_so;
-        // printf("\nlen: %d\n", len);
-        if (len) {
-          memset(match, '\0', sizeof(match));
-          memcpy(match, buffer + pmatch_func[i].rm_so, len);
-          // printf("%s\n", match);
+          for (int i = 0; i < nm && pmatch_func[i].rm_so != -1; i++) {
+            int len = pmatch_func[i].rm_eo - pmatch_func[i].rm_so;
+            // printf("\nlen: %d\n", len);
+            if (len) {
+              memset(match, '\0', sizeof(match));
+              memcpy(match, buffer + pmatch_func[i].rm_so, len);
+              // printf("%s\n", match);
+            }
+          }
+
+          for (int i = 0; i < nm && pmatch_time[i].rm_so != -1; i++) {
+            int len = pmatch_time[i].rm_eo - pmatch_time[i].rm_so;
+            // printf("\nlen: %d\n", len);
+            if (len) {
+              memset(match, '\0', sizeof(match));
+              memcpy(match, buffer + pmatch_time[i].rm_so, len);
+              // printf("%s\n", match);
+            }
+          }
         }
-      }
-
-      for (int i = 0; i < nm && pmatch_time[i].rm_so != -1; i++) {
-        int len = pmatch_time[i].rm_eo - pmatch_time[i].rm_so;
-        // printf("\nlen: %d\n", len);
-        if (len) {
-          memset(match, '\0', sizeof(match));
-          memcpy(match, buffer + pmatch_time[i].rm_so, len);
-          // printf("%s\n", match);
-        }
-      }
-    }
+        */
     waitpid((pid_t)pid, &status, 0);
   }
 
