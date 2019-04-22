@@ -31,12 +31,12 @@ int main(int argc, char* argv[]) {
   pid_t pid = fork();
   if (pid == 0) {
     dup2(pfd[1], STDOUT_FILENO);
-    close(pfd[0]);
+    // close(pfd[0]);
     execvp("strace", st_argv);
     exit(0);
   } else {
     char buffer[1024] = {0};
-    // close(pfd[1]);
+    close(pfd[1]);
     int len;
     while ((len = read(pfd[0], buffer, 1023)) > 0) {
       buffer[len] = '\0';
