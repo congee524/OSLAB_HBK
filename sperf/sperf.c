@@ -25,7 +25,6 @@ int main(int argc, char* argv[]) {
     printf("create pipe failed!\n");
     return -1;
   }
-  FILE* fp;
 
   char* st_argv[argc + 3];
   st_argv[0] = "strace";
