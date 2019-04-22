@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 int main(int argc, char* argv[]) {
+  /*
   for (int i = 0; i < argc; i++) {
     printf("argv[%d]: %s\n", i, argv[i]);
   }
@@ -12,6 +13,7 @@ int main(int argc, char* argv[]) {
     printf("please input parameters!\n");
     return 0;
   }
+  */
 
   int status;
 
