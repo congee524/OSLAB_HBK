@@ -9,21 +9,19 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < argc; i++) {
     printf("argv[%d]: %s\n", i, argv[i]);
   }
+  */
   if (argc <= 1) {
-    printf("please input parameters!\n");
+    printf("please input the program you want to run!\n");
     return 0;
   }
-  */
 
   int status;
 
-  /*
-    int fildes[2];
-    if (pipe(fildes) != 0) {
-      printf("create pipe failed!\n");
-      return -1;
-    }
-  */
+  int fildes[2];
+  if (pipe(fildes) != 0) {
+    printf("create pipe failed!\n");
+    return -1;
+  }
 
   char* st_argv[argc + 3];
   st_argv[0] = "strace";
@@ -35,12 +33,11 @@ int main(int argc, char* argv[]) {
 
   pid_t pid = fork();
   if (pid == 0) {
-    // dup2(fildes[1], 2);
-    // close(fildes[0]);
+    dup2(fildes[1], 2);
+    close(fildes[0]);
     execv("/usr/bin/strace", st_argv);
     exit(0);
   } else {
-    /*
     close(fildes[1]);
     char buffer[1024] = {0};
     int len;
@@ -48,7 +45,6 @@ int main(int argc, char* argv[]) {
       buffer[len] = '\0';
       printf("%s\n", buffer);
     }
-    */
     waitpid((pid_t)pid, &status, 0);
   }
 
