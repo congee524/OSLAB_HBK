@@ -4,8 +4,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-char buffer[1024];
-
 int main(int argc, char* argv[]) {
   for (int i = 0; i < argc; i++) {
     printf("argv[%d]: %s\n", i, argv[i]);
@@ -19,6 +17,7 @@ int main(int argc, char* argv[]) {
 
   int pfd[2];
   if (pipe(pfd) < 0) {
+    printf("create pipe failed!\n");
     return -1;
   }
 
@@ -32,10 +31,11 @@ int main(int argc, char* argv[]) {
   pid_t pid = fork();
   if (pid == 0) {
     dup2(pfd[1], STDOUT_FILENO);
-    // close(pfd[0]);
+    close(pfd[0]);
     execvp("strace", st_argv);
     exit(0);
   } else {
+    char buffer[1024] = {0};
     // close(pfd[1]);
     int len;
     while ((len = read(pfd[0], buffer, 1023)) > 0) {
