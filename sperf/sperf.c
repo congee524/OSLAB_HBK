@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
         assert(cnt <= MAX_FUNC);
       }
     }
-
+    printf("!!%d!!\n", cnt);
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf\n", func_time[i].name, func_time[i].t);
     }
