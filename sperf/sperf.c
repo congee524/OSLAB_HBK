@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_t);
     }
     */
-    assert(tot_t != 0);
+    assert(tot_t);
     for (int i = 0; i < cnt; i++) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
     }
