@@ -15,26 +15,26 @@ int main(int argc, char* argv[]) {
 
   int status;
 
-  int fildes[2];
-  if (pipe(fildes) != 0) {
-    printf("create pipe failed!\n");
-    return -1;
-  }
-
   /*
+    int fildes[2];
+    if (pipe(fildes) != 0) {
+      printf("create pipe failed!\n");
+      return -1;
+    }
+  */
+
   char* st_argv[argc + 2];
   st_argv[0] = "strace";
   st_argv[1] = "-T";
   for (int i = 1; i < argc; i++) {
     st_argv[i + 1] = argv[i];
   }
-  */
 
   pid_t pid = fork();
   if (pid == 0) {
     // dup2(fildes[1], 2);
     // close(fildes[0]);
-    execl("/usr/bin/strace", "-T", "ls", NULL);
+    execv("/usr/bin/strace", st_argv);
     exit(0);
   } else {
     /*
