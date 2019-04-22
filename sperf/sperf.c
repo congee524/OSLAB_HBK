@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
 
   pid_t pid = fork();
   if (pid == 0) {
+    printf("!!\n");
     dup2(pfd[1], STDOUT_FILENO);
     close(pfd[0]);
     execvp("strace", st_argv);
