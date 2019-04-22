@@ -4,6 +4,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+struct {
+}
+
 int main(int argc, char* argv[]) {
   /*
   for (int i = 0; i < argc; i++) {
@@ -16,12 +19,6 @@ int main(int argc, char* argv[]) {
   }
 
   int status;
-
-  FILE* fp;
-
-  if ((fp = fopen(argv[1], "r")) == NULL) {
-    printf("can't open %s\n", argv[1]);
-  }
 
   int fildes[2];
   if (pipe(fildes) != 0) {
@@ -46,8 +43,10 @@ int main(int argc, char* argv[]) {
   } else {
     close(fildes[1]);
     char buffer[1024] = {0};
-    while (fgets(buffer, 1023, fp)) {
-      printf("%s\n", buffer);
+    int len;
+    while ((len = read(fildes[0], buffer, 1023)) > 0) {
+      buffer[len] = '\0';
+      printf("%s", buffer);
     }
     waitpid((pid_t)pid, &status, 0);
   }
