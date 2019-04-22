@@ -106,7 +106,6 @@ int main(int argc, char* argv[]) {
         }
       }
     */
-      memset(buffer, '\0', 1024);
     }
     waitpid((pid_t)pid, &status, 0);
   }
