@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
   ls_argvp[0] = "-l";
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(fildes[1], stdout);
+    dup2(fildes[1], 1);
     close(fildes[0]);
     execvp("ls", ls_argvp);
     exit(0);
