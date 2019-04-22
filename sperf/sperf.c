@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     int cnt = 0;
     char M_time[32];
     double tt;
-    double tot_t = 0.0;
+    double tot_tt = 0;
 
     if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
       regerror(err, &reg_func, errbuf, sizeof(errbuf));
@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
-      tot_t += tt;
+      tot_tt += tt;
     }
 
     /*
@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_t);
     }
     */
-    assert(tot_t);
+    assert(tot_tt);
     for (int i = 0; i < cnt; i++) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
     }
