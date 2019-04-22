@@ -35,10 +35,8 @@ int main(int argc, char* argv[]) {
 
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(fildes[1], STDERR_FILENO);
+    dup2(fildes[1], STDOUT_FILENO);
     close(fildes[0]);
-    close(STDOUT_FILENO);
-    close(STDERR_FILENO);
     execvp("strace", st_argv);
     exit(0);
   } else {
