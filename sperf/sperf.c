@@ -29,12 +29,13 @@ int main(int argc, char* argv[]) {
       st_argv[i + 1] = argv[i];
     }
     */
-
+  char* ls_argvp[1];
+  ls_argvp[0] = "-l";
   pid_t pid = fork();
   if (pid == 0) {
     dup2(pfd[1], STDOUT_FILENO);
     close(pfd[0]);
-    execvp("ls", "-l");
+    execvp("ls", ls_argvp);
     exit(0);
   } else {
     char buffer[1024] = {0};
