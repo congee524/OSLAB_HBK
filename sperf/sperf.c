@@ -107,6 +107,9 @@ int main(int argc, char* argv[]) {
           }
         }
         */
+    char buffer[1024] = {0};
+    while (fgets(buffer, 1023, stdout))
+      ;
     waitpid((pid_t)pid, &status, 0);
   }
 
