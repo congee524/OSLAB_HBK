@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(STDERR_FILENO, fildes[1]);
+    dup2(STDOUT_FILENO, fildes[1]);
     close(fildes[0]);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
