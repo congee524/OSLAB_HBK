@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
   if (pid == 0) {
     dup2(fildes[1], STDERR_FILENO);
     close(fildes[0]);
-    // close(STDOUT_FILENO);
+    close(STDOUT_FILENO);
     execvp("strace", st_argv);
     // exit(0);
   } else {
