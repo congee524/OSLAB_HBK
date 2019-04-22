@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match_func, '\0', sizeof(match_func));
           memcpy(match_func, buffer + pmatch_func[i].rm_so, len);
-          printf("%s\n", match_func);
+          // printf("%s\n", match_func);
         }
       }
 
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match_time, '\0', sizeof(match_time));
           memcpy(match_time, buffer + pmatch_time[i].rm_so, len);
-          printf("%s\n", match_time);
+          // printf("%s\n", match_time);
         }
       }
 
@@ -156,11 +156,10 @@ int main(int argc, char* argv[]) {
        tot_tt);
         }
         */
-    /*
+
     for (int i = 0; i < cnt; i++) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
     }
-    */
 
     waitpid((pid_t)pid, &status, 0);
   }
