@@ -86,8 +86,8 @@ int main(int argc, char* argv[]) {
       // String Matching
       err = regexec(&reg_func, buffer, nm, pmatch_func, 0);
       if (err == REG_NOMATCH) {
-        printf("no match\n");
-        exit(-1);
+        // printf("no match\n");
+        continue;
       } else if (err) {
         regerror(err, &reg_func, errbuf, sizeof(errbuf));
         printf("err:%s\n", errbuf);
@@ -96,8 +96,8 @@ int main(int argc, char* argv[]) {
 
       err = regexec(&reg_time, buffer, nm, pmatch_time, 0);
       if (err == REG_NOMATCH) {
-        printf("no match\n");
-        exit(-1);
+        // printf("no match\n");
+        continue;
       } else if (err) {
         regerror(err, &reg_time, errbuf, sizeof(errbuf));
         printf("err:%s\n", errbuf);
@@ -147,9 +147,10 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
-      for (int i = 0; i < cnt; i++) {
-        printf("%s: %lf\n", func_time[i].name, func_time[i].t);
-      }
+    }
+
+    for (int i = 0; i < cnt; i++) {
+      printf("%s: %lf\n", func_time[i].name, func_time[i].t);
     }
     waitpid((pid_t)pid, &status, 0);
   }
