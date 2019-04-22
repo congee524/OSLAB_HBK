@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
   if (pid == 0) {
     dup2(fildes[1], STDERR_FILENO);
     close(fildes[0]);
+    close(STDOUT_FILENO);
     execvp("strace", st_argv);
     exit(0);
   } else {
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match_func, '\0', sizeof(match_func));
           memcpy(match_func, buffer + pmatch_func[i].rm_so, len);
-          // printf("%s\n", match_func);
+          printf("%s\n", match_func);
         }
       }
 
@@ -119,7 +120,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match_time, '\0', sizeof(match_time));
           memcpy(match_time, buffer + pmatch_time[i].rm_so, len);
-          // printf("%s\n", match_time);
+          printf("%s\n", match_time);
         }
       }
 
