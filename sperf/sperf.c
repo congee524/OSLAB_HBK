@@ -68,7 +68,6 @@ int main(int argc, char* argv[]) {
     int cnt = 0;
     char M_time[32];
     double tt;
-    double tot_tt = 0;
 
     if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
       regerror(err, &reg_func, errbuf, sizeof(errbuf));
