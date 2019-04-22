@@ -151,14 +151,16 @@ int main(int argc, char* argv[]) {
       tot_t += tt;
     }
 
+    /*
     for (int i = 0; i < cnt; i++) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_t);
     }
-    /*
+    */
+
     for (int i = 0; i < cnt; i++) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
     }
-    */
+
     fflush(stdout);
     waitpid((pid_t)pid, &status, 0);
   }
