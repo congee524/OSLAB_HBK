@@ -161,6 +161,7 @@ int main(int argc, char* argv[]) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
     }
 
+    printf("%lf\n", tot_t);
     fflush(stdout);
     waitpid((pid_t)pid, &status, 0);
   }
