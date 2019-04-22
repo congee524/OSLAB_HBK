@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
     int cnt = 0;
     char M_time[32];
     double tt;
+    double tot_tt = 0;
 
     if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
       regerror(err, &reg_func, errbuf, sizeof(errbuf));
@@ -133,7 +134,8 @@ int main(int argc, char* argv[]) {
         M_time[i - 1] = match_time[i];
       }
       tt = atof(M_time);
-      printf("%lf\n", tt);
+      tot_tt += tt;
+      printf("%lf\n", tot_tt);
       int flag = 0;
       for (int i = 0; i < cnt; i++) {
         if (strcmp(func_time[i].name, match_func) == 0) {
@@ -148,8 +150,6 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
-      // printf("%lf\n", tt);
-      // tot_tt += tt;
     }
 
     /*
