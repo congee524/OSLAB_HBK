@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  // int status;
+  int status;
 
   int fildes[2];
   if (pipe(fildes) != 0) {
@@ -162,6 +162,6 @@ int main(int argc, char* argv[]) {
       printf("%s: %lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_tt);
     }
   }
-  // waitpid((pid_t)pid, &status, 0);
+  waitpid((pid_t)pid, &status, 0);
   return 0;
 }
