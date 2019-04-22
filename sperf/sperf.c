@@ -35,15 +35,15 @@ int main(int argc, char* argv[]) {
 
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(fildes[0], STDOUT_FILENO);
-    close(fildes[1]);
+    dup2(fildes[1], STDOUT_FILENO);
+    close(fildes[0]);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
     execvp("strace", st_argv);
     exit(0);
   } else {
-    dup2(STDIN_FILENO, fildes[1]);
-    close(fildes[0]);
+    dup2(STDIN_FILENO, fildes[0]);
+    close(fildes[1]);
     /*
         char* pat_func = "^[a-zA-Z0-9_]{2,}";
         char* pat_time = "<[0-9.]{2,}>";
