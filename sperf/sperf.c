@@ -41,26 +41,26 @@ int main(int argc, char* argv[]) {
     exit(0);
   } else {
     close(fildes[1]);
+    /*
+        char* pat_func = "^[a-zA-Z0-9_]{2,}";
+        char* pat_time = "<[0-9.]{2,}>";
+        char errbuf[1024];
+        char match[100];
+        regex_t reg_func, reg_time;
+        int err = 0, nm = 1;
+        regmatch_t pmatch_func[nm];
+        regmatch_t pmatch_time[nm];
 
-    char* pat_func = "^[a-zA-Z0-9_]{2,}";
-    char* pat_time = "<[0-9.]{2,}>";
-    char errbuf[1024];
-    char match[100];
-    regex_t reg_func, reg_time;
-    int err = 0, nm = 1;
-    regmatch_t pmatch_func[nm];
-    regmatch_t pmatch_time[nm];
+        if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
+          regerror(err, &reg_func, errbuf, sizeof(errbuf));
+          printf("err:%s\n", errbuf);
+        }
 
-    if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
-      regerror(err, &reg_func, errbuf, sizeof(errbuf));
-      printf("err:%s\n", errbuf);
-    }
-
-    if (regcomp(&reg_time, pat_time, REG_EXTENDED) < 0) {
-      regerror(err, &reg_time, errbuf, sizeof(errbuf));
-      printf("err:%s\n", errbuf);
-    }
-
+        if (regcomp(&reg_time, pat_time, REG_EXTENDED) < 0) {
+          regerror(err, &reg_time, errbuf, sizeof(errbuf));
+          printf("err:%s\n", errbuf);
+        }
+    */
     /*
         char buffer[1024] = {0};
         while (fgets(buffer, 1023, stdout)) {
