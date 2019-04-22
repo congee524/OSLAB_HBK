@@ -23,12 +23,13 @@ int main(int argc, char* argv[]) {
     }
   */
 
-  char* st_argv[argc + 2];
+  char* st_argv[argc + 3];
   st_argv[0] = "strace";
   st_argv[1] = "-T";
   for (int i = 1; i < argc; i++) {
     st_argv[i + 1] = argv[i];
   }
+  st_argv[argc + 2] = NULL;
 
   pid_t pid = fork();
   if (pid == 0) {
