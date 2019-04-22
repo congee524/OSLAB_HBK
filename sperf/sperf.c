@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
   if (pid == 0) {
     dup2(fildes[1], 2);
     close(fildes[0]);
-    execv("/usr/bin/strace", st_argv);
+    execv("strace", st_argv);
     exit(0);
   } else {
     close(fildes[1]);
