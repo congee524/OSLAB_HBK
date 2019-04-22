@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
   if (pid == 0) {
     dup2(pfd[1], STDOUT_FILENO);
     close(pfd[0]);
-    execvp("strace", st_argv);
+    execvp("strace", &st_argv);
     exit(0);
   } else {
     close(pfd[1]);
