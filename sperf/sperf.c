@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     execvp("strace", st_argv);
     exit(0);
   } else {
-    dup2(STDIN_FILENO, fildes[0]);
+    // dup2(STDIN_FILENO, fildes[0]);
     close(fildes[1]);
     /*
         char* pat_func = "^[a-zA-Z0-9_]{2,}";
@@ -109,10 +109,17 @@ int main(int argc, char* argv[]) {
         }
         */
     char buffer[1024] = {0};
+    int len;
+    while ((len = read(fildes[0], buffer, 1023) > 0)) {
+      printf("%s\n\n", buffer);
+      memset(buffer, '\0', 1024);
+    }
+    /*
     while (fgets(buffer, 1023, stdin)) {
       printf("%s", buffer);
       printf("\n!!!!\n\n");
     }
+    */
     // waitpid((pid_t)pid, &status, 0);
   }
 
