@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     int cnt = 0;
     char M_time[32];
     double tt;
-    // double tot_tt = 0;
+    double tot_tt = 0;
 
     if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
       regerror(err, &reg_func, errbuf, sizeof(errbuf));
@@ -148,6 +148,7 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
+      tot_tt += tt;
     }
 
     /*
@@ -160,9 +161,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf\n", func_time[i].name, func_time[i].t);
     }
-
-    waitpid((pid_t)pid, &status, 0);
   }
-
+  waitpid((pid_t)pid, &status, 0);
   return 0;
 }
