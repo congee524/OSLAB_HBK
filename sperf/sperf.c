@@ -40,7 +40,6 @@ int main(int argc, char* argv[]) {
     execvp("strace", st_argv);
     exit(0);
   } else {
-    close(STDIN_FILENO);
     dup2(STDIN_FILENO, fildes[0]);
     close(fildes[1]);
     /*
