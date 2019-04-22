@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) {
     printf("create pipe failed!\n");
     return -1;
   }
+  FILE* fp;
 
   char* st_argv[argc + 3];
   st_argv[0] = "strace";
@@ -43,7 +44,7 @@ int main(int argc, char* argv[]) {
   } else {
     close(fildes[1]);
     char buffer[1024] = {0};
-    while (fgets(buffer, 1023, fildes)) {
+    while (fgets(buffer, 1023, fildes[0])) {
       printf("%s\n", buffer);
     }
     waitpid((pid_t)pid, &status, 0);
