@@ -148,12 +148,16 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
+      printf("%lf\n", tt);
       tot_tt += tt;
     }
 
-    for (int i = 0; i < cnt; i++) {
-      printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_tt);
-    }
+    /*
+        for (int i = 0; i < cnt; i++) {
+          printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 /
+       tot_tt);
+        }
+        */
     /*
     for (int i = 0; i < cnt; i++) {
       printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t);
