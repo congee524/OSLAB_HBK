@@ -21,23 +21,21 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  /*
-    char* st_argv[argc + 2];
-    st_argv[0] = "strace";
-    st_argv[1] = "-T";
-    for (int i = 1; i < argc; i++) {
-      st_argv[i + 1] = argv[i];
-    }
-    */
-  char* ls_argvp[1];
-  ls_argvp[0] = "-l";
+  char* st_argv[argc + 2];
+  st_argv[0] = "strace";
+  st_argv[1] = "-T";
+  for (int i = 1; i < argc; i++) {
+    st_argv[i + 1] = argv[i];
+  }
+
   pid_t pid = fork();
   if (pid == 0) {
-    dup2(fildes[1], 2);
-    close(fildes[0]);
-    execvp("ls", ls_argvp);
+    // dup2(fildes[1], 2);
+    // close(fildes[0]);
+    execvp("strace", st_argv);
     exit(0);
   } else {
+    /*
     close(fildes[1]);
     char buffer[1024] = {0};
     int len;
@@ -45,6 +43,7 @@ int main(int argc, char* argv[]) {
       buffer[len] = '\0';
       printf("%s\n", buffer);
     }
+    */
     waitpid((pid_t)pid, &status, 0);
   }
 
