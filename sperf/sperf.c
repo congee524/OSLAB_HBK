@@ -152,7 +152,9 @@ int main(int argc, char* argv[]) {
     }
 
     for (int i = 0; i < cnt; i++) {
-      printf("%s: %.2lf\n", func_time[i].name, func_time[i].t * 100.0 / tot_t);
+      tt = func_time[i].t * 100;
+      tt /= tot_t;
+      printf("%s: %.2lf\n", func_time[i].name, tt);
     }
     waitpid((pid_t)pid, &status, 0);
   }
