@@ -133,7 +133,6 @@ int main(int argc, char* argv[]) {
         M_time[i - 1] = match_time[i];
       }
       tt = atof(M_time);
-      printf("%lf\n", tt);
       int flag = 0;
       for (int i = 0; i < cnt; i++) {
         if (strcmp(func_time[i].name, match_func) == 0) {
@@ -150,11 +149,10 @@ int main(int argc, char* argv[]) {
       }
     }
 
-    waitpid((pid_t)pid, &status, 0);
-
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf\n", func_time[i].name, func_time[i].t);
     }
+    waitpid((pid_t)pid, &status, 0);
   }
 
   return 0;
