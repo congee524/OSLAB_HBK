@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         */
     char buffer[1024] = {0};
     while (fgets(buffer, 1023, stdin)) printf("\n!!!!\n\n");
-    waitpid((pid_t)pid, &status, 0);
+    // waitpid((pid_t)pid, &status, 0);
   }
 
   return 0;
