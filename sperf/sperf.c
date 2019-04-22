@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
     int cnt = 0;
     char M_time[32];
     double tt;
+    double tot_time = 0;
 
     if (regcomp(&reg_func, pat_func, REG_EXTENDED) < 0) {
       regerror(err, &reg_func, errbuf, sizeof(errbuf));
@@ -110,7 +111,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match_func, '\0', sizeof(match_func));
           memcpy(match_func, buffer + pmatch_func[i].rm_so, len);
-          printf("%s\n", match_func);
+          // printf("%s\n", match_func);
         }
       }
 
@@ -120,7 +121,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match_time, '\0', sizeof(match_time));
           memcpy(match_time, buffer + pmatch_time[i].rm_so, len);
-          printf("%s\n", match_time);
+          // printf("%s\n", match_time);
         }
       }
 
@@ -143,20 +144,23 @@ int main(int argc, char* argv[]) {
       }
       if (!flag) {
         strcpy(func_time[cnt].name, match_func);
-        func_time[cnt].t = 0;
+        func_time[cnt].t = tt;
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
+      tot_time += tt;
     }
 
+    waitpid((pid_t)pid, &status, 0);
     /*
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf\n", func_time[i].name, func_time[i].t);
     }
     */
-    waitpid((pid_t)pid, &status, 0);
+
     for (int i = 0; i < cnt; i++) {
-      printf("%s: %lf\n", func_time[i].name, func_time[i].t);
+      printf("%s: %.2f\%\n", func_time[i].name,
+             func_time[i].t * 100.0 / tot_time);
     }
   }
 
