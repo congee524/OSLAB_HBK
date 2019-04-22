@@ -147,11 +147,9 @@ int main(int argc, char* argv[]) {
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
-      printf("!!%d!!\n", cnt);
-    }
-
-    for (int i = 0; i < cnt; i++) {
-      printf("%s: %lf\n", func_time[i].name, func_time[i].t);
+      for (int i = 0; i < cnt; i++) {
+        printf("%s: %lf\n", func_time[i].name, func_time[i].t);
+      }
     }
     waitpid((pid_t)pid, &status, 0);
   }
