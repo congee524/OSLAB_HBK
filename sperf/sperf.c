@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match, '\0', sizeof(match));
           memcpy(match, buffer + pmatch_func[i].rm_so, len);
-          printf("%s\n", match);
+          // printf("%s\n", match);
         }
       }
 
@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
         if (len) {
           memset(match, '\0', sizeof(match));
           memcpy(match, buffer + pmatch_time[i].rm_so, len);
-          printf("%s\n", match);
+          // printf("%s\n", match);
         }
       }
     }
