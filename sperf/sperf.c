@@ -40,9 +40,14 @@ int main(int argc, char* argv[]) {
   } else {
     close(fildes[1]);
     char buffer[1024] = {0};
+    /*
     int len;
     while ((len = read(fildes[0], buffer, 1023)) > 0) {
       buffer[len] = '\0';
+      printf("%s", buffer);
+    }
+    */
+    while (fgets(buffer, 1023, 2)) {
       printf("%s", buffer);
     }
     waitpid((pid_t)pid, &status, 0);
