@@ -55,8 +55,6 @@ int main(int argc, char* argv[]) {
     // dup2(STDIN_FILENO, fildes[0]);
     close(fildes[1]);
 
-    waitpid((pid_t)pid, &status, 0);
-
     char* pat_func = "^[a-zA-Z0-9_]{2,}";
     char* pat_time = "<[0-9.]{2,}>";
     char errbuf[1024];
@@ -164,6 +162,6 @@ int main(int argc, char* argv[]) {
       printf("%s: %lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_tt);
     }
   }
-
+  waitpid((pid_t)pid, &status, 0);
   return 0;
 }
