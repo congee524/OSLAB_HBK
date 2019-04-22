@@ -142,7 +142,7 @@ int main(int argc, char* argv[]) {
       }
       if (!flag) {
         strcpy(func_time[cnt].name, match_func);
-        func_time[cnt].tt = 0;
+        func_time[cnt].t = 0;
         cnt++;
         assert(cnt <= MAX_FUNC);
       }
