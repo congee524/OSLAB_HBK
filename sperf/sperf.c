@@ -161,7 +161,8 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_tt);
     }
+    waitpid((pid_t)pid, &status, 0);
   }
-  waitpid((pid_t)pid, &status, 0);
+
   return 0;
 }
