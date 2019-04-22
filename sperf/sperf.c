@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     execvp("strace", st_argv);
     exit(0);
   } else {
+    dup2(fildes[0], STDIN_FILENO);
     close(fildes[1]);
     /*
         char* pat_func = "^[a-zA-Z0-9_]{2,}";
