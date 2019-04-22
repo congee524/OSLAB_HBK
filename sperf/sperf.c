@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  int status;
+  // int status;
 
   int fildes[2];
   if (pipe(fildes) != 0) {
