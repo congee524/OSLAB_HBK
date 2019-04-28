@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #define MAX_FUNC 256
+#define CLEAR() printf("\033[2J")
 
 typedef struct {
   char name[128];
@@ -51,6 +52,8 @@ int main(int argc, char* argv[]) {
     execvp("strace", st_argv);
     // exit(0);
   } else {
+    time_t last_t = time(NULL);
+
     dup2(fildes[0], STDIN_FILENO);
     // dup2(STDIN_FILENO, fildes[0]);
     close(fildes[1]);
@@ -149,6 +152,15 @@ int main(int argc, char* argv[]) {
         assert(cnt <= MAX_FUNC);
       }
       tot_tt += tt;
+
+      if (time(NULL) - last_t >= 1) {
+        last_t = time(NULL);
+        CLEAR();
+        for (int i = 0; i < cnt; i++) {
+          printf("%s: %lf%%\n", func_time[i].name,
+                 func_time[i].t * 100 / tot_tt);
+        }
+      }
     }
 
     /*
@@ -158,6 +170,7 @@ int main(int argc, char* argv[]) {
         }
         */
 
+    CLEAR();
     for (int i = 0; i < cnt; i++) {
       printf("%s: %lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_tt);
     }
