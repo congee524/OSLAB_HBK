@@ -162,9 +162,8 @@ int main(int argc, char* argv[]) {
                  func_time[i].t * 100 / tot_tt);
         }
       }
-      waitpid((pid_t)pid, &status, 0);
     }
-
+    waitpid((pid_t)pid, &status, 0);
     /*
         for (int i = 0; i < cnt; i++) {
           printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 /
