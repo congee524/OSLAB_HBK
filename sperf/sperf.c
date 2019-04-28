@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #define MAX_FUNC 256
-#define CLEAR() printf("\033[2J")
+#define CLEAR() printf("\033c")
 
 typedef struct {
   char name[128];
