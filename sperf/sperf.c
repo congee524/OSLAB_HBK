@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
         }
       }
     }
-    waitpid((pid_t)pid, &status, 0);
+
     /*
         for (int i = 0; i < cnt; i++) {
           printf("%s: %.2lf%%\n", func_time[i].name, func_time[i].t * 100 /
@@ -176,6 +176,6 @@ int main(int argc, char* argv[]) {
       printf("%s: %lf%%\n", func_time[i].name, func_time[i].t * 100 / tot_tt);
     }
   }
-
+  waitpid((pid_t)pid, &status, 0);
   return 0;
 }
