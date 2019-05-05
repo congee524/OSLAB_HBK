@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
       // test
 #if defined(__x86_64__)
       system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
-#elif
+#else
       system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
 #endif
       // test
