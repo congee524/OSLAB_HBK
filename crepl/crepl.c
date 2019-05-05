@@ -27,33 +27,33 @@ int main(int argc, char *argv[]) {
       fp = fopen("/tmp/crepl_test.c", "w");
       fprintf(fp, "%s", command);
       fclose(fp);
-
-      int status;
-      pid_t pid = fork();
-      if (pid == 0) {
-        char *cflags[] = {
-          "gcc",
-          "-shared",
-          "-fPIC",
-#if defined(_i386)
-          "-m32",
-#elif defined(__x86_64__)
-          "-m64",
-#endif
-          "/tmp/crepl_test.c",
-          "-o",
-          "/tmp/crepl_test.so",
-          "-ldl"
-        };
-        execvp("gcc", cflags);
-        _exit(1);
-      } else {
-        wait(&status);
-
-        fp = fopen("/tmp/crepl_link.c", "a+");
-        fprintf(fp, "%s", command);
-        fclose(fp);
-      }
+      /*
+            int status;
+            pid_t pid = fork();
+            if (pid == 0) {
+              char *cflags[] = {
+                "gcc",
+                "-shared",
+                "-fPIC",
+      #if defined(_i386)
+                "-m32",
+      #elif defined(__x86_64__)
+                "-m64",
+      #endif
+                "/tmp/crepl_test.c",
+                "-o",
+                "/tmp/crepl_test.so",
+                "-ldl"
+              };
+              execvp("gcc", cflags);
+              _exit(1);
+            } else {
+              wait(&status);
+      */
+      fp = fopen("/tmp/crepl_link.c", "a+");
+      fprintf(fp, "%s", command);
+      fclose(fp);
+      //      }
     } else {
       int len = strlen(command) - 1;
       if (command[len] == '\n') {
