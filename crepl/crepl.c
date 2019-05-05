@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
         pid_t pid2 = fork();
         if (pid2 == 0) {
           char *cflags[] = {
-            "gcc",
+            "/usr/bin/gcc",
             "-shared",
             "-fPIC",
 #if defined(__i386__)
