@@ -18,7 +18,7 @@ extern char **environ;
 int main(int argc, char *argv[]) {
   pid_t pid = fork();
   if (pid == 0) {
-    char *cflags[] = {"rm", "/tmp/crepl*", NULL};
+    char *cflags[] = {"rm", "/tmp/crepl_.so", NULL};
     execve("/bin/rm", cflags, environ);
     _exit(1);
   }
