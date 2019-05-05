@@ -41,7 +41,6 @@ int main(int argc, char *argv[]) {
   // "w" Opens an empty file for writing
   // If the given file exists, its contents are destroyed.
   fclose(fp);
-
   while (fgets(command, 1024, stdin)) {
     if (strncmp(command, "int", 3) == 0) {
       fp = fopen("/tmp/crepl_test.c", "w");
