@@ -86,6 +86,7 @@ int main(int argc, char *argv[]) {
       fp = fopen("/tmp/crepl_link.c", "a+");
       fprintf(fp, "%s", command);
       fclose(fp);
+      printf("\n")
     } else {
       int len = strlen(command) - 1;
       if (command[len] == '\n') {
