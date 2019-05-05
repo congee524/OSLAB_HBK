@@ -13,6 +13,7 @@ int cnt_ex;
 void *handle;
 char *error;
 int (*ex_func)();
+extern char **environ;
 
 int main(int argc, char *argv[]) {
   cnt_ex = 0;
@@ -99,7 +100,7 @@ int main(int argc, char *argv[]) {
             "-o",
             "/tmp/crepl_ex.so"
           };
-          execvp("gcc", cflags);
+          exece("gcc", cflags, environ);
           _exit(1);
         } else {
           wait(&status2);
