@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
             "-o",
             "/tmp/crepl_ex.so"
           };
-          execve("gcc", cflags, environ);
+          execve("/usr/bin/gcc", cflags, environ);
           _exit(1);
         } else {
           wait(&status2);
