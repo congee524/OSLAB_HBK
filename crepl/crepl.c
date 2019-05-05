@@ -27,12 +27,12 @@ void my_system(char *const *__argv) {
 
 int main(int argc, char *argv[]) {
   pid_t pid = fork();
-  char *cflags[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
-  my_system(cflags);
-  char *cflags[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
-  my_system(cflags);
-  char *cflags[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
-  my_system(cflags);
+  char *rm1[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
+  my_system(rm1);
+  char *rm2[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
+  my_system(rm2);
+  char *rm3[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
+  my_system(rm3);
   cnt_ex = 0;
 
   // create a tmp file to be complied
@@ -48,28 +48,28 @@ int main(int argc, char *argv[]) {
       fclose(fp);
 
 #if defined(__i386__)
-      char *cflags[] = {"gcc",
-                        "-shared",
-                        "-fPIC",
-                        "-m32",
-                        "/tmp/crepl_test.c",
-                        "-o",
-                        "/tmp/crepl_test.so",
-                        "-ldl",
-                        NULL};
+      char *gcc_test[] = {"gcc",
+                          "-shared",
+                          "-fPIC",
+                          "-m32",
+                          "/tmp/crepl_test.c",
+                          "-o",
+                          "/tmp/crepl_test.so",
+                          "-ldl",
+                          NULL};
 #elif defined(__x86_64__)
-      char *cflags[] = {"gcc",
-                        "-shared",
-                        "-fPIC",
-                        "-m64",
-                        "/tmp/crepl_test.c",
-                        "-o",
-                        "/tmp/crepl_test.so",
-                        "-ldl",
-                        NULL};
+      char *gcc_test[] = {"gcc",
+                          "-shared",
+                          "-fPIC",
+                          "-m64",
+                          "/tmp/crepl_test.c",
+                          "-o",
+                          "/tmp/crepl_test.so",
+                          "-ldl",
+                          NULL};
 #endif
 
-      my_system(cflags);
+      my_system(gcc_test);
 
       fp = fopen("/tmp/crepl_link.c", "a+");
       fprintf(fp, "%s", command);
@@ -85,8 +85,8 @@ int main(int argc, char *argv[]) {
       sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
 
-      char *cflags[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
-      my_system(cflags);
+      char *cp_link[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
+      my_system(cp_link);
       // system("ls /tmp/");
       // test
       // system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
@@ -97,15 +97,15 @@ int main(int argc, char *argv[]) {
       fclose(fp);
 
 #if defined(__i386__)
-      char *cflags[] = {
+      char *gcc_ex[] = {
           "gcc", "-shared",          "-fPIC", "-m32", "/tmp/crepl_ex.c",
           "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
 #elif defined(__x86_64__)
-      char *cflags[] = {
+      char *gcc_ex[] = {
           "gcc", "-shared",          "-fPIC", "-m64", "/tmp/crepl_ex.c",
           "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
 #endif
-      my_system(cflags);
+      my_system(gcc_ex);
 
       // system("ls /tmp");
       // test
