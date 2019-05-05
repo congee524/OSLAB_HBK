@@ -26,7 +26,6 @@ void my_system(char *const *__argv) {
 }
 
 int main(int argc, char *argv[]) {
-  pid_t pid = fork();
   char *rm1[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
   my_system(rm1);
   char *rm2[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
