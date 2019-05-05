@@ -45,7 +45,8 @@ int main(int argc, char *argv[]) {
           "/tmp/crepl_test.c",
           "-o",
           "/tmp/crepl_test.so",
-          "-ldl"
+          "-ldl",
+          NULL
         };
         execvp("gcc", cflags);
         _exit(1);
@@ -75,7 +76,7 @@ int main(int argc, char *argv[]) {
         _exit(1);
       } else {
         waitpid((pid_t)pid, &status, 0);
-        system("ls /tmp/");
+        // system("ls /tmp/");
         // test
         // system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
         // test
@@ -99,13 +100,14 @@ int main(int argc, char *argv[]) {
             "/tmp/crepl_ex.c",
             "-o",
             "/tmp/crepl_ex.so",
+            "-ldl",
             NULL
           };
           execve("/usr/bin/gcc", cflags, environ);
           _exit(1);
         } else {
           waitpid(pid2, &status2, 0);
-          system("ls /tmp");
+          // system("ls /tmp");
           // test
           //#if defined(__x86_64__)
           //      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
