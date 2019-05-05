@@ -16,6 +16,13 @@ int (*ex_func)();
 extern char **environ;
 
 int main(int argc, char *argv[]) {
+  pid_t pid = fork();
+  if (pid == 0) {
+    char *cflags[] = {"rm", "/tmp/crepl*", NULL};
+    execve("rm", cflags, environ);
+    _exit(1);
+  }
+  wait(NULL);
   cnt_ex = 0;
 
   // create a tmp file to be complied
