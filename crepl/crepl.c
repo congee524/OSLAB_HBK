@@ -74,11 +74,13 @@ int main(int argc, char *argv[]) {
             */
 
 #if defined(__x86_64__)
-            system("gcc -shared -fPIC -m64 /tmp/crepl_test.c -o
-            /tmp/crepl_test.so -ldl");
+      system(
+          "gcc -shared -fPIC -m64 /tmp/crepl_test.c -o /tmp/crepl_test.so "
+          "-ldl");
 #else
-            system("gcc -shared -fPIC -m32 /tmp/crepl_test.c -o
-            /tmp/crepl_test.so -ldl");
+      system(
+          "gcc -shared -fPIC -m32 /tmp/crepl_test.c -o /tmp/crepl_test.so "
+          "-ldl");
 #endif
 
       fp = fopen("/tmp/crepl_link.c", "a+");
@@ -123,13 +125,10 @@ int main(int argc, char *argv[]) {
       // system("ls /tmp");
 
 #if defined(__x86_64__)
-            system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
-            /tmp/crepl_ex.so -ldl");
+      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
 #else
-            system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o
-            /tmp/crepl_ex.so -ldl");
+      system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
 #endif
-      
 
       handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
       if (!handle) {
