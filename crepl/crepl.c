@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
         };
         execvp("gcc", cflags);
       } else {
-        waitpid((pid_t)pid, &status, 0);
+        // waitpid((pid_t)pid, &status, 0);
 
         fp = fopen("/tmp/crepl_link.c", "a+");
         fprintf(fp, "%s", command);
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
         char *cflags[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
         execvp("cp", cflags);
       } else {
-        waitpid((pid_t)pid, &status, 0);
+        // waitpid((pid_t)pid, &status, 0);
 
         fp = fopen("/tmp/crepl_ex.c", "a+");
         fprintf(fp, "%s", ex_buffer);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
           };
           execvp("gcc", cflags);
         } else {
-          waitpid((pid_t)pid, &status, 0);
+          // waitpid((pid_t)pid, &status, 0);
 
           handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
           if (!handle) {
