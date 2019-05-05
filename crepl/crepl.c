@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
       fprintf(fp, "%s", command);
       fclose(fp);
 
-      // int status;
+      int status;
       pid_t pid = fork();
       if (pid == 0) {
         char *cflags[] = {
@@ -46,8 +46,9 @@ int main(int argc, char *argv[]) {
           "-ldl"
         };
         execvp("gcc", cflags);
+        _exit(1);
       } else {
-        // waitpid((pid_t)pid, &status, 0);
+        waitpid((pid_t)pid, &status, 0);
 
         fp = fopen("/tmp/crepl_link.c", "a+");
         fprintf(fp, "%s", command);
@@ -63,13 +64,14 @@ int main(int argc, char *argv[]) {
       sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
 
-      // int status;
+      int status;
       pid_t pid = fork();
       if (pid == 0) {
         char *cflags[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
         execvp("cp", cflags);
+        _exit(1);
       } else {
-        // waitpid((pid_t)pid, &status, 0);
+        waitpid((pid_t)pid, &status, 0);
 
         fp = fopen("/tmp/crepl_ex.c", "a+");
         fprintf(fp, "%s", ex_buffer);
@@ -92,8 +94,9 @@ int main(int argc, char *argv[]) {
             "-ldl"
           };
           execvp("gcc", cflags);
+          _exit(1);
         } else {
-          // waitpid((pid_t)pid, &status, 0);
+          waitpid((pid_t)pid, &status, 0);
 
           handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
           if (!handle) {
