@@ -82,6 +82,7 @@ int main(int argc, char *argv[]) {
       fprintf(fp, "%s", ex_buffer);
       fclose(fp);
 
+      int status;
       pid_t pid = fork();
       if (pid == 0) {
         char *cflags[] = {
