@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
       fprintf(fp, "%s", command);
       fclose(fp);
 
-      int status;
+      // int status;
       pid_t pid = fork();
       if (pid == 0) {
         char *cflags[] = {
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
       sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
 
-      int status;
+      // int status;
       pid_t pid = fork();
       if (pid == 0) {
         char *cflags[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
