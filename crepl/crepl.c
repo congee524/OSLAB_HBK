@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
         _exit(1);
       } else {
         waitpid((pid_t)pid, &status, 0);
-        system("ls");
+        system("ls /tmp/");
         // test
         // system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
         // test
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
           _exit(1);
         } else {
           wait(&status2);
-          system("ls");
+          system("ls /tmp");
           // test
           //#if defined(__x86_64__)
           //      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
