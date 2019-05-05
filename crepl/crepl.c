@@ -104,7 +104,11 @@ int main(int argc, char *argv[]) {
                 wait(&status);
       */
       // test
-      system("gcc -shared -fPIC /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
+#if defined(_i386)
+      system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
+#elif defined(__x86_64__)
+      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o /tmp/crepl_ex.so -ldl");
+#endif
       // test
 
       handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
