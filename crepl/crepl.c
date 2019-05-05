@@ -15,18 +15,24 @@ char *error;
 int (*ex_func)();
 extern char **environ;
 
-int main(int argc, char *argv[]) {
+void my_system(char *const *__argv) {
+  int status;
   pid_t pid = fork();
   if (pid == 0) {
-    char *cflags1[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
-    execve("/bin/rm", cflags1, environ);
-    char *cflags2[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
-    execve("/bin/rm", cflags2, environ);
-    char *cflags3[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
-    execve("/bin/rm", cflags3, environ);
+    execve(__argv[0], __argv, environ);
     _exit(1);
   }
-  wait(NULL);
+  waitpid(pid, &status, 0);
+}
+
+int main(int argc, char *argv[]) {
+  pid_t pid = fork();
+  char *cflags[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
+  my_system(cflags);
+  char *cflags[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
+  my_system(cflags);
+  char *cflags[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
+  my_system(cflags);
   cnt_ex = 0;
 
   // create a tmp file to be complied
@@ -41,33 +47,33 @@ int main(int argc, char *argv[]) {
       fprintf(fp, "%s", command);
       fclose(fp);
 
-      int status;
-      pid_t pid = fork();
-      if (pid == 0) {
-        char *cflags[] = {
-          "gcc",
-          "-shared",
-          "-fPIC",
 #if defined(__i386__)
-          "-m32",
+      char *cflags[] = {"gcc",
+                        "-shared",
+                        "-fPIC",
+                        "-m32",
+                        "/tmp/crepl_test.c",
+                        "-o",
+                        "/tmp/crepl_test.so",
+                        "-ldl",
+                        NULL};
 #elif defined(__x86_64__)
-          "-m64",
+      char *cflags[] = {"gcc",
+                        "-shared",
+                        "-fPIC",
+                        "-m64",
+                        "/tmp/crepl_test.c",
+                        "-o",
+                        "/tmp/crepl_test.so",
+                        "-ldl",
+                        NULL};
 #endif
-          "/tmp/crepl_test.c",
-          "-o",
-          "/tmp/crepl_test.so",
-          "-ldl",
-          NULL
-        };
-        execvp("gcc", cflags);
-        _exit(1);
-      } else {
-        wait(&status);
 
-        fp = fopen("/tmp/crepl_link.c", "a+");
-        fprintf(fp, "%s", command);
-        fclose(fp);
-      }
+      my_system(cflags);
+
+      fp = fopen("/tmp/crepl_link.c", "a+");
+      fprintf(fp, "%s", command);
+      fclose(fp);
     } else {
       int len = strlen(command) - 1;
       if (command[len] == '\n') {
@@ -79,74 +85,53 @@ int main(int argc, char *argv[]) {
       sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
 
-      /*
-            int status;
-            pid_t pid = fork();
-            if (pid == 0) {
-              char *cflags[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
-              execvp("cp", cflags);
-              _exit(1);
-            } else {
-              */
-      waitpid((pid_t)pid, &status, 0);
+      char *cflags[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
+      my_system(cflags);
       // system("ls /tmp/");
       // test
-      system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
+      // system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
       // test
 
       fp = fopen("/tmp/crepl_ex.c", "a+");
       fprintf(fp, "%s", ex_buffer);
       fclose(fp);
 
-      int status2;
-      pid_t pid2 = fork();
-      if (pid2 == 0) {
-        char *cflags[] = {
-          "/usr/bin/gcc",
-          "-shared",
-          "-fPIC",
 #if defined(__i386__)
-          "-m32",
+      char *cflags[] = {
+          "gcc", "-shared",          "-fPIC", "-m32", "/tmp/crepl_ex.c",
+          "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
 #elif defined(__x86_64__)
-          "-m64",
+      char *cflags[] = {
+          "gcc", "-shared",          "-fPIC", "-m64", "/tmp/crepl_ex.c",
+          "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
 #endif
-          "/tmp/crepl_ex.c",
-          "-o",
-          "/tmp/crepl_ex.so",
-          "-ldl",
-          NULL
-        };
-        execve("/usr/bin/gcc", cflags, environ);
-        _exit(1);
-      } else {
-        waitpid(pid2, &status2, 0);
-        // system("ls /tmp");
-        // test
-        //#if defined(__x86_64__)
-        //      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
-        //      /tmp/crepl_ex.so -ldl");
-        //#else
-        //      system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o
-        //      /tmp/crepl_ex.so -ldl");
-        //#endif
-        // test
+      my_system(cflags);
 
-        handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
-        if (!handle) {
-          fprintf(stderr, "%s\n", dlerror());
-          return 1;
-        }
-        dlerror();
+      // system("ls /tmp");
+      // test
+      //#if defined(__x86_64__)
+      //      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
+      //      /tmp/crepl_ex.so -ldl");
+      //#else
+      //      system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o
+      //      /tmp/crepl_ex.so -ldl");
+      //#endif
+      // test
 
-        ex_func = dlsym(handle, func_buffer);
-        if ((error = dlerror()) != NULL) {
-          fprintf(stderr, "%s\n", error);
-          return 1;
-        }
-        printf("%s = %d\n", command, (*ex_func)());
-        dlclose(handle);
+      handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
+      if (!handle) {
+        fprintf(stderr, "%s\n", dlerror());
+        return 1;
       }
-      // }
+      dlerror();
+
+      ex_func = dlsym(handle, func_buffer);
+      if ((error = dlerror()) != NULL) {
+        fprintf(stderr, "%s\n", error);
+        return 1;
+      }
+      printf("%s = %d\n", command, (*ex_func)());
+      dlclose(handle);
     }
   }
   return 0;
