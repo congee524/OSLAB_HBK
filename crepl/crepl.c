@@ -61,6 +61,7 @@ int main(int argc, char *argv[]) {
         command[len] = '\0';
       }
 
+      memset(func_buffer, '\0', sizeof(func_buffer));
       memset(ex_buffer, '\0', sizeof(ex_buffer));
       sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
