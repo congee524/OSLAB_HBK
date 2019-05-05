@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
       }
 
       memset(ex_buffer, '\0', sizeof(ex_buffer));
-      spirntf(func_buffer, "__expression%d", ++cnt_ex);
+      sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
 
       int status;
