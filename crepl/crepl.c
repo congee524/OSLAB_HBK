@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
           execve("/usr/bin/gcc", cflags, environ);
           _exit(1);
         } else {
-          wait(&status2);
+          waitpid(pid2, &status2, 0);
           system("ls /tmp");
           // test
           //#if defined(__x86_64__)
