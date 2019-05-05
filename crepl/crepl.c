@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         execvp("cp", cflags);
         _exit(1);
       } else {
-        waitpid((pid_t)pid, &status, 0);
+        wait(&status);
 
         fp = fopen("/tmp/crepl_ex.c", "a+");
         fprintf(fp, "%s", ex_buffer);
