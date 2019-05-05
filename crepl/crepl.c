@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "%s\n", error);
         return 1;
       }
-      printf("%s = %d\n", command, (*ex_func)());
+      printf(">> %s = %d\n\n", command, (*ex_func)());
       dlclose(handle);
     }
   }
