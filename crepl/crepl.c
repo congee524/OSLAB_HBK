@@ -98,7 +98,8 @@ int main(int argc, char *argv[]) {
 #endif
             "/tmp/crepl_ex.c",
             "-o",
-            "/tmp/crepl_ex.so"
+            "/tmp/crepl_ex.so",
+            NULL
           };
           execve("/usr/bin/gcc", cflags, environ);
           _exit(1);
