@@ -26,12 +26,14 @@ void my_system(char *const *__argv) {
 }
 
 int main(int argc, char *argv[]) {
+  /*
   char *rm1[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
   my_system(rm1);
   char *rm2[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
   my_system(rm2);
   char *rm3[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
   my_system(rm3);
+  */
   cnt_ex = 0;
 
   // create a tmp file to be complied
@@ -45,30 +47,39 @@ int main(int argc, char *argv[]) {
       fp = fopen("/tmp/crepl_test.c", "w");
       fprintf(fp, "%s", command);
       fclose(fp);
+      /*
+      #if defined(__i386__)
+            char *gcc_test[] = {"gcc",
+                                "-shared",
+                                "-fPIC",
+                                "-m32",
+                                "/tmp/crepl_test.c",
+                                "-o",
+                                "/tmp/crepl_test.so",
+                                "-ldl",
+                                NULL};
+      #elif defined(__x86_64__)
+            char *gcc_test[] = {"gcc",
+                                "-shared",
+                                "-fPIC",
+                                "-m64",
+                                "/tmp/crepl_test.c",
+                                "-o",
+                                "/tmp/crepl_test.so",
+                                "-ldl",
+                                NULL};
+      #endif
 
-#if defined(__i386__)
-      char *gcc_test[] = {"gcc",
-                          "-shared",
-                          "-fPIC",
-                          "-m32",
-                          "/tmp/crepl_test.c",
-                          "-o",
-                          "/tmp/crepl_test.so",
-                          "-ldl",
-                          NULL};
-#elif defined(__x86_64__)
-      char *gcc_test[] = {"gcc",
-                          "-shared",
-                          "-fPIC",
-                          "-m64",
-                          "/tmp/crepl_test.c",
-                          "-o",
-                          "/tmp/crepl_test.so",
-                          "-ldl",
-                          NULL};
+            my_system(gcc_test);
+            */
+
+#if defined(__x86_64__)
+            system("gcc -shared -fPIC -m64 /tmp/crepl_test.c -o
+            /tmp/crepl_test.so -ldl");
+#else
+            system("gcc -shared -fPIC -m32 /tmp/crepl_test.c -o
+            /tmp/crepl_test.so -ldl");
 #endif
-
-      my_system(gcc_test);
 
       fp = fopen("/tmp/crepl_link.c", "a+");
       fprintf(fp, "%s", command);
@@ -83,39 +94,42 @@ int main(int argc, char *argv[]) {
       memset(ex_buffer, '\0', sizeof(ex_buffer));
       sprintf(func_buffer, "__expression%d", ++cnt_ex);
       sprintf(ex_buffer, "int %s(){return %s;}", func_buffer, command);
-
-      char *cp_link[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
-      my_system(cp_link);
+      /*
+            char *cp_link[] = {"cp", "/tmp/crepl_link.c", "/tmp/crepl_ex.c"};
+            my_system(cp_link);
+            */
       // system("ls /tmp/");
-      // test
-      // system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
-      // test
+
+      system("cp /tmp/crepl_link.c /tmp/crepl_ex.c");
 
       fp = fopen("/tmp/crepl_ex.c", "a+");
       fprintf(fp, "%s", ex_buffer);
       fclose(fp);
 
-#if defined(__i386__)
-      char *gcc_ex[] = {
-          "gcc", "-shared",          "-fPIC", "-m32", "/tmp/crepl_ex.c",
-          "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
-#elif defined(__x86_64__)
-      char *gcc_ex[] = {
-          "gcc", "-shared",          "-fPIC", "-m64", "/tmp/crepl_ex.c",
-          "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
-#endif
-      my_system(gcc_ex);
+      /*
+      #if defined(__i386__)
+            char *gcc_ex[] = {
+                "gcc", "-shared",          "-fPIC", "-m32", "/tmp/crepl_ex.c",
+                "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
+      #elif defined(__x86_64__)
+            char *gcc_ex[] = {
+                "gcc", "-shared",          "-fPIC", "-m64", "/tmp/crepl_ex.c",
+                "-o",  "/tmp/crepl_ex.so", "-ldl",  NULL};
+      #endif
+            my_system(gcc_ex);
+
+            */
 
       // system("ls /tmp");
-      // test
-      //#if defined(__x86_64__)
-      //      system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
-      //      /tmp/crepl_ex.so -ldl");
-      //#else
-      //      system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o
-      //      /tmp/crepl_ex.so -ldl");
-      //#endif
-      // test
+
+#if defined(__x86_64__)
+            system("gcc -shared -fPIC -m64 /tmp/crepl_ex.c -o
+            /tmp/crepl_ex.so -ldl");
+#else
+            system("gcc -shared -fPIC -m32 /tmp/crepl_ex.c -o
+            /tmp/crepl_ex.so -ldl");
+#endif
+      
 
       handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
       if (!handle) {
