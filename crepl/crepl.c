@@ -82,8 +82,9 @@ int main(int argc, char *argv[]) {
         fprintf(fp, "%s", ex_buffer);
         fclose(fp);
 
-        pid = fork();
-        if (pid == 0) {
+        int status2;
+        pid_t pid2 = fork();
+        if (pid2 == 0) {
           char *cflags[] = {
             "gcc",
             "-shared",
@@ -101,7 +102,7 @@ int main(int argc, char *argv[]) {
           execvp("gcc", cflags);
           _exit(1);
         } else {
-          wait(&status);
+          wait(&status2);
 
           // test
           //#if defined(__x86_64__)
