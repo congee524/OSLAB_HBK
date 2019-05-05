@@ -18,12 +18,12 @@ extern char **environ;
 int main(int argc, char *argv[]) {
   pid_t pid = fork();
   if (pid == 0) {
-    char *cflags[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
-    execve("/bin/rm", cflags, environ);
-    char *cflags[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
-    execve("/bin/rm", cflags, environ);
-    char *cflags[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
-    execve("/bin/rm", cflags, environ);
+    char *cflags1[] = {"/bin/rm", "/tmp/crepl_ex.so", NULL};
+    execve("/bin/rm", cflags1, environ);
+    char cflags2[] = {"/bin/rm", "/tmp/crepl_ex.c", NULL};
+    execve("/bin/rm", cflags2, environ);
+    char *cflags3[] = {"/bin/rm", "/tmp/crepl_link.c", NULL};
+    execve("/bin/rm", cflags3, environ);
     _exit(1);
   }
   wait(NULL);
