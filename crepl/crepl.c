@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
         execvp("gcc", cflags);
         _exit(1);
       } else {
-        waitpid((pid_t)pid, &status, 0);
+        wait(&status);
 
         fp = fopen("/tmp/crepl_link.c", "a+");
         fprintf(fp, "%s", command);
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
           execvp("gcc", cflags);
           _exit(1);
         } else {
-          waitpid((pid_t)pid, &status, 0);
+          wait(&status);
 
           handle = dlopen("/tmp/crepl_ex.so", RTLD_LAZY);
           if (!handle) {
