@@ -5,9 +5,10 @@ static void kmt_init() {
     // TODO
 }
 
-static void kmt_create(task_t *task, const char *name, \
+static int kmt_create(task_t *task, const char *name, \
         void (*entry)(void *arg), void *arg) {
     // TODO
+    return 0;
 }
 
 static void kmt_teardown(task_t *task) {
