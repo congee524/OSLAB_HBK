@@ -1,5 +1,5 @@
 #include <kernel.h>
-#include <my_spinlock.h>
+//#include <my_spinlock.h>
 
 #define BLOCK_SIZE 12
 // align the size by 4 byte
