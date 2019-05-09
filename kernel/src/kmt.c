@@ -1,0 +1,39 @@
+#include <common.h>
+#include <klib.h>
+
+static void kmt_init() {
+    // TODO
+}
+
+static void kmt_create(task_t *task, const char *name, \
+        void (*entry)(void *arg), void *arg) {
+    // TODO
+}
+
+static void kmt_teardown(task_t *task) {
+    // TODO
+}
+
+static void kmt_spin_init(spinlock_t *lk) {
+    // TODO
+}
+
+static void kmt_spin_lock(spinlock_t *lk){
+    // TODO
+}
+
+static void kmt_spin_unlock(spinlock_t *lk) {
+    // TODO
+}
+
+static void kmt_sem_init(sem_t *sem, const char *name, int value){
+    // TODO
+}
+
+static void kmt_sem_wait(sem_t *sem) {
+    // TODO
+}
+
+static void kmt_sem_signal(sem_t *sem) {
+    // TODO
+}
