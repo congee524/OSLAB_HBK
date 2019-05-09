@@ -15,7 +15,7 @@ static void kmt_teardown(task_t *task) {
     // TODO
 }
 
-static void kmt_spin_init(spinlock_t *lk) {
+static void kmt_spin_init(spinlock_t *lk, const char *name) {
     // TODO
 }
 
