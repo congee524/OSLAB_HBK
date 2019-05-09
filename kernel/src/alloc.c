@@ -65,7 +65,7 @@ static void merge_block(t_block pre) {
 }
 
 static void *kalloc(size_t size) {
-  spin_lock(&alloc_lk);
+  kmt->spin_lock(&alloc_lk);
   // TODO()
 
   t_block pre, last;
@@ -76,7 +76,7 @@ static void *kalloc(size_t size) {
     printf("base !\n");
     if (pre == NULL) {
       printf("base Need more memory!\n");
-      spin_unlock(&alloc_lk);
+      kmt->spin_unlock(&alloc_lk);
       return NULL;
     } else {
       base = pre;
@@ -98,22 +98,23 @@ static void *kalloc(size_t size) {
       pre = extend_heap(last, size);
       if (pre == NULL) {
         printf("Need more memory!\n");
-        spin_unlock(&alloc_lk);
+        kmt->spin_unlock(&alloc_lk);
         return NULL;
       }
     }
   }
 
-  spin_unlock(&alloc_lk);
+  kmt->spin_unlock(&alloc_lk);
   return (void *)&pre->data;
 }
 
 static void kfree(void *ptr) {
-  spin_lock(&alloc_lk);
+  //spin_lock(&alloc_lk);
+  kmt->spin_lock(&alloc_lk);
   // TODO()
   if (base == NULL) {
     printf("wrong memory space!\n");
-    spin_unlock(&alloc_lk);
+    kmt->spin_unlock(&alloc_lk);
     assert(0);
     return;
   }
@@ -126,7 +127,7 @@ static void kfree(void *ptr) {
   }
   if (pre == NULL) {
     printf("No such memory space!\n");
-    spin_unlock(&alloc_lk);
+    kmt->spin_unlock(&alloc_lk);
     assert(0);
     return;
   }
@@ -137,7 +138,7 @@ static void kfree(void *ptr) {
   if (pre->next != NULL && pre->next->free == 1) {
     merge_block(pre);
   }
-  spin_unlock(&alloc_lk);
+  kmt->spin_unlock(&alloc_lk);
   return;
 }
 
