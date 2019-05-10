@@ -1,5 +1,5 @@
-#include <alloc.h>
 #include <common.h>
+#include <kernel.h>
 #include <klib.h>
 
 static uintptr_t pm_start, pm_end, pm_pre;
@@ -109,7 +109,7 @@ static void *kalloc(size_t size) {
 }
 
 static void kfree(void *ptr) {
-  //spin_lock(&alloc_lk);
+  // spin_lock(&alloc_lk);
   kmt->spin_lock(&alloc_lk);
   // TODO()
   if (base == NULL) {

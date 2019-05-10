@@ -102,4 +102,22 @@ int memcmp(const void* s1, const void* s2, size_t n){
   return 0;
 }
 
+void *memmove(void *dest, const void *src, size_t n) {
+    char *d = (char*) dest;
+    const char* s = (const char*) src;
+    if (s > d) {
+        while(n--) {
+            *d++  = *s++;
+        }
+    } else if (s < d) {
+        d = d + n - 1;
+        s = s + n - 1;
+
+        while(n--) {
+            *d-- = *s--;
+        }
+    }
+    return dest;
+}
+
 #endif
