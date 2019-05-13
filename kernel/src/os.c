@@ -2,6 +2,8 @@
 #include <devices.h>
 #include <klib.h>
 
+#define current (current_task[_cpu()])
+
 void echo_task(void *arg) {
   char *name = (char *)arg;
   device_t *tty = dev_lookup(name);
