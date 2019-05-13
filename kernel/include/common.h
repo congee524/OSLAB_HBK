@@ -1,8 +1,8 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#include <am.h>
 #include <kernel.h>
+#include <klib.h>
 #include <nanos.h>
 
 #define STK_SZ 4096  // the size of stack
