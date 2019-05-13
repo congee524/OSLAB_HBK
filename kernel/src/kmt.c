@@ -18,12 +18,24 @@ static inline void panic(const char *s) {
   _halt(1);
 }
 
-static void kmt_context_save() {
+static void kmt_context_save(_Event ev, _Context *ctx) {
   // TODO
+  if (current) current->context = *ctx;
 }
 
-static void kmt_context_switch() {
+static void kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
+  do {
+    if (!current || current + 1 == &tasks[LENGTH(tasks)]) {
+      current = &tasks[0];
+    } else {
+      current++;
+    }
+  } while ((current - tasks) % _ncpu() != _cpu());
+
+  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
+
+  return &current->context;
 }
 
 static void kmt_init() {

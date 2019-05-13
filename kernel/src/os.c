@@ -37,19 +37,14 @@ static void os_run() {
 }
 
 static _Context *os_trap(_Event ev, _Context *ctx) {
-  if (current) current->context = *ctx;
-
-  do {
-    if (!current || current + 1 == &tasks[LENGTH(tasks)]) {
-      current = &tasks[0];
-    } else {
-      current++;
+  _Context *ret = NULL;
+  for_each(handler in handlers) {
+    if (handler->event == _EVENT_NULL || handler->event == ev.event) {
+      _Context *next = handler->handler(ev, context);
+      if (next) ret = next;
     }
-  } while ((current - tasks) % _ncpu() != _cpu());
-
-  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
-
-  return &current->context;
+  }
+  return ret;
 }
 
 static void os_on_irq(int seq, int event, handler_t handler) {
