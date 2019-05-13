@@ -2,9 +2,17 @@
 #include <devices.h>
 #include <klib.h>
 
+#define MAX_HANDLER 32
 #define current (current_task[_cpu()])
 
-static void os_init() {
+struct {
+  int seq;
+  _Event event;
+  handler_t handler;
+} handlers[MAX_HANDLER]
+
+    static void
+    os_init() {
   pmm->init();
   kmt->init();
   // _vme_init(pmm->alloc, pmm->free);
@@ -38,7 +46,7 @@ static void os_run() {
 
 static _Context *os_trap(_Event ev, _Context *ctx) {
   _Context *ret = NULL;
-  for_each(handler in handlers) {
+  for (int handler = 0; handler < MAX_HANDLER; handler++) {
     if (handler->event == _EVENT_NULL || handler->event == ev.event) {
       _Context *next = handler->handler(ev, context);
       if (next) ret = next;
@@ -47,6 +55,8 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
   return ret;
 }
 
+int cnt_handle = 0;
+spinlock_t irq_lk;
 static void os_on_irq(int seq, int event, handler_t handler) {
   // TODO
 }
