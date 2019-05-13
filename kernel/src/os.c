@@ -46,8 +46,8 @@ static void os_run() {
 
 static _Context *os_trap(_Event ev, _Context *ctx) {
   _Context *ret = NULL;
-  for (int handler = 0; handler < MAX_HANDLER; handler++) {
-    if (handler->event == _EVENT_NULL || handler->event == ev.event) {
+  for (int i = 0; i < MAX_HANDLER; i++) {
+    if (handlers[i].event == _EVENT_NULL || handlers[i].event == ev.event) {
       _Context *next = handler->handler(ev, context);
       if (next) ret = next;
     }
@@ -59,6 +59,28 @@ int cnt_handle = 0;
 spinlock_t irq_lk;
 static void os_on_irq(int seq, int event, handler_t handler) {
   // TODO
+  kmt->spin_lock(&irq_lk);
+  handlers[cnt_handle].seq = seq;
+  handlers[cnt_handle].event = event;
+  handlers[cnt_handle].handler = handler;
+  cnt_handle++;
+  // according to seq, call it
+  for (int i = cnt_handle - 1; i > 0; i--) {
+    if (handlers[cnt_handle].seq < handlers[i - 1].seq) {
+      int tmp_seq = handlers[i].seq;
+      _Event tmp_event = handlers[i].event;
+      handler_t tmp_handler = handlers[i].handler;
+      handlers[i].seq = handlers[i - 1].seq;
+      handlers[i].event = handlers[i - 1].event;
+      handlers[i].handler = handlers[i - 1].handler;
+      handlers[i - 1].seq = tmp_seq;
+      handlers[i - 1].event = tmp_event;
+      handlers[i - 1].handler = tmp_handler;
+    } else {
+      break;
+    }
+  }
+  kmt->spin_unlock(&irq_lk);
 }
 
 MODULE_DEF(os){
