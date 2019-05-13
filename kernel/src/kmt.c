@@ -1,7 +1,6 @@
 #include <common.h>
 #include <kernel.h>
 #include <klib.h>
-#include <kmt.h>
 
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
