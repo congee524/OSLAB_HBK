@@ -1,7 +1,8 @@
 #include <common.h>
 #include <klib.h>
 
-void echo_task(void *name) {
+void echo_task(void *arg) {
+  char *name = (char *)arg;
   device_t *tty = dev_lookup(name);
   while (1) {
     char line[128], text[128];
