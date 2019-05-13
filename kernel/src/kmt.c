@@ -5,6 +5,9 @@
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
+#define INT_MAX 2147483647
+#define INT_MIN (-INT_MAX - 1)
+
 extern void getcallerpcs(void *v, unsigned int pcs[]);
 extern int holding(struct spinlock *lock);
 extern void pushcli(void);
@@ -13,6 +16,14 @@ extern void popcli(void);
 static inline void panic(const char *s) {
   printf("%s\n", s);
   _halt(1);
+}
+
+satic void kmt_context_save() {
+  // TODO
+}
+
+static void kmt_context_switch() {
+  // TODO
 }
 
 static void kmt_init() {
