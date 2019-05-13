@@ -1,7 +1,6 @@
 #include <am.h>
 #include <kernel.h>
 
-#define STK_SZ 4096  // the size of stack
 #define TASK_MAX 4
 
 struct task tasks;
