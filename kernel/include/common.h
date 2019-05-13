@@ -19,7 +19,7 @@ struct task {
 
 // Mutual exclusion lock.
 struct spinlock {
-  unsigned int locked;  // Is the lock held?
+  volatile intptr_t locked;  // Is the lock held?
 
   // For debugging:
   char *name;            // Name of lock.
