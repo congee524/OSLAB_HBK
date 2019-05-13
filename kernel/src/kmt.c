@@ -18,7 +18,7 @@ static inline void panic(const char *s) {
   _halt(1);
 }
 
-satic void kmt_context_save() {
+static void kmt_context_save() {
   // TODO
 }
 
