@@ -29,11 +29,7 @@ struct spinlock {
                     // that locked the lock.
 };
 struct semaphore {
-  uint val;
-  struct spinlock lock;
-  void *thread[NPROC];
-  uint next;
-  uint end;
+  // TODO
 };
 
 #endif

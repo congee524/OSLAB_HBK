@@ -74,49 +74,14 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
   // TODO
-  sem->val = value;
-  // cprintf("%s sem_init: val = %d\n", name, s->val);
-  kmt_spin_init(&sem->lock, (char *)sem);
-  for (int j = 0; j < NPROC; j++) sem->thread[j] = 0;
-  sem->next = sem->end = 0;
 }
 
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
-  kmt_spin_lock(&sem->lock);
-  // s->thread[s->end] = proc;
-  // s->end = (s->end + 1) % NPROC;
-  while (sem->val == 0) {
-    sem->thread[sem->end] = proc;
-    sem->end = (sem->end + 1) % NPROC;
-    sleep(proc, &sem->lock);
-  }
-  sem->val = sem->val - 1;
-  // cprintf("%s sem_wait: val = %d\n", s->name, s->val);
-  kmt_spin_unlock(&sem->lock);
 }
 
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
-  kmt_spin_lock(&sem->lock);
-  sem->val = sem->val + 1;
-  // cprintf("%s sem_signal: val = %d\n", s->name, s->val);
-  if (sem->thread[sem->next]) {
-    wakeup(sem->thread[sem->next]);
-    sem->thread[sem->next] = 0;
-    sem->next = (sem->next + 1) % NPROC;
-  }
-  kmt_spin_unlock(&sem->lock);
-}
-
-static void kmt_sem_broadcast(sem_t *sem) {
-  // wakeup all the waiting proc
-  kmt_spin_lock(&sem->lock);
-  sem->val = sem->val + 1;
-  // cprintf("%s sem_signal: val = %d\n", s->name, s->val);
-  sem->next = (sem->next + 1) % NPROC;
-  for (int i = 0; i < NPROC; i++) wakeup(sem->thread[i]);
-  kmt_spin_unlock(&sem->lock);
 }
 
 MODULE_DEF(kmt){
@@ -129,7 +94,6 @@ MODULE_DEF(kmt){
     .sem_init = kmt_sem_init,
     .sem_wait = kmt_sem_wait,
     .sem_signal = kmt_sem_signal,
-    .sem_broadcast = kmt_sem_broadcast,
     //.context_save = kmt_context_save,
     //.context_switch = kmt_context_switch,
 };
