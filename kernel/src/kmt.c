@@ -6,7 +6,7 @@
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
-extern void getcallerpcs(void *v, uint pcs[]);
+extern void getcallerpcs(void *v, unsigned int pcs[]);
 extern int holding(struct spinlock *lock);
 extern void pushcli(void);
 extern void popcli(void);
