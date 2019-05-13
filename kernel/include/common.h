@@ -39,6 +39,6 @@ struct Task_Pool {
   int cnt;
 } tasks[MAX_CPU];
 
-struct task *current
+struct task *current;
 
 #endif

@@ -35,7 +35,7 @@ static void kmt_context_switch(_Event ev, _Context *ctx) {
   } while ((current - tasks) % _ncpu() != _cpu());
   */
 
-  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
+  // printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
 
   return &current->context;
 }
