@@ -11,6 +11,7 @@
 struct task {
   const char *name;
   _Context context;
+  int status;
   struct task *next;
   uint8_t fence1[32];  // init with 0xcc, check overflow
   uint8_t stack[STK_SZ];
@@ -31,10 +32,13 @@ struct semaphore {
   // TODO
 };
 
-#define TASK_MAX 4
+#define MAX_CPU 16
 
-struct task tasks;
+struct Task_Pool {
+  struct task *head;
+  int cnt;
+} tasks[MAX_CPU];
 
-struct task *current_task[TASK_MAX];
+struct task *current
 
 #endif

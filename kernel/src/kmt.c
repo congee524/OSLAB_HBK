@@ -25,6 +25,7 @@ static void kmt_context_save(_Event ev, _Context *ctx) {
 
 static void kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
+  /*
   do {
     if (!current || current + 1 == &tasks[LENGTH(tasks)]) {
       current = &tasks[0];
@@ -32,6 +33,7 @@ static void kmt_context_switch(_Event ev, _Context *ctx) {
       current++;
     }
   } while ((current - tasks) % _ncpu() != _cpu());
+  */
 
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
 
@@ -41,19 +43,92 @@ static void kmt_context_switch(_Event ev, _Context *ctx) {
 static void kmt_init() {
   // TODO
   // ...
+  for (int i = 0; i < _ncpu(); i++) {
+    tasks[i].head = NULL;
+    tasks[i].cnt = 0;
+  }
+  kmt_spin_init(&create_lk, "create_lk");
+  kmt_spin_init(&teard_lk, "teard_lk");
+  kmt_spin_init(&alloc_lk, "alloc_lk");
+
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
   // ...
 }
 
+spinlock_t create_lk;
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
   // TODO
+  kmt_spin_lock(&create_lk);
+  task->name = name;
+  task->next = NULL;
+  _Area stack = (_Area){task->stack, task->fence2};
+  task->context = *_kcontext(stack, entry, arg);
+  int j = 0;
+  for (int i = 1; i < _ncpu(); i++) {
+    if (tasks[i].cnt < task[j].cnt) {
+      j = i;
+    }
+  }
+  if (!task[j].head) {
+    tasks[j].head = task;
+  } else {
+    task_t *tmp = tasks[j].head;
+    while (tmp->next) tmp = tmp->next;
+    tmp->next = task;
+  }
+  tasks[j].cnt++;
+  kmt_spin_unlock(&create_lk);
   return 0;
 }
 
+spinlock_t teard_lk;
 static void kmt_teardown(task_t *task) {
   // TODO
+  kmt_spin_lock(&teard_lk);
+  int flag = 0;
+  task_t *tmp;
+  task_t *last;
+  int i;
+  for (i = 0; i < _ncpu(); i++) {
+    if (tasks[i].cnt > 0) {
+      last = tmp = tasks[i].head;
+      if (strcmp(tmp->name, task->name) == 0) {
+        flag = 2;
+        break;
+      }
+      while (tmp->next) {
+        last = tmp;
+        tmp = tmp->next;
+        if (strcmp(tmp->name, task->name) == 0) {
+          flag = 1;
+          break;
+        }
+      }
+    }
+    if (flag) break;
+  }
+
+  switch (flag) {
+    case 0:
+      panic("No such task!");
+      break;
+    case 1:
+      last->next = tmp->next;
+      pmm->free(tmp);
+      tasks[i].cnt--;
+      break;
+    case 2:
+      tasks[i].head = NULL;
+      pmm->free(tmp);
+      tasks[i].cnt--;
+      break;
+    default:
+      panic("Wrong flag!");
+      break;
+  }
+  kmt_spin_unlock(&teard_lk);
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {

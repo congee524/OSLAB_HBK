@@ -3,16 +3,14 @@
 #include <klib.h>
 
 #define MAX_HANDLER 32
-#define current (current_task[_cpu()])
 
 struct {
   int seq;
   _Event event;
   handler_t handler;
-} handlers[MAX_HANDLER]
+} handlers[MAX_HANDLER];
 
-    static void
-    os_init() {
+static void os_init() {
   pmm->init();
   kmt->init();
   // _vme_init(pmm->alloc, pmm->free);
