@@ -1,6 +1,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#include <am.h>
 #include <kernel.h>
 #include <nanos.h>
 
