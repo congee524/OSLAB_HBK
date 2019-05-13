@@ -26,7 +26,7 @@ static void kmt_teardown(task_t *task) {
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
-  lk->name = name;
+  strcpy(lk->name, name);
   lk->locked = 0;
   lk->cpu = 0;
 }
