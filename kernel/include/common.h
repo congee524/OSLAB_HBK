@@ -8,13 +8,10 @@
 #define NPROC 32
 typedef unsigned int uint;
 
-#define panic(s)                                        \
-  do {                                                  \
-    puts("Panic: ");                                    \
-    puts(s);                                            \
-    puts(" @ " __FILE__ ":" TOSTRING(__LINE__) "  \n"); \
-    _halt(1);                                           \
-  } while (0)
+inline void panic(const char *s) {
+  printf("%s\n", s);
+  _halt(1);
+}
 
 struct task {
   const char *name;
