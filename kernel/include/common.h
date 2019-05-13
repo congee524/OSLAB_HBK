@@ -7,7 +7,6 @@
 
 #define STK_SZ 4096  // the size of stack
 #define NPROC 32
-typedef unsigned int uint;
 
 struct task {
   const char *name;
@@ -20,13 +19,13 @@ struct task {
 
 // Mutual exclusion lock.
 struct spinlock {
-  uint locked;  // Is the lock held?
+  unsigned int locked;  // Is the lock held?
 
   // For debugging:
-  char *name;       // Name of lock.
-  struct cpu *cpu;  // The cpu holding the lock.
-  uint pcs[10];     // The call stack (an array of program counters)
-                    // that locked the lock.
+  char *name;            // Name of lock.
+  struct cpu *cpu;       // The cpu holding the lock.
+  unsigned int pcs[10];  // The call stack (an array of program counters)
+                         // that locked the lock.
 };
 struct semaphore {
   // TODO
