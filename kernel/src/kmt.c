@@ -97,6 +97,6 @@ MODULE_DEF(kmt){
     .sem_init = kmt_sem_init,
     .sem_wait = kmt_sem_wait,
     .sem_signal = kmt_sem_signal,
-    //.context_save = kmt_context_save,
-    //.context_switch = kmt_context_switch,
+    .context_save = kmt_context_save,
+    .context_switch = kmt_context_switch,
 };

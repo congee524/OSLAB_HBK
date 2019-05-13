@@ -1,3 +1,4 @@
+#include <device.h>
 #include <kernel.h>
 #include <klib.h>
 
