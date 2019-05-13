@@ -4,6 +4,8 @@
 #include <kernel.h>
 #include <nanos.h>
 
+#define STK_SZ 4096  // the size of stack
+#define NPROC 32
 typedef unsigned int uint;
 
 struct task {
