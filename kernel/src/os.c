@@ -4,31 +4,19 @@
 
 #define current (current_task[_cpu()])
 
-void echo_task(void *arg) {
-  char *name = (char *)arg;
-  device_t *tty = dev_lookup(name);
-  while (1) {
-    char line[128], text[128];
-    sprintf(text, "(%s) $ ", name);
-    tty->ops->write(tty, 0, text, strlen(text));
-    int nread = tty->ops->read(tty, 0, line, sizeof(line));
-    line[nread - 1] = '\0';
-    sprintf(text, "Echo: %s.\n", line);
-    tty->ops->write(tty, 0, text, strlen(text));
-  }
-}
-
 static void os_init() {
   pmm->init();
   kmt->init();
-  _vme_init(pmm->alloc, pmm->free);
+  // _vme_init(pmm->alloc, pmm->free);
   dev->init();
-
+  vfs->init();
   // create thread, able to call tty->ops->read, tty->ops->write
+  /*
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty1");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty2");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty3");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
+  */
 }
 
 static void hello() {
@@ -52,14 +40,16 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
   if (current) current->context = *ctx;
 
   do {
-    if (!current) {
-      current = &tasks;
+    if (!current || current + 1 == &tasks[LENGTH(tasks)]) {
+      current = &tasks[0];
     } else {
-      current = current->next;
+      current++;
     }
   } while ((current - tasks) % _ncpu() != _cpu());
+
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
-  return context;
+
+  return &current->context;
 }
 
 static void os_on_irq(int seq, int event, handler_t handler) {

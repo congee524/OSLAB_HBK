@@ -17,6 +17,10 @@ static inline void panic(const char *s) {
 
 static void kmt_init() {
   // TODO
+  // ...
+  os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
+  os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
+  // ...
 }
 
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
