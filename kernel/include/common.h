@@ -9,11 +9,6 @@
 #define NPROC 32
 typedef unsigned int uint;
 
-inline void panic(const char *s) {
-  printf("%s\n", s);
-  _halt(1);
-}
-
 struct task {
   const char *name;
   _Context context;

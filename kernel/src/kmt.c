@@ -11,6 +11,11 @@ extern int holding(struct spinlock *lock);
 extern void pushcli(void);
 extern void popcli(void);
 
+static inline void panic(const char *s) {
+  printf("%s\n", s);
+  _halt(1);
+}
+
 static void kmt_init() {
   // TODO
 }
