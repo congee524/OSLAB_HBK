@@ -50,6 +50,7 @@ static void kmt_init() {
   kmt_spin_init(&create_lk, "create_lk");
   kmt_spin_init(&teard_lk, "teard_lk");
   kmt_spin_init(&alloc_lk, "alloc_lk");
+  kmt_spin_lock(&sleep_lk, "sleep_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);

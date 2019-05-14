@@ -8,6 +8,13 @@
 #define STK_SZ 4096  // the size of stack
 #define NTASK 32
 
+typedef enum {
+  SLEEPING = 0,
+  RUNNABLE,
+  RUNNING,
+  DEAD,
+} task_status;
+
 struct task {
   const char *name;
   _Context context;
@@ -33,7 +40,7 @@ struct semaphore {
   int value;
   const char *name;
   spinlock_t lock;
-  task_t list[NTASK];
+  task_t *list[NTASK];
   int end;
   int start;
 };
