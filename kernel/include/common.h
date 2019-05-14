@@ -58,5 +58,6 @@ spinlock_t teard_lk;
 spinlock_t irq_lk;
 spinlock_t sleep_lk;
 spinlock_t alloc_lk;
+spinlock_t os_trap_lk;
 
 #endif

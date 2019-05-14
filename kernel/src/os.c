@@ -43,6 +43,7 @@ static void os_run() {
 }
 
 static _Context *os_trap(_Event ev, _Context *ctx) {
+  kmt->spin_lock(&os_trap_lk);
   _Context *ret = NULL;
   for (int i = 0; i < MAX_HANDLER; i++) {
     if (handlers[i].event == _EVENT_NULL || handlers[i].event == ev.event) {
@@ -50,6 +51,7 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
       if (next) ret = next;
     }
   }
+  kmt->spin_unlock(&os_trap_lk);
   return ret;
 }
 
