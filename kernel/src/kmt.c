@@ -1,30 +1,25 @@
 #include <common.h>
 #include <kernel.h>
 #include <klib.h>
-#include <semaphore.h>
-#include <spinlock.h>
-
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
 #define INT_MAX 2147483647
 #define INT_MIN (-INT_MAX - 1)
+typedef unsigned int uint;
 
-struct task *current_task[MAX_CPU];
+task_t *current_task[MAX_CPU];
 
 #define current (current_task[_cpu()])
-
-extern void getcallerpcs(void *v, unsigned int pcs[]);
-extern int holding(struct spinlock *lock);
-extern void pushcli(void);
-extern void popcli(void);
-extern void sleep(task_t *chan, spinlock_t *lk);
-extern void wakeup(task_t *chan);
 
 static inline void panic(const char *s) {
   printf("%s\n", s);
   _halt(1);
 }
+
+//==========================================
+//==========================================
+// handler
 
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
   // TODO
@@ -55,6 +50,9 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   return &current->context;
 }
 
+//==========================================
+//==========================================
+// task schedule init create teardown
 static void kmt_init() {
   // TODO
   // ...
@@ -149,6 +147,44 @@ static void kmt_teardown(task_t *task) {
   kmt->spin_unlock(&teard_lk);
 }
 
+//==========================================
+//==========================================
+// spin_lock
+
+// Record the current call stack in pcs[] by following the %ebp chain.
+void getcallerpcs(void *v, uint pcs[]) {
+  uint *ebp;
+  int i;
+
+  ebp = (uint *)v - 2;
+  for (i = 0; i < 10; i++) {
+    if (ebp == 0 || ebp < (uint *)KERNBASE || ebp == (uint *)0xffffffff) break;
+    pcs[i] = ebp[1];       // saved %eip
+    ebp = (uint *)ebp[0];  // saved %ebp
+  }
+  for (; i < 10; i++) pcs[i] = 0;
+}
+
+// Check whether this cpu is holding the lock.
+int holding(spinlock_t *lock) { return lock->locked && lock->cpu == _cpu(); }
+
+// Pushcli/popcli are like cli/sti except that they are matched:
+// it takes two popcli to undo two pushcli.  Also, if interrupts
+// are off, then pushcli, popcli leaves them off
+void pushcli(void) {
+  int eflags;
+
+  eflags = readeflags();
+  cli();
+  if (cpu->ncli++ == 0) cpu->intena = eflags & FL_IF;
+}
+
+void popcli(void) {
+  if (readeflags() & FL_IF) panic("popcli - interruptible");
+  if (--cpu->ncli < 0) panic("popcli");
+  if (cpu->ncli == 0 && cpu->intena) sti();
+}
+
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
   strcpy(lk->name, name);
   lk->locked = 0;
@@ -189,6 +225,58 @@ static void kmt_spin_unlock(spinlock_t *lk) {
   _atomic_xchg(&(lk->locked), 0);
 
   popcli();
+}
+
+//==========================================
+//==========================================
+// semaphore
+
+void sleep(task_t *chan, spinlock_t *lk) {
+  if (!current) panic("sleep");
+
+  if (!lk) panic("sleep without lk");
+
+  if (lk != &sleep_lk) {
+    kmt->spin_lock(&sleep_lk);
+    kmt->spin_unlock(lk);
+  }
+
+  chan->state = SLEEPING;
+  _yield();
+
+  if (lk != &sleep_lk) {
+    kmt->spin_unlock(&sleep_lk);
+    kmt->spin_lock(lk);
+  }
+}
+
+void wakeupl(task_t *chan) {
+  task_t *tmp;
+  for (int i = 0; i < _ncpu(); i++) {
+    if (tasks[i].cnt > 0) {
+      tmp = tasks[i].head;
+      if (tmp->status == SLEEPING && strcmp(tmp->name, chan->name) == 0) {
+        tmp->status = RUNNABLE;
+        flag = 1;
+        break;
+      }
+      while (tmp->next) {
+        tmp = tmp->next;
+        if (tmp->status == SLEEPING && strcmp(tmp->name, chan->name) == 0) {
+          tmp->status = RUNNABLE;
+          flag = 1;
+          break;
+        }
+      }
+    }
+    if (flag) break;
+  }
+}
+
+void wakeup(task_t *chan) {
+  kmt->spin_lock(&sleep_lk);
+  wakeupl(chan);
+  kmt->spin_unlock(&sleep_lk);
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
