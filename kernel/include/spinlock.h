@@ -1,6 +1,3 @@
-#include <am.h>
-#include <kernel.h>
-
 typedef unsigned int uint;
 
 // Record the current call stack in pcs[] by following the %ebp chain.

@@ -1,6 +1,3 @@
-#include <am.h>
-#include <kernel.h>
-
 void sleep(task_t *chan, spinlock_t *lk) {
   if (!current) panic("sleep");
 
