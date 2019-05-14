@@ -62,8 +62,8 @@ static void kmt_init() {
   kmt->spin_init(&create_lk, "create_lk");
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
-  kmt->spin_lock(&sleep_lk, "sleep_lk");
-  kmt->spin_lock(&irq_lk, "irq_lk");
+  kmt->spin_init(&sleep_lk, "sleep_lk");
+  kmt->spin_init(&irq_lk, "irq_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
@@ -81,11 +81,11 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
   task->context = *_kcontext(stack, entry, arg);
   int j = 0;
   for (int i = 1; i < _ncpu(); i++) {
-    if (tasks[i].cnt < task[j].cnt) {
+    if (tasks[i].cnt < tasks[j].cnt) {
       j = i;
     }
   }
-  if (!task[j].head) {
+  if (!tasks[j].head) {
     tasks[j].head = task;
   } else {
     task_t *tmp = tasks[j].head;
@@ -194,7 +194,7 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
   char tmp[128];
   sprintf(tmp, "%s_spinlock", name);
   kmt->spin_init(&sem->lock, tmp);
-  end = start = 0;
+  sem->end = sem->start = 0;
 }
 
 static void kmt_sem_wait(sem_t *sem) {
