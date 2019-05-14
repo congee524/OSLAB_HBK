@@ -47,7 +47,7 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
   _Context *ret = NULL;
   for (int i = 0; i < MAX_HANDLER; i++) {
     if (handlers[i].event == _EVENT_NULL || handlers[i].event == ev.event) {
-      _Context *next = handler->handler(ev, context);
+      _Context *next = handlers[i]->handler(ev, context);
       if (next) ret = next;
     }
   }
