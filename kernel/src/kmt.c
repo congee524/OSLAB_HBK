@@ -29,7 +29,7 @@ static void kmt_context_save(_Event ev, _Context *ctx) {
   if (current) current->context = *ctx;
 }
 
-static _Context kmt_context_switch(_Event ev, _Context *ctx) {
+static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   if (!current) {
     current = tasks[_cpu()].head;
@@ -216,7 +216,7 @@ static void kmt_sem_signal(sem_t *sem) {
   sem.value++;
   if (sem.value <= 0) {
     wakeup(sem->list[sem->start]);
-    sem->list[s->start] = NULL;
+    sem->list[sem->start] = NULL;
     sem->start = (sem->start + 1) % NTASK;
   }
   kmt_spin_unlock(&sem->lock);
