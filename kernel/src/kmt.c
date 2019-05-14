@@ -152,8 +152,7 @@ static void kmt_teardown(task_t *task) {
 // spin_lock
 
 // Key addresses for address space layout (see kmap in vm.c for layout)
-#define KERNBASE 0x80000000          // First kernel virtual address
-#define KERNLINK(KERNBASE + EXTMEM)  // Address where kernel is linked
+#define KERNBASE 0x80000000  // First kernel virtual address
 
 // Record the current call stack in pcs[] by following the %ebp chain.
 void getcallerpcs(void *v, uint pcs[]) {
