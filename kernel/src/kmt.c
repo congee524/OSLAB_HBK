@@ -201,9 +201,9 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
-  sem.value--;
-  if (sem.value < 0) {
-    sem->list[end] = current;
+  sem->value--;
+  if (sem->value < 0) {
+    sem->list[sem->end] = current;
     sem->end = (sem->end + 1) % NTASK;
     sleep(current, &sem->lock);
   }
@@ -213,8 +213,8 @@ static void kmt_sem_wait(sem_t *sem) {
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
-  sem.value++;
-  if (sem.value <= 0) {
+  sem->value++;
+  if (sem->value <= 0) {
     wakeup(sem->list[sem->start]);
     sem->list[sem->start] = NULL;
     sem->start = (sem->start + 1) % NTASK;
