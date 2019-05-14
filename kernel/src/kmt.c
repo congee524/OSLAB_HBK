@@ -175,14 +175,36 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
   // TODO
+  sem->name = name;
+  sem->value = value;
+  char tmp[128];
+  sprintf(tmp, "%s_spinlock", name);
+  kmt_spin_init(&sem->lock, tmp);
+  end = start = 0;
 }
 
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
+  kmt_spin_lock(&sem->lock);
+  sem.value--;
+  if (s.value < 0) {
+    s->list[end] = current;
+    s->end = (s->end + 1) % NTASK;
+    sleep(current, &sem->lock);
+  }
+  kmt_spin_unlock(&sem->lock);
 }
 
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
+  kmt_spin_lock(&sem->lock);
+  sem.value++;
+  if (sem.value <= 0) {
+    wakeup(sem->list[sem->start]);
+    sem->list[s->start] = NULL;
+    sem->start = (sem->start + 1) % NTASK;
+  }
+  kmt_spin_unlock(&sem->lock);
 }
 
 MODULE_DEF(kmt){

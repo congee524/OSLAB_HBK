@@ -6,7 +6,7 @@
 #include <nanos.h>
 
 #define STK_SZ 4096  // the size of stack
-#define NPROC 32
+#define NTASK 32
 
 struct task {
   const char *name;
@@ -31,8 +31,11 @@ struct spinlock {
 struct semaphore {
   // TODO
   int value;
+  const char *name;
   spinlock_t lock;
-  task_t *list;
+  task_t list[NTASK];
+  int end;
+  int start;
 };
 
 #define MAX_CPU 16
