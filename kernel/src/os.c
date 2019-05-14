@@ -6,7 +6,7 @@
 
 struct {
   int seq;
-  _Event event;
+  int event;
   handler_t handler;
 } handlers[MAX_HANDLER];
 
