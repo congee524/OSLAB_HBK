@@ -202,9 +202,9 @@ static void kmt_sem_wait(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
   sem.value--;
-  if (s.value < 0) {
-    s->list[end] = current;
-    s->end = (s->end + 1) % NTASK;
+  if (sem.value < 0) {
+    sem->list[end] = current;
+    sem->end = (sem->end + 1) % NTASK;
     sleep(current, &sem->lock);
   }
   kmt->spin_unlock(&sem->lock);
