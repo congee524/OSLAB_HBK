@@ -64,4 +64,6 @@ struct {
   task_t tasks[NTASK];
 } ptable;
 
+int8_t ncli[MAX_CPU], intena[MAX_CPU];
+
 #endif
