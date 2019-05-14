@@ -12,6 +12,8 @@ extern void getcallerpcs(void *v, unsigned int pcs[]);
 extern int holding(struct spinlock *lock);
 extern void pushcli(void);
 extern void popcli(void);
+extern void sleep(task_t *chan, spinlock_t *lk);
+extern void wakeup(task_t *chan);
 
 static inline void panic(const char *s) {
   printf("%s\n", s);
@@ -23,19 +25,25 @@ static void kmt_context_save(_Event ev, _Context *ctx) {
   if (current) current->context = *ctx;
 }
 
-static void kmt_context_switch(_Event ev, _Context *ctx) {
+static _Context kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
-  /*
-  do {
-    if (!current || current + 1 == &tasks[LENGTH(tasks)]) {
-      current = &tasks[0];
-    } else {
-      current++;
+  if (!current) {
+    current = tasks[_cpu()].head;
+  } else {
+    current->status = RUNNABLE;
+    for (int i = 0; i < tasks[_cpu()].cnt; i++) {
+      if (!current->next) {
+        current = tasks[_cpu()].head;
+      } else {
+        current = current->next;
+      }
+      if (current->status == RUNNABLE) {
+        break;
+      }
     }
-  } while ((current - tasks) % _ncpu() != _cpu());
-  */
-
-  // printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
+  }
+  current->status = RUNNING;
+  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
 
   return &current->context;
 }
@@ -64,6 +72,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
   kmt_spin_lock(&create_lk);
   task->name = name;
   task->next = NULL;
+  task->status = RUNNABLE;
   _Area stack = (_Area){task->stack, task->fence2};
   task->context = *_kcontext(stack, entry, arg);
   int j = 0;
@@ -87,6 +96,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
 spinlock_t teard_lk;
 static void kmt_teardown(task_t *task) {
   // TODO
+  // problem!!!!! if the task in sleeping list
   kmt_spin_lock(&teard_lk);
   int flag = 0;
   task_t *tmp;
