@@ -8,6 +8,10 @@
 #define INT_MAX 2147483647
 #define INT_MIN (-INT_MAX - 1)
 
+struct task *current_task[MAX_CPU];
+
+#define current (current_task[_cpu()])
+
 extern void getcallerpcs(void *v, unsigned int pcs[]);
 extern int holding(struct spinlock *lock);
 extern void pushcli(void);

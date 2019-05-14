@@ -52,8 +52,4 @@ struct Task_Pool {
   int cnt;
 } tasks[MAX_CPU];
 
-struct task *current_task[MAX_CPU];
-
-#define current (current_task[_cpu()])
-
 #endif
