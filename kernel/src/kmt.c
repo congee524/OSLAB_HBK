@@ -60,10 +60,12 @@ static void kmt_init() {
     tasks[i].head = NULL;
     tasks[i].cnt = 0;
   }
+  memset(ncli, 0, sizeof(ncli));
+  memset(intena, 0, sizeof(intena));
   kmt->spin_init(&create_lk, "create_lk");
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
-  kmt->spin_init(&sleep_lk, "sleep_lk");
+  kmt->spin_init(&ptable.lock, "ptable_lk");
   kmt->spin_init(&irq_lk, "irq_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
 
@@ -187,13 +189,13 @@ void pushcli(void) {
 
   eflags = readeflags();
   cli();
-  if (_cpu->ncli++ == 0) _cpu->intena = eflags & FL_IF;
+  if (ncli[_cpu()]++ == 0) intena[_cpu()] = eflags & FL_IF;
 }
 
 void popcli(void) {
   if (readeflags() & FL_IF) panic("popcli - interruptible");
-  if (--_cpu->ncli < 0) panic("popcli");
-  if (_cpu->ncli == 0 && _cpu->intena) sti();
+  if (--ncli[_cpu()] < 0) panic("popcli");
+  if (ncli[_cpu()] == 0 && intena[_cpu()]) sti();
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
@@ -247,16 +249,16 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
   if (!lk) panic("sleep without lk");
 
-  if (lk != &sleep_lk) {
-    kmt->spin_lock(&sleep_lk);
+  if (lk != &ptable.lock) {
+    kmt->spin_lock(&ptable.lock);
     kmt->spin_unlock(lk);
   }
 
   chan->state = SLEEPING;
   _yield();
 
-  if (lk != &sleep_lk) {
-    kmt->spin_unlock(&sleep_lk);
+  if (lk != &ptable.lock) {
+    kmt->spin_unlock(&ptable.lock);
     kmt->spin_lock(lk);
   }
 }

@@ -56,8 +56,12 @@ struct Task_Pool {
 spinlock_t create_lk;
 spinlock_t teard_lk;
 spinlock_t irq_lk;
-spinlock_t sleep_lk;
 spinlock_t alloc_lk;
 spinlock_t os_trap_lk;
+
+struct {
+  spinlock_t lock;
+  task_t tasks[NTASK];
+} ptable;
 
 #endif
