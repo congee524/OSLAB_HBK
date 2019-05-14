@@ -30,6 +30,9 @@ struct spinlock {
 };
 struct semaphore {
   // TODO
+  int value;
+  spinlock_t lock;
+  task_t *list;
 };
 
 #define MAX_CPU 16
