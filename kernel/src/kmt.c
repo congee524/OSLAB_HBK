@@ -160,6 +160,8 @@ static inline uint readeflags(void) {
   return eflags;
 }
 
+static inline void cli(void) { asm volatile("cli"); }
+
 // Record the current call stack in pcs[] by following the %ebp chain.
 void getcallerpcs(void *v, uint pcs[]) {
   uint *ebp;
@@ -185,13 +187,13 @@ void pushcli(void) {
 
   eflags = readeflags();
   cli();
-  if (cpu->ncli++ == 0) cpu->intena = eflags & FL_IF;
+  if (_cpu()->ncli++ == 0) _cpu()->intena = eflags & FL_IF;
 }
 
 void popcli(void) {
   if (readeflags() & FL_IF) panic("popcli - interruptible");
-  if (--cpu->ncli < 0) panic("popcli");
-  if (cpu->ncli == 0 && cpu->intena) sti();
+  if (--_cpu()->ncli < 0) panic("popcli");
+  if (_cpu()->ncli == 0 && _cpu()->intena) sti();
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
