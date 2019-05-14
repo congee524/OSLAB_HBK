@@ -59,10 +59,10 @@ static void kmt_init() {
     tasks[i].head = NULL;
     tasks[i].cnt = 0;
   }
-  kmt_spin_init(&create_lk, "create_lk");
-  kmt_spin_init(&teard_lk, "teard_lk");
-  kmt_spin_init(&alloc_lk, "alloc_lk");
-  kmt_spin_lock(&sleep_lk, "sleep_lk");
+  kmt->spin_init(&create_lk, "create_lk");
+  kmt->spin_init(&teard_lk, "teard_lk");
+  kmt->spin_init(&alloc_lk, "alloc_lk");
+  kmt->spin_lock(&sleep_lk, "sleep_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
@@ -73,7 +73,7 @@ spinlock_t create_lk;
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
   // TODO
-  kmt_spin_lock(&create_lk);
+  kmt->spin_lock(&create_lk);
   task->name = name;
   task->next = NULL;
   task->status = RUNNABLE;
@@ -93,7 +93,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
     tmp->next = task;
   }
   tasks[j].cnt++;
-  kmt_spin_unlock(&create_lk);
+  kmt->spin_unlock(&create_lk);
   return 0;
 }
 
@@ -101,7 +101,7 @@ spinlock_t teard_lk;
 static void kmt_teardown(task_t *task) {
   // TODO
   // problem!!!!! if the task in sleeping list
-  kmt_spin_lock(&teard_lk);
+  kmt->spin_lock(&teard_lk);
   int flag = 0;
   task_t *tmp;
   task_t *last;
@@ -143,7 +143,7 @@ static void kmt_teardown(task_t *task) {
       panic("Wrong flag!");
       break;
   }
-  kmt_spin_unlock(&teard_lk);
+  kmt->spin_unlock(&teard_lk);
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
@@ -194,32 +194,32 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
   sem->value = value;
   char tmp[128];
   sprintf(tmp, "%s_spinlock", name);
-  kmt_spin_init(&sem->lock, tmp);
+  kmt->spin_init(&sem->lock, tmp);
   end = start = 0;
 }
 
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
-  kmt_spin_lock(&sem->lock);
+  kmt->spin_lock(&sem->lock);
   sem.value--;
   if (s.value < 0) {
     s->list[end] = current;
     s->end = (s->end + 1) % NTASK;
     sleep(current, &sem->lock);
   }
-  kmt_spin_unlock(&sem->lock);
+  kmt->spin_unlock(&sem->lock);
 }
 
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
-  kmt_spin_lock(&sem->lock);
+  kmt->spin_lock(&sem->lock);
   sem.value++;
   if (sem.value <= 0) {
     wakeup(sem->list[sem->start]);
     sem->list[sem->start] = NULL;
     sem->start = (sem->start + 1) % NTASK;
   }
-  kmt_spin_unlock(&sem->lock);
+  kmt->spin_unlock(&sem->lock);
 }
 
 MODULE_DEF(kmt){
