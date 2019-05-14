@@ -154,6 +154,12 @@ static void kmt_teardown(task_t *task) {
 // Key addresses for address space layout (see kmap in vm.c for layout)
 #define KERNBASE 0x80000000  // First kernel virtual address
 
+static inline uint readeflags(void) {
+  uint eflags;
+  asm volatile("pushfl; popl %0" : "=r"(eflags));
+  return eflags;
+}
+
 // Record the current call stack in pcs[] by following the %ebp chain.
 void getcallerpcs(void *v, uint pcs[]) {
   uint *ebp;
