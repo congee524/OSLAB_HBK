@@ -67,7 +67,7 @@ static void os_on_irq(int seq, int event, handler_t handler) {
   for (int i = cnt_handle - 1; i > 0; i--) {
     if (handlers[cnt_handle].seq < handlers[i - 1].seq) {
       int tmp_seq = handlers[i].seq;
-      _Event tmp_event = handlers[i].event;
+      int tmp_event = handlers[i].event;
       handler_t tmp_handler = handlers[i].handler;
       handlers[i].seq = handlers[i - 1].seq;
       handlers[i].event = handlers[i - 1].event;
