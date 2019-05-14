@@ -4,7 +4,6 @@
 // align the size by 4 byte
 #define align4(x) (((((x)-1) >> 2) << 2) + 4)
 
-spinlock_t alloc_lk;
 void *base = NULL;
 
 typedef struct s_block *t_block;

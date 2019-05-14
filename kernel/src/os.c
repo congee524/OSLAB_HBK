@@ -54,7 +54,6 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
 }
 
 int cnt_handle = 0;
-spinlock_t irq_lk;
 static void os_on_irq(int seq, int event, handler_t handler) {
   // TODO
   kmt->spin_lock(&irq_lk);

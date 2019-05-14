@@ -52,4 +52,11 @@ struct Task_Pool {
   int cnt;
 } tasks[MAX_CPU];
 
+// ptable
+spinlock_t create_lk;
+spinlock_t teard_lk;
+spinlock_t irq_lk;
+spinlock_t sleep_lk;
+spinlock_t alloc_lk;
+
 #endif

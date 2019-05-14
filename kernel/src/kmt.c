@@ -63,13 +63,13 @@ static void kmt_init() {
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
   kmt->spin_lock(&sleep_lk, "sleep_lk");
+  kmt->spin_lock(&irq_lk, "irq_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
   // ...
 }
 
-spinlock_t create_lk;
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
   // TODO
@@ -97,7 +97,6 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
   return 0;
 }
 
-spinlock_t teard_lk;
 static void kmt_teardown(task_t *task) {
   // TODO
   // problem!!!!! if the task in sleeping list
