@@ -187,13 +187,13 @@ void pushcli(void) {
 
   eflags = readeflags();
   cli();
-  if (_cpu()->ncli++ == 0) _cpu()->intena = eflags & FL_IF;
+  if (_cpu->ncli++ == 0) _cpu->intena = eflags & FL_IF;
 }
 
 void popcli(void) {
   if (readeflags() & FL_IF) panic("popcli - interruptible");
-  if (--_cpu()->ncli < 0) panic("popcli");
-  if (_cpu()->ncli == 0 && _cpu()->intena) sti();
+  if (--_cpu->ncli < 0) panic("popcli");
+  if (_cpu->ncli == 0 && _cpu->intena) sti();
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
