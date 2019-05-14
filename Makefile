@@ -8,7 +8,7 @@ SRCS   := $(shell find . -maxdepth 1 -name "*.c")
 DEPS   := $(shell find . -maxdepth 1 -name "*.h") $(SRCS)
 CFLAGS += -O1 -std=gnu11 -ggdb -Wall -Werror -Wno-unused-result -Wno-unused-value
 
-.PHONY: all git test clean commit-and-make
+.PHONY: all git test clean commit-and-make 
 
 .DEFAULT_GOAL := commit-and-make
 commit-and-make: git all
@@ -27,4 +27,3 @@ $(NAME)-32.so: $(DEPS) # 32bit shared library
 
 clean:
 	rm -f $(NAME)-64 $(NAME)-32 $(NAME)-64.so $(NAME)-32.so
-
