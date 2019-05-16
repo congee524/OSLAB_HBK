@@ -157,7 +157,7 @@ static void kmt_teardown(task_t *task) {
 #define KERNBASE 0x80000000  // First kernel virtual address
 #define FL_IF 0x00000200     // Interrupt Enable
 
-sti(void) { asm volatile("sti"); }
+static inline void sti(void) { asm volatile("sti"); }
 
 static inline uint readeflags(void) {
   uint eflags;
