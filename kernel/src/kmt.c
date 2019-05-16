@@ -14,7 +14,7 @@ task_t *current_task[MAX_CPU];
 
 static inline void panic(const char *s) {
   printf("%s\n", s);
-  _halt(1);
+  //_halt(1);
 }
 
 //==========================================
@@ -104,6 +104,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
 static void kmt_teardown(task_t *task) {
   // TODO
   // problem!!!!! if the task in sleeping list
+  return;
   kmt->spin_lock(&teard_lk);
   int flag = 0;
   task_t *tmp;
@@ -227,7 +228,7 @@ static void kmt_spin_lock(spinlock_t *lk) {
 // Release the lock.
 static void kmt_spin_unlock(spinlock_t *lk) {
   if (!holding(lk)) {
-    log("%s", lk->name);
+    log("%s\n", lk->name);
     panic("release");
   }
 
