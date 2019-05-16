@@ -15,14 +15,14 @@ static void echo_task(void *arg) {
     tty->ops->write(tty, 0, text, strlen(text));
   }
 }
-
+/*
 static void create_threads() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty1");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty2");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty3");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
 }
-
+*/
 int main() {
   _ioe_init();
   _cte_init(os->trap);
