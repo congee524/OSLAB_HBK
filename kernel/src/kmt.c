@@ -205,15 +205,14 @@ void popcli(void) {
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
   strcpy(lk->name, name);
   lk->locked = 0;
-  lk->cpu = 0;
+  lk->cpu = _cpu();
 }
 
 static void kmt_spin_lock(spinlock_t *lk) {
   pushcli();  // disable interrupts to avoid deadlock.
   if (holding(lk)) {
     printf("\n%s ", lk->name);
-    return;
-    // panic("acquire");
+    panic("acquire");
   }
   // The xchg is atomic.
   // It also serializes, so that reads after acquire are not
