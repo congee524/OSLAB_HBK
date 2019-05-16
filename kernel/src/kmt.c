@@ -201,10 +201,10 @@ void popcli(void) {
   if (ncli[_cpu()] == 0 && intena[_cpu()]) sti();
 }
 
-static void kmt_spin_init(spinlock_t *lk, const char *name) {
-  strcpy(lk->name, name);
+static void kmt_spin_init(spinlock_t *lk, char *name) {
+  lk->name = name;
   lk->locked = 0;
-  lk->cpu = _cpu();
+  lk->cpu = 0;
 }
 
 static void kmt_spin_lock(spinlock_t *lk) {
@@ -226,7 +226,10 @@ static void kmt_spin_lock(spinlock_t *lk) {
 
 // Release the lock.
 static void kmt_spin_unlock(spinlock_t *lk) {
-  if (!holding(lk)) panic("release");
+  if (!holding(lk)) {
+    Log("%s", lk->name);
+    panic("release")
+  };
 
   lk->pcs[0] = 0;
   lk->cpu = 0;
