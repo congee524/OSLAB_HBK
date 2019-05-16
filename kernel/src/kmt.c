@@ -212,7 +212,7 @@ static void kmt_spin_init(spinlock_t *lk, const char *name) {
 static void kmt_spin_lock(spinlock_t *lk) {
   pushcli();  // disable interrupts to avoid deadlock.
   if (holding(lk)) {
-    printf("\n%s ", lk->name);
+    log("\n%s ", lk->name);
     panic("acquire");
   }
   // The xchg is atomic.
