@@ -67,7 +67,7 @@ static void kmt_init() {
   kmt->spin_init(&alloc_lk, "alloc_lk");
   kmt->spin_init(&ptable.lock, "ptable_lk");
   kmt->spin_init(&irq_lk, "irq_lk");
-  // kmt->spin_init(&os_trap_lk, "os_trap_lk");
+  kmt->spin_init(&os_trap_lk, "os_trap_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
