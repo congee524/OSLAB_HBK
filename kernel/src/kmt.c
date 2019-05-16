@@ -202,7 +202,7 @@ void popcli(void) {
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
-  strcat(lk->name, name);
+  strcpy(lk->name, name);
   lk->locked = 0;
   lk->cpu = 0;
 }
@@ -210,7 +210,7 @@ static void kmt_spin_init(spinlock_t *lk, const char *name) {
 static void kmt_spin_lock(spinlock_t *lk) {
   pushcli();  // disable interrupts to avoid deadlock.
   if (holding(lk)) {
-    log("\n%s ", lk->name);
+    log("%s\n", lk->name);
     panic("acquire");
   }
   // The xchg is atomic.
