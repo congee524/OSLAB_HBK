@@ -12,9 +12,9 @@ struct {
 
 static void os_init() {
   pmm->init();
-  kmt->init();
+  // kmt->init();
   // _vme_init(pmm->alloc, pmm->free);
-  dev->init();
+  // dev->init();
   // vfs->init();
   // create thread, able to call tty->ops->read, tty->ops->write
   /*
