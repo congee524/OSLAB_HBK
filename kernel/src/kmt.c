@@ -210,8 +210,10 @@ static void kmt_spin_init(spinlock_t *lk, const char *name) {
 
 static void kmt_spin_lock(spinlock_t *lk) {
   pushcli();  // disable interrupts to avoid deadlock.
-  if (holding(lk)) panic("acquire");
-
+  if (holding(lk)) {
+    printf("%s ", lk->name);
+    panic("acquire");
+  }
   // The xchg is atomic.
   // It also serializes, so that reads after acquire are not
   // reordered before it.
