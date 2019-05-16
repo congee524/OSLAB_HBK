@@ -254,7 +254,7 @@ void sleep(task_t *chan, spinlock_t *lk) {
     kmt->spin_unlock(lk);
   }
 
-  chan->state = SLEEPING;
+  chan->status = SLEEPING;
   _yield();
 
   if (lk != &ptable.lock) {
@@ -265,6 +265,7 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
 void wakeupl(task_t *chan) {
   task_t *tmp;
+  int flag = 0;
   for (int i = 0; i < _ncpu(); i++) {
     if (tasks[i].cnt > 0) {
       tmp = tasks[i].head;
@@ -287,9 +288,9 @@ void wakeupl(task_t *chan) {
 }
 
 void wakeup(task_t *chan) {
-  kmt->spin_lock(&sleep_lk);
+  kmt->spin_lock(&ptable.lock);
   wakeupl(chan);
-  kmt->spin_unlock(&sleep_lk);
+  kmt->spin_unlock(&ptable.lock);
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
