@@ -1,7 +1,7 @@
 #include <devices.h>
 #include <kernel.h>
 #include <klib.h>
-
+/*
 static void echo_task(void *arg) {
   char *name = (char *)arg;
   device_t *tty = dev_lookup(name);
@@ -15,7 +15,7 @@ static void echo_task(void *arg) {
     tty->ops->write(tty, 0, text, strlen(text));
   }
 }
-/*
+
 static void create_threads() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty1");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty2");
