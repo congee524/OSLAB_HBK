@@ -203,8 +203,8 @@ void popcli(void) {
   if (ncli[_cpu()] == 0 && intena[_cpu()]) sti();
 }
 
-static void kmt_spin_init(spinlock_t *lk, char *name) {
-  lk->name = name;
+static void kmt_spin_init(spinlock_t *lk, const char *name) {
+  strcat(lk->name, name);
   lk->locked = 0;
   lk->cpu = 0;
 }
