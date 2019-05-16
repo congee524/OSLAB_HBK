@@ -228,8 +228,8 @@ static void kmt_spin_lock(spinlock_t *lk) {
 static void kmt_spin_unlock(spinlock_t *lk) {
   if (!holding(lk)) {
     Log("%s", lk->name);
-    panic("release")
-  };
+    panic("release");
+  }
 
   lk->pcs[0] = 0;
   lk->cpu = 0;
