@@ -14,7 +14,7 @@ task_t *current_task[MAX_CPU];
 
 static inline void panic(const char *s) {
   printf("%s\n", s);
-  //_halt(1);
+  _halt(1);
 }
 
 //==========================================

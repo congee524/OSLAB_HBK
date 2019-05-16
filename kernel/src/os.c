@@ -12,7 +12,7 @@ struct {
 
 static void os_init() {
   pmm->init();
-  // kmt->init();
+  kmt->init();
   // _vme_init(pmm->alloc, pmm->free);
   // dev->init();
   // vfs->init();
