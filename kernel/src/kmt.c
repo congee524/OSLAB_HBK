@@ -188,12 +188,12 @@ int holding(spinlock_t *lock) { return lock->locked && lock->cpu == _cpu(); }
 // it takes two popcli to undo two pushcli.  Also, if interrupts
 // are off, then pushcli, popcli leaves them off
 void pushcli(void) {
-  // int eflags;
+  uint eflags;
 
-  // eflags = readeflags();
+  eflags = readeflags();
   cli();
-  // if (ncli[_cpu()]++ == 0) intena[_cpu()] = eflags & FL_IF;
-  if (ncli[_cpu()]++ == 0) intena[_cpu()] = _intr_read();
+  if (ncli[_cpu()]++ == 0) intena[_cpu()] = eflags & FL_IF;
+  // if (ncli[_cpu()]++ == 0) intena[_cpu()] = _intr_read();
 }
 
 void popcli(void) {
