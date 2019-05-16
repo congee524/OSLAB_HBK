@@ -8,6 +8,8 @@
 #define STK_SZ 4096  // the size of stack
 #define NTASK 32
 
+#define log(fmt, ...) printf("%s:%d: " fmt, __func__, __LINE__, ##__VA_ARGS__)
+
 typedef enum {
   SLEEPING = 0,
   RUNNABLE,

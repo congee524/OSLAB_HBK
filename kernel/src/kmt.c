@@ -8,15 +8,13 @@
 #define INT_MIN (-INT_MAX - 1)
 typedef unsigned int uint;
 
-#define log(fmt, ...) printf("%s:%d: " fmt, __func__, __LINE__, ##__VA_ARGS__)
-
 task_t *current_task[MAX_CPU];
 
 #define current (current_task[_cpu()])
 
 static inline void panic(const char *s) {
   printf("%s\n", s);
-  _halt(1);
+  //_halt(1);
 }
 
 //==========================================
