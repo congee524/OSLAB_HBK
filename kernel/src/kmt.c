@@ -192,7 +192,8 @@ void pushcli(void) {
 
   eflags = readeflags();
   cli();
-  if (ncli[_cpu()]++ == 0) intena[_cpu()] = eflags & FL_IF;
+  // if (ncli[_cpu()]++ == 0) intena[_cpu()] = eflags & FL_IF;
+  if (ncli[_cpu()]++ == 0) intena[_cpu()] = _intr_read();
 }
 
 void popcli(void) {
