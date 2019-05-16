@@ -227,7 +227,7 @@ static void kmt_spin_lock(spinlock_t *lk) {
 // Release the lock.
 static void kmt_spin_unlock(spinlock_t *lk) {
   if (!holding(lk)) {
-    Log("%s", lk->name);
+    log("%s", lk->name);
     panic("release");
   }
 
