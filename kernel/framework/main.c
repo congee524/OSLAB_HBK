@@ -25,7 +25,6 @@ static void create_threads() {
 */
 int main() {
   _ioe_init();
-  kmt->init();
   _cte_init(os->trap);
 
   // call sequential init code
