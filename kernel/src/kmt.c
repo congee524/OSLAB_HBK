@@ -24,7 +24,8 @@ static inline void panic(const char *s) {
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
   // TODO
   if (current) current->context = *ctx;
-  return &current->context;
+  // return &current->context;
+  return NULL;
 }
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
