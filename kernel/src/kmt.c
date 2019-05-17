@@ -24,14 +24,14 @@ static inline void panic(const char *s) {
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
   // TODO
   if (current) current->context = *ctx;
-  // return &current->context;
-  return NULL;
+  return &current->context;
 }
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   if (!current) {
-    current = tasks[_cpu()].head;
+    // current = tasks[_cpu()].head;
+    current = tasks[0].head;
   } else {
     current->status = RUNNABLE;
     for (int i = 0; i < tasks[_cpu()].cnt; i++) {
