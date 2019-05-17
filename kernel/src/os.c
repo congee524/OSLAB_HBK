@@ -24,7 +24,7 @@ static void os_init() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
   */
 }
-/*
+
 void test() {
   void *space[100];
   int i;
@@ -40,7 +40,7 @@ void test() {
     pmm->free(space[i]);
   }
 }
-*/
+
 static void hello() {
   for (const char *ptr = "Hello from CPU #"; *ptr; ptr++) {
     _putc(*ptr);
@@ -51,7 +51,7 @@ static void hello() {
 
 static void os_run() {
   hello();
-  // test();
+  test();
   _intr_write(1);
   while (1) {
     _yield();

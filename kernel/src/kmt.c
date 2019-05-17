@@ -30,7 +30,6 @@ static _Context *kmt_context_save(_Event ev, _Context *ctx) {
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   if (!current) {
-    // current = tasks[_cpu()].head;
     assert(tasks[_cpu()].head);
     current = tasks[_cpu()].head;
   } else {
@@ -48,7 +47,6 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   }
   current->status = RUNNING;
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
-
   return &current->context;
 }
 
