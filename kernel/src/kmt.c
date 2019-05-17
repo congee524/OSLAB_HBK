@@ -233,7 +233,7 @@ static void kmt_spin_unlock(spinlock_t *lk) {
   }
 
   lk->pcs[0] = 0;
-  lk->cpu = 0;
+  lk->cpu = -1;
 
   // The xchg serializes, so that reads before release are
   // not reordered after it.  The 1996 PentiumPro manual (Volume 3,
