@@ -31,7 +31,8 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   if (!current) {
     // current = tasks[_cpu()].head;
-    current = tasks[0].head;
+    assert(tasks[_cpu].head);
+    current = tasks[_cpu()].head;
   } else {
     current->status = RUNNABLE;
     for (int i = 0; i < tasks[_cpu()].cnt; i++) {
