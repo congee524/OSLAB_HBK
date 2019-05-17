@@ -52,9 +52,6 @@ static void hello() {
 static void os_run() {
   hello();
   // test();
-  if (_cpu() != 0)
-    while (1)
-      ;
   _intr_write(1);
   while (1) {
     _yield();
