@@ -58,6 +58,7 @@ static void os_run() {
   }
 }
 
+int cnt_handle = 0;
 static _Context *os_trap(_Event ev, _Context *ctx) {
   // kmt->spin_lock(&os_trap_lk);
   _Context *ret = NULL;
@@ -71,7 +72,6 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
   return ret;
 }
 
-int cnt_handle = 0;
 static void os_on_irq(int seq, int event, handler_t handler) {
   // TODO
   kmt->spin_lock(&irq_lk);
