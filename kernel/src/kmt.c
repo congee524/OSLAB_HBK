@@ -205,7 +205,7 @@ void popcli(void) {
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
   strcpy(lk->name, name);
   lk->locked = 0;
-  lk->cpu = 0;
+  lk->cpu = -1;
 }
 
 static void kmt_spin_lock(spinlock_t *lk) {
