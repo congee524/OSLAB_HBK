@@ -314,8 +314,8 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
 
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
-  log("kmt spin lock %s", sem->name);
   kmt->spin_lock(&sem->lock);
+  log("kmt spin lock %s", sem->name);
   sem->value--;
   if (sem->value < 0) {
     sem->list[sem->end] = current;
