@@ -66,7 +66,7 @@ static void os_run() {
 
 int cnt_handle = 0;
 static _Context *os_trap(_Event ev, _Context *ctx) {
-  kmt->spin_lock(&os_trap_lk);
+  // kmt->spin_lock(&os_trap_lk);
   _Context *ret = NULL;
   for (int i = 0; i < cnt_handle; i++) {
     if (handlers[i].event == _EVENT_NULL || handlers[i].event == ev.event) {
@@ -75,24 +75,16 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
     }
   }
   assert(ret);
-  kmt->spin_unlock(&os_trap_lk);
+  // kmt->spin_unlock(&os_trap_lk);
   return ret;
 }
 
 static void os_on_irq(int seq, int event, handler_t handler) {
   // TODO
-  kmt->spin_lock(&os_trap_lk);
-  printf("\nirq before: ");
-  for (int i = 0; i < cnt_handle; i++) {
-    printf("%d ", handlers[i].seq);
-  }
-  printf("\n");
-  log("seq: %d, event: %d", seq, event);
+  // kmt->spin_lock(&os_trap_lk);
   handlers[cnt_handle].seq = seq;
   handlers[cnt_handle].event = event;
   handlers[cnt_handle].handler = handler;
-  log("handlers- seq: %d, event: %d", handlers[cnt_handle].seq,
-      handlers[cnt_handle].event);
   cnt_handle++;
   // according to seq, call it
   for (int i = cnt_handle - 1; i > 0; i--) {
@@ -110,12 +102,12 @@ static void os_on_irq(int seq, int event, handler_t handler) {
       break;
     }
   }
-  printf("\nirq after: ");
+  printf("\nirq: ");
   for (int i = 0; i < cnt_handle; i++) {
-    printf("%d ", handlers[i].seq);
+    printf("%d %d | ", handlers[i].seq, handlers[i].event);
   }
   printf("\n");
-  kmt->spin_unlock(&os_trap_lk);
+  // kmt->spin_unlock(&os_trap_lk);
 }
 
 MODULE_DEF(os){

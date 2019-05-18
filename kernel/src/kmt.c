@@ -5,7 +5,7 @@
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
 #define INT_MAX 2147483647
-#define INT_MIN (-INT_MAX)
+#define INT_MIN (-INT_MAX)  // printf cannot printf INT_MIN
 typedef unsigned int uint;
 
 task_t *current_task[MAX_CPU];
