@@ -43,10 +43,10 @@ struct semaphore {
   // TODO
   int value;
   char *name;
-  spinlock_t lock;
   task_t *list[NTASK];
   int end;
   int start;
+  spinlock_t lock;
 };
 
 #define MAX_CPU 16
