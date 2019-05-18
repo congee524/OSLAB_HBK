@@ -19,7 +19,7 @@ typedef enum {
 } task_status;
 
 struct task {
-  const char *name;
+  const char name[128];
   _Context context;
   int status;
   struct task *next;
@@ -41,12 +41,12 @@ struct spinlock {
 
 struct semaphore {
   // TODO
+  spinlock_t lock;
   int value;
-  char *name;
+  char name[128];
   task_t *list[NTASK];
   int end;
   int start;
-  spinlock_t lock;
 };
 
 #define MAX_CPU 16
