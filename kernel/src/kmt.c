@@ -257,17 +257,18 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 void sleep(task_t *chan, spinlock_t *lk) {
   assert(lk != &ptable.lk);
   if (!current) panic("sleep");
-
   if (!lk) panic("sleep without lk");
+  task_t *t = current;
 
   // kmt->spin_lock(&ptable.lk);
+  t->chan = chan;
+  t->status = SLEEPING;
   kmt->spin_unlock(lk);
-
-  chan->status = SLEEPING;
   _yield();
 
   // kmt->spin_unlock(&ptable.lk);
   kmt->spin_lock(lk);
+  t->chan = NULL;
 }
 
 void wakeupl(task_t *chan) {

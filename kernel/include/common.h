@@ -22,6 +22,7 @@ struct task {
   char name[128];
   _Context context;
   int status;
+  void *chan;
   struct task *next;
   uint8_t fence1[32];  // init with 0xcc, check overflow
   uint8_t stack[STK_SZ];
