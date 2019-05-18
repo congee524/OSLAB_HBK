@@ -87,6 +87,7 @@ static void os_on_irq(int seq, int event, handler_t handler) {
     printf("%d ", handlers[i].seq);
   }
   printf("\n");
+  log("seq: %d, event: %d", seq, event);
   handlers[cnt_handle].seq = seq;
   handlers[cnt_handle].event = event;
   handlers[cnt_handle].handler = handler;
