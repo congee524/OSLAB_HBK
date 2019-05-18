@@ -65,7 +65,6 @@ static void kmt_init() {
   kmt->spin_init(&create_lk, "create_lk");
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
-  kmt->spin_init(&ptable.lock, "ptable_lk");
   kmt->spin_init(&irq_lk, "irq_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
 
@@ -258,16 +257,16 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
   if (!lk) panic("sleep without lk");
 
-  if (lk != &ptable.lock) {
-    kmt->spin_lock(&ptable.lock);
+  if (lk != &os_trap_lk) {
+    kmt->spin_lock(&os_trap_lk);
     kmt->spin_unlock(lk);
   }
 
   chan->status = SLEEPING;
   _yield();
 
-  if (lk != &ptable.lock) {
-    kmt->spin_unlock(&ptable.lock);
+  if (lk != &os_trap_lk) {
+    kmt->spin_unlock(&os_trap_lk);
     kmt->spin_lock(lk);
   }
 }
@@ -297,9 +296,9 @@ void wakeupl(task_t *chan) {
 }
 
 void wakeup(task_t *chan) {
-  kmt->spin_lock(&ptable.lock);
+  kmt->spin_lock(&os_trap_lk);
   wakeupl(chan);
-  kmt->spin_unlock(&ptable.lock);
+  kmt->spin_unlock(&os_trap_lk);
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
