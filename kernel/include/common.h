@@ -33,7 +33,7 @@ struct spinlock {
   volatile intptr_t locked;  // Is the lock held?
 
   // For debugging:
-  char name[name];       // Name of lock.
+  char name[128];        // Name of lock.
   int cpu;               // The cpu holding the lock.
   unsigned int pcs[10];  // The call stack (an array of program counters)
                          // that locked the lock.
