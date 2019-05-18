@@ -304,7 +304,7 @@ void wakeup(task_t *chan) {
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
   // TODO
-  sem->name = name;
+  strcpy(sem->name, name);
   sem->value = value;
   char tmp[128];
   sprintf(tmp, "%s_spinlock", name);
