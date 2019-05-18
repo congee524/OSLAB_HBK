@@ -314,7 +314,7 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
 
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
-  Log("kmt spin lock %s", sem->name);
+  log("kmt spin lock %s", sem->name);
   kmt->spin_lock(&sem->lock);
   sem->value--;
   if (sem->value < 0) {
