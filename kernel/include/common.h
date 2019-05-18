@@ -65,4 +65,9 @@ spinlock_t switch_lk;
 
 int8_t ncli[MAX_CPU], intena[MAX_CPU];
 
+struct {
+  spinlock_t lk;
+  task_t task[NTASK];
+} ptable;
+
 #endif

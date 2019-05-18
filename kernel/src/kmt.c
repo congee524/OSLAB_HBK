@@ -68,7 +68,7 @@ static void kmt_init() {
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
-  kmt->spin_init(&switch_lk, "switch_lk");
+  kmt->spin_init(&ptable.lk, "ptable.lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
@@ -259,14 +259,14 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
   if (!lk) panic("sleep without lk");
 
-  // kmt->spin_lock(&os_trap_lk);
-  // kmt->spin_unlock(lk);
+  kmt->spin_lock(&ptable.lk);
+  kmt->spin_unlock(lk);
 
   chan->status = SLEEPING;
   _yield();
 
-  // kmt->spin_unlock(&os_trap_lk);
-  // kmt->spin_lock(lk);
+  kmt->spin_unlock(&ptable.lk);
+  kmt->spin_lock(lk);
 }
 
 void wakeupl(task_t *chan) {
@@ -294,9 +294,9 @@ void wakeupl(task_t *chan) {
 }
 
 void wakeup(task_t *chan) {
-  // kmt->spin_lock(&os_trap_lk);
+  kmt->spin_lock(&ptable.lk);
   wakeupl(chan);
-  // kmt->spin_unlock(&os_trap_lk);
+  kmt->spin_unlock(&ptable.lk);
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
@@ -304,7 +304,7 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
   strcpy(sem->name, name);
   sem->value = value;
   char tmp[128];
-  sprintf(tmp, "%s_spinlock", name);
+  sprintf(tmp, "%s_lk", name);
   kmt->spin_init(&sem->lock, tmp);
   sem->end = sem->start = 0;
 }
