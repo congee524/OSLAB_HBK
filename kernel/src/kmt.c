@@ -259,14 +259,14 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
   if (!lk) panic("sleep without lk");
 
-  kmt->spin_lock(&os_trap_lk);
-  kmt->spin_unlock(lk);
+  // kmt->spin_lock(&os_trap_lk);
+  // kmt->spin_unlock(lk);
 
   chan->status = SLEEPING;
   _yield();
 
-  kmt->spin_unlock(&os_trap_lk);
-  kmt->spin_lock(lk);
+  // kmt->spin_unlock(&os_trap_lk);
+  // kmt->spin_lock(lk);
 }
 
 void wakeupl(task_t *chan) {
@@ -294,9 +294,9 @@ void wakeupl(task_t *chan) {
 }
 
 void wakeup(task_t *chan) {
-  kmt->spin_lock(&os_trap_lk);
+  // kmt->spin_lock(&os_trap_lk);
   wakeupl(chan);
-  kmt->spin_unlock(&os_trap_lk);
+  // kmt->spin_unlock(&os_trap_lk);
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
