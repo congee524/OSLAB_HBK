@@ -316,7 +316,7 @@ static void kmt_sem_wait(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
   // log("\nkmt spin lock %s\nsem_value %d\n", sem->name, sem->value);
-  log("wait value b %d %d\n", sem->value);
+  log("wait value b %d\n", sem->value);
   sem->value--;
   log("wait value a %d\n", sem->value);
   if (sem->value < 0) {
