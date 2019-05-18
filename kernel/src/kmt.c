@@ -263,7 +263,7 @@ void sleep(task_t *chan, spinlock_t *lk) {
   }
 
   chan->status = SLEEPING;
-  _yield();
+  //_yield();
 
   if (lk != &os_trap_lk) {
     kmt->spin_unlock(&os_trap_lk);
