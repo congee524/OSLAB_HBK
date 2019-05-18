@@ -37,6 +37,7 @@ struct spinlock {
   unsigned int pcs[10];  // The call stack (an array of program counters)
                          // that locked the lock.
 };
+
 struct semaphore {
   // TODO
   int value;
