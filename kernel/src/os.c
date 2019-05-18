@@ -91,6 +91,8 @@ static void os_on_irq(int seq, int event, handler_t handler) {
   handlers[cnt_handle].seq = seq;
   handlers[cnt_handle].event = event;
   handlers[cnt_handle].handler = handler;
+  log("handlers- seq: %d, event: %d", handlers[cnt_handle].seq,
+      handlers[cnt_handle].event);
   cnt_handle++;
   // according to seq, call it
   for (int i = cnt_handle - 1; i > 0; i--) {
