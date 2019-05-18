@@ -29,7 +29,7 @@ static _Context *kmt_context_save(_Event ev, _Context *ctx) {
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
-  kmt->spin_lock(&os_trap_lk);
+  kmt->spin_lock(&switch_lk);
   if (!current) {
     assert(tasks[_cpu()].head);
     current = tasks[_cpu()].head;
@@ -48,7 +48,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   }
   current->status = RUNNING;
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
-  kmt->spin_unlock(&os_trap_lk);
+  kmt->spin_unlock(&switch_lk);
   return &current->context;
 }
 
@@ -68,6 +68,7 @@ static void kmt_init() {
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
+  kmt->spin_init(&switch_lk, "switch_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);

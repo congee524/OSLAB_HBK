@@ -62,6 +62,7 @@ spinlock_t teard_lk;
 spinlock_t irq_lk;
 spinlock_t alloc_lk;
 spinlock_t os_trap_lk;
+spinlock_t switch_lk;
 
 int8_t ncli[MAX_CPU], intena[MAX_CPU];
 
