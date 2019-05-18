@@ -5,7 +5,7 @@
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
 #define INT_MAX 2147483647
-#define INT_MIN (-INT_MAX - 1)
+#define INT_MIN (-INT_MAX)
 typedef unsigned int uint;
 
 task_t *current_task[MAX_CPU];
@@ -67,7 +67,6 @@ static void kmt_init() {
   kmt->spin_init(&create_lk, "create_lk");
   kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
-  kmt->spin_init(&irq_lk, "irq_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
