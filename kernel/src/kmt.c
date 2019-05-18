@@ -29,7 +29,7 @@ static _Context *kmt_context_save(_Event ev, _Context *ctx) {
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
-  kmt->spin_lock(&switch_lk);
+  // kmt->spin_lock(&switch_lk);
   if (!current) {
     assert(tasks[_cpu()].head);
     current = tasks[_cpu()].head;
@@ -48,7 +48,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   }
   current->status = RUNNING;
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
-  kmt->spin_unlock(&switch_lk);
+  // kmt->spin_unlock(&switch_lk);
   return &current->context;
 }
 
