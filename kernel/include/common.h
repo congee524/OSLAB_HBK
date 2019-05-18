@@ -31,7 +31,6 @@ struct task {
 // Mutual exclusion lock.
 struct spinlock {
   volatile intptr_t locked;  // Is the lock held?
-
   // For debugging:
   char name[128];        // Name of lock.
   int cpu;               // The cpu holding the lock.
