@@ -1,5 +1,5 @@
-#include "klib.h"
 #include <stdarg.h>
+#include "klib.h"
 //#ifndef __ISA_NATIVE__
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
@@ -9,7 +9,7 @@ int printf(const char *fmt, ...) {
   va_start(ap, fmt);
   vsprintf(out, fmt, ap);
   va_end(ap);
-  char* ptr = out;
+  char *ptr = out;
   while (*ptr) {
     _putc(*ptr);
     ptr++;
@@ -18,7 +18,8 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  unsigned int t;
+  int t;
+  int sign = 0;
   unsigned int lim = 0;
   char *ptr = NULL;
   char *start = out;
@@ -42,7 +43,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         fmt++;
         lim = 0;
         for (int k = 0; k <= 9; k++) {
-          if(*(fmt + 1) == Representation[k]) {
+          if (*(fmt + 1) == Representation[k]) {
             lim = k;
             fmt++;
             break;
@@ -51,10 +52,14 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       }
 
       switch (*++fmt) {
-        case 'd': 
+        case 'd':
           t = va_arg(ap, int);
           ptr = &buffer[49];
           *ptr = '\0';
+          if (t < 0) {
+            t = -t;
+            sign = 1;
+          }
           do {
             *--ptr = Representation[t % 10];
             t /= 10;
@@ -62,6 +67,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           while (&buffer[49] - ptr < lim) {
             *--ptr = Representation[0];
           }
+          if (sign) *--ptr = '-';
           while (*ptr) {
             *start = *ptr;
             start++;
@@ -69,7 +75,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           }
           break;
 
-        case 'x': 
+        case 'x':
           t = va_arg(ap, unsigned int);
           ptr = &buffer[49];
           *ptr = '\0';
@@ -86,10 +92,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
 
         case 'c':
-          *start++ = (char) va_arg(ap, int);
+          *start++ = (char)va_arg(ap, int);
           break;
 
-        case 's': 
+        case 's':
           ptr = va_arg(ap, char *);
           while (*ptr) {
             *start++ = *ptr++;
@@ -137,8 +143,6 @@ int sprintf(char *out, const char *fmt, ...) {
   return 0;
 }
 
-int snprintf(char *out, size_t n, const char *fmt, ...) {
-  return 0;
-}
+int snprintf(char *out, size_t n, const char *fmt, ...) { return 0; }
 
 #endif
