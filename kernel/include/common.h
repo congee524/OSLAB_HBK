@@ -41,7 +41,7 @@ struct spinlock {
 struct semaphore {
   // TODO
   int value;
-  const char *name;
+  char *name;
   spinlock_t lock;
   task_t *list[NTASK];
   int end;
