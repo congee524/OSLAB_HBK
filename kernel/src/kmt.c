@@ -78,7 +78,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
   // TODO
   kmt->spin_lock(&create_lk);
-  task->name = name;
+  strcpy(task->name, name);
   task->next = NULL;
   task->status = RUNNABLE;
   _Area stack = (_Area){task->stack, task->fence2};
