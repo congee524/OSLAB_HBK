@@ -68,6 +68,7 @@ static void kmt_init() {
   kmt->spin_init(&ptable.lock, "ptable_lk");
   kmt->spin_init(&irq_lk, "irq_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
+  kmt->spin_init(&test_lk, "test_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
@@ -314,7 +315,8 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
 
 static void kmt_sem_wait(sem_t *sem) {
   // TODO
-  kmt->spin_lock(&sem->lock);
+  // kmt->spin_lock(&sem->lock);
+  kmt->spin_lock(&test_lk);
   // log("\nkmt spin lock %s\nsem_value %d\n", sem->name, sem->value);
   log("wait value b %d\n", sem->value);
   sem->value--;
@@ -324,12 +326,14 @@ static void kmt_sem_wait(sem_t *sem) {
     sem->end = (sem->end + 1) % NTASK;
     sleep(current, &sem->lock);
   }
-  kmt->spin_unlock(&sem->lock);
+  // kmt->spin_unlock(&sem->lock);
+  kmt->spin_unlock(&test_lk);
 }
 
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
-  kmt->spin_lock(&sem->lock);
+  // kmt->spin_lock(&sem->lock);
+  kmt->spin_lock(&test_lk);
   // log("\nkmt spin unlock %s\nsem_value %d\n", sem->name, sem->value);
   log("signal value b %d\n", sem->value);
   sem->value++;
@@ -339,7 +343,8 @@ static void kmt_sem_signal(sem_t *sem) {
     sem->list[sem->start] = NULL;
     sem->start = (sem->start + 1) % NTASK;
   }
-  kmt->spin_unlock(&sem->lock);
+  // kmt->spin_unlock(&sem->lock);
+  kmt->spin_unlock(&test_lk);
 }
 
 MODULE_DEF(kmt){

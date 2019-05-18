@@ -62,6 +62,7 @@ spinlock_t teard_lk;
 spinlock_t irq_lk;
 spinlock_t alloc_lk;
 spinlock_t os_trap_lk;
+spinlock_t test_lk;
 
 struct {
   spinlock_t lock;
