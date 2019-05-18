@@ -277,14 +277,14 @@ void wakeupl(task_t *chan) {
   for (int i = 0; i < _ncpu(); i++) {
     if (tasks[i].cnt > 0) {
       tmp = tasks[i].head;
-      if (tmp->status == SLEEPING && strcmp(tmp->name, chan->name) == 0) {
+      if (tmp->status == SLEEPING && tmp->chan == chan) {
         tmp->status = RUNNABLE;
         flag = 1;
         break;
       }
       while (tmp->next) {
         tmp = tmp->next;
-        if (tmp->status == SLEEPING && strcmp(tmp->name, chan->name) == 0) {
+        if (tmp->status == SLEEPING && tmp->chan == chan) {
           tmp->status = RUNNABLE;
           flag = 1;
           break;
