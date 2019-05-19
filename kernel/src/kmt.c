@@ -276,6 +276,9 @@ void wakeup(task_t *chan) {
     if (tmp->status == SLEEPING && tmp->chan == chan) {
       tmp->status = RUNNABLE;
       log("yes!!!\n");
+      if (strcmp(sem->list[sem->start]->name, "input-task") == 0) {
+        panic("now wake up");
+      }
     }
   }
 }
@@ -316,9 +319,7 @@ static void kmt_sem_signal(sem_t *sem) {
   if (sem->value <= 0) {
     log("before wake sem->start:%d ----- name: %s\n", sem->start,
         sem->list[sem->start]->name);
-    if (strcmp(sem->list[sem->start]->name, "input-task") == 0) {
-      panic("now wake up");
-    }
+
     wakeup(sem->list[sem->start]);
 
     sem->list[sem->start] = NULL;
