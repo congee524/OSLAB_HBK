@@ -16,12 +16,34 @@ void idle(void *arg) {
   }
 }
 
+static void echo_task(void *arg) {
+  char *name = (char *)arg;
+  char line[128] = "", text[128] = "";
+  device_t *tty = dev_lookup(name);
+  while (1) {
+    sprintf(text, "(%s) $ ", name);
+    tty->ops->write(tty, 0, text, strlen(text));
+    int nread = tty->ops->read(tty, 0, line, sizeof(line));
+    line[nread - 1] = '\0';
+    sprintf(text, "Echo: %s.\n", line);
+    tty->ops->write(tty, 0, text, strlen(text));
+  }
+}
+
+static void create_threads() {
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty1");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty2");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty3");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
+}
+
 static void os_init() {
   pmm->init();
   kmt->init();
   for (int i = 0; i < _ncpu(); i++) {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
   }
+  create_threads();
   //_vme_init(pmm->alloc, pmm->free);
   dev->init();
   // vfs->init();
