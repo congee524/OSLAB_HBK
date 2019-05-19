@@ -43,7 +43,7 @@ static void os_init() {
   for (int i = 0; i < _ncpu(); i++) {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
   }
-  create_threads();
+  // create_threads();
   //_vme_init(pmm->alloc, pmm->free);
   dev->init();
   // vfs->init();
