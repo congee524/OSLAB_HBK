@@ -29,15 +29,22 @@ static _Context *kmt_context_save(_Event ev, _Context *ctx) {
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
-  // kmt->spin_lock(&switch_lk);
+  kmt->spin_lock(&ptable.lk);
   if (!current) {
     /*
     assert(tasks[_cpu()].head);
     current = tasks[_cpu()].head;
     */
-    assert(ptable)
+    for (task_t *tmp = ptable.tasks; tmp->next != ptable.tasks;
+         tmp = tmp->next) {
+      if (tmp->cpu == _cpu() && tmp->status == RUNNABLE) {
+        current = tmp;
+        break;
+      }
+    }
+    if (!current) panic("no task to switch!");
   } else {
-    current->status = RUNNABLE;
+    /*
     for (int i = 0; i < tasks[_cpu()].cnt; i++) {
       if (!current->next) {
         current = tasks[_cpu()].head;
@@ -48,10 +55,20 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
         break;
       }
     }
+    */
+    task_t *tmp = current;
+    do {
+      tmp = tmp->next;
+    } while (tmp->cpu != _cpu() || tmp->status != RUNNABLE);
+    if (tmp == current) {
+      printf("switch failure\n");
+    } else {
+      current = tmp;
+      current->status = RUNNING;
+    }
   }
-  current->status = RUNNING;
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
-  // kmt->spin_unlock(&switch_lk);
+  kmt->spin_unlock(&ptable.lk);
   return &current->context;
 }
 
@@ -67,11 +84,13 @@ static void kmt_init() {
     tasks[i].cnt = 0;
   }
   */
-  ptable.tasks = NULL;
+  ptable.tasks = pmm->alloc(sizeof(task_t));
+  ptable.tasks->prev = ptable.tasks->next = ptable.tasks;
+  ptable.tasks->cpu = -1;
+  // ptable.tasks = NULL;
+  ptable.cnt_task = 0;
   memset(ncli, 0, sizeof(ncli));
   memset(intena, 0, sizeof(intena));
-  kmt->spin_init(&create_lk, "create_lk");
-  kmt->spin_init(&teard_lk, "teard_lk");
   kmt->spin_init(&alloc_lk, "alloc_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
   kmt->spin_init(&ptable.lk, "ptable.lk");
@@ -81,15 +100,33 @@ static void kmt_init() {
   // ...
 }
 
+static int task_insert(task_t *task) {
+  // insert from head
+  if (!task) {
+    log("task is empty!");
+    return 1;
+  }
+  if (!ptable.tasks) {
+    log("ptable.tasks init failure!");
+    return 1;
+  }
+  task->next = ptable.tasks->next;
+  ptable.tasks->next->prev = task;
+  ptable.tasks->next = task;
+  task->prev = ptable.tasks;
+  return 0;
+}
+
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
   // TODO
-  kmt->spin_lock(&create_lk);
+  kmt->spin_lock(&ptable.lk);
   strcpy(task->name, name);
-  task->next = NULL;
+  task->cpu = cnt_task % _ncpu();
   task->status = RUNNABLE;
   _Area stack = (_Area){task->stack, task->fence2};
   task->context = *_kcontext(stack, entry, arg);
+  /*
   int j = 0;
   for (int i = 1; i < _ncpu(); i++) {
     if (tasks[i].cnt < tasks[j].cnt) {
@@ -104,7 +141,10 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
     tmp->next = task;
   }
   tasks[j].cnt++;
-  kmt->spin_unlock(&create_lk);
+  */
+  if (task_insert(task)) panic("list insert wrong!");
+  ptable.cnt_task++;
+  kmt->spin_unlock(&ptable.lk);
   return 0;
 }
 
@@ -112,6 +152,7 @@ static void kmt_teardown(task_t *task) {
   // TODO
   // problem!!!!! if the task in sleeping list
   return;
+  /*
   kmt->spin_lock(&teard_lk);
   int flag = 0;
   task_t *tmp;
@@ -154,6 +195,7 @@ static void kmt_teardown(task_t *task) {
       panic("Wrong flag!");
       break;
   }
+  */
   kmt->spin_unlock(&teard_lk);
 }
 
@@ -261,23 +303,30 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 // semaphore
 
 void sleep(task_t *chan, spinlock_t *lk) {
-  assert(lk != &ptable.lk);
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
+
+  if (lk != &ptable.lk) {
+    kmt->spin_lock(&ptable.lk);
+    kmt->spin_unlock(&lk);
+  }
   task_t *t = current;
 
-  // kmt->spin_lock(&ptable.lk);
   t->chan = chan;
   t->status = SLEEPING;
-  kmt->spin_unlock(lk);
+
   _yield();
 
-  // kmt->spin_unlock(&ptable.lk);
-  kmt->spin_lock(lk);
-  t->chan = NULL;
+  t->chan = 0;
+
+  if (lk != &ptable.lk) {
+    kmt->spin_lock(&lk);
+    kmt->spin_unlock(&ptable.lk);
+  }
 }
 
 void wakeupl(task_t *chan) {
+  /*
   task_t *tmp;
   int flag = 0;
   for (int i = 0; i < _ncpu(); i++) {
@@ -298,6 +347,13 @@ void wakeupl(task_t *chan) {
       }
     }
     if (flag) break;
+  }
+  */
+  task_t *tmp;
+  for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
+    if (tmp->state == SLEEPING && tmp->chan == chan) {
+      tmp->state = RUNNABLE;
+    }
   }
 }
 

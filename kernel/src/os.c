@@ -4,7 +4,7 @@
 
 #define MAX_HANDLER 32
 
-struct {
+struct irq_hand {
   int seq;
   int event;
   handler_t handler;
@@ -83,15 +83,9 @@ static void os_on_irq(int seq, int event, handler_t handler) {
   // according to seq, call it
   for (int i = cnt_handle - 1; i > 0; i--) {
     if (handlers[cnt_handle].seq < handlers[i - 1].seq) {
-      int tmp_seq = handlers[i].seq;
-      int tmp_event = handlers[i].event;
-      handler_t tmp_handler = handlers[i].handler;
-      handlers[i].seq = handlers[i - 1].seq;
-      handlers[i].event = handlers[i - 1].event;
-      handlers[i].handler = handlers[i - 1].handler;
-      handlers[i - 1].seq = tmp_seq;
-      handlers[i - 1].event = tmp_event;
-      handlers[i - 1].handler = tmp_handler;
+      struct irq_hand tmp = handlers[i];
+      handlers[i] = handlers[i - 1];
+      handlers[i - 1] = tmp;
     } else {
       break;
     }

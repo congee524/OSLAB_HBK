@@ -22,8 +22,10 @@ struct task {
   char name[128];
   _Context context;
   int status;
+  int cpu;
   void *chan;
   struct task *next;
+  struct task *prev;
   uint8_t fence1[32];  // init with 0xcc, check overflow
   uint8_t stack[STK_SZ];
   uint8_t fence2[32];
@@ -59,18 +61,15 @@ struct Task_Pool {
 */
 
 // ptable
-spinlock_t create_lk;
-spinlock_t teard_lk;
-spinlock_t irq_lk;
 spinlock_t alloc_lk;
 spinlock_t os_trap_lk;
-spinlock_t switch_lk;
 
 int8_t ncli[MAX_CPU], intena[MAX_CPU];
 
 struct {
   spinlock_t lk;
-  task_t tasks[NTASK];
+  task_t *tasks;
+  int cnt_task;
 } ptable;
 
 #endif
