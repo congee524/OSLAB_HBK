@@ -316,7 +316,9 @@ static void kmt_sem_signal(sem_t *sem) {
   if (sem->value <= 0) {
     log("before wake sem->start:%d ----- name: %s\n", sem->start,
         sem->list[sem->start]->name);
-    assert(strcmp(sem->list[sem->start]->name, "input-task"));
+    if (strcmp(sem->list[sem->start]->name, "input-task") == 0) {
+      panic("now wake up");
+    }
     wakeup(sem->list[sem->start]);
 
     sem->list[sem->start] = NULL;
