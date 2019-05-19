@@ -50,11 +50,13 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     task_t *tmp = current;
     do {
       tmp = tmp->next;
+      if (tmp == current) {
+        log("switch failure\n");
+        break;
+      }
       log("222");
     } while (tmp->cpu != _cpu() || tmp->status != RUNNABLE);
-    if (tmp == current) {
-      printf("switch failure\n");
-    } else {
+    if (current != tmp) {
       current = tmp;
       current->status = RUNNING;
     }
