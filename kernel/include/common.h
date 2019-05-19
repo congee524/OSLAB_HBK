@@ -35,10 +35,10 @@ struct task {
 struct spinlock {
   volatile intptr_t locked;  // Is the lock held?
   // For debugging:
-  char name[128];        // Name of lock.
-  int cpu;               // The cpu holding the lock.
-  unsigned int pcs[10];  // The call stack (an array of program counters)
-                         // that locked the lock.
+  char name[128];  // Name of lock.
+  int cpu;         // The cpu holding the lock.
+  // unsigned int pcs[10];  // The call stack (an array of program counters)
+  // that locked the lock.
 };
 
 struct semaphore {
@@ -63,6 +63,7 @@ struct Task_Pool {
 // ptable
 spinlock_t alloc_lk;
 spinlock_t os_trap_lk;
+spinlock_t print_lk;
 
 int8_t ncli[MAX_CPU], intena[MAX_CPU];
 

@@ -32,13 +32,13 @@ static _Context *kmt_context_save(_Event ev, _Context *ctx) {
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   kmt->spin_lock(&ptable.lk);
+  task_t *tmp;
   if (!current) {
     /*
     assert(tasks[_cpu()].head);
     current = tasks[_cpu()].head;
     */
-    for (task_t *tmp = ptable.tasks; tmp->next != ptable.tasks;
-         tmp = tmp->next) {
+    for (tmp = ptable.tasks; tmp->next != ptable.tasks; tmp = tmp->next) {
       // log("111");
       if (tmp->cpu == _cpu() && tmp->status == RUNNABLE) {
         current = tmp;
@@ -48,21 +48,25 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     }
     if (!current) panic("no task to switch!");
   } else {
-    task_t *tmp = current;
+    tmp = current;
     do {
       tmp = tmp->next;
+
       if (tmp == current) {
-        log("switch failure\n");
+        // log("switch failure\n");
         break;
       }
+
       // log("222");
     } while (tmp->cpu != _cpu() || tmp->status != RUNNABLE);
     if (current != tmp) {
       if (current->status == RUNNING) current->status = RUNNABLE;
       current = tmp;
       current->status = RUNNING;
+      log("switch to cpu %d %s\n", current->cpu, current->name);
     }
   }
+  /*
   printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
   task_t *ppp = ptable.tasks;
   while (ppp->next != ptable.tasks) {
@@ -70,6 +74,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     printf("name: %s status: %d cpu: %d\n", ppp->name, ppp->status, ppp->cpu);
   }
   printf("\n");
+  */
   kmt->spin_unlock(&ptable.lk);
   return &current->context;
 }
@@ -88,7 +93,7 @@ static void kmt_init() {
   */
   ptable.tasks = pmm->alloc(sizeof(task_t));
   ptable.tasks->prev = ptable.tasks->next = ptable.tasks;
-  ptable.tasks->cpu = -1;
+  ptable.tasks->cpu = -2;
   // ptable.tasks = NULL;
   ptable.cnt_task = 0;
   memset(ncli, 0, sizeof(ncli));
@@ -96,6 +101,7 @@ static void kmt_init() {
   kmt->spin_init(&alloc_lk, "alloc_lk");
   kmt->spin_init(&os_trap_lk, "os_trap_lk");
   kmt->spin_init(&ptable.lk, "ptable.lk");
+  kmt->spin_init(&print_lk, "print_lk");
 
   os->on_irq(INT_MIN, _EVENT_NULL, kmt_context_save);
   os->on_irq(INT_MAX, _EVENT_NULL, kmt_context_switch);
@@ -183,7 +189,8 @@ int holding(spinlock_t *lock) { return lock->locked && lock->cpu == _cpu(); }
 void pushcli(void) {
   uint eflags;
   eflags = readeflags();
-  cli();
+  // cli();
+  _intr_write(0);
   if (ncli[_cpu()]++ == 0) intena[_cpu()] = eflags & FL_IF;
   // if (ncli[_cpu()]++ == 0) intena[_cpu()] = _intr_read();
 }
@@ -191,7 +198,8 @@ void pushcli(void) {
 void popcli(void) {
   if (readeflags() & FL_IF) panic("popcli - interruptible");
   if (--ncli[_cpu()] < 0) panic("popcli");
-  if (ncli[_cpu()] == 0 && intena[_cpu()]) sti();
+  if (ncli[_cpu()] == 0 && intena[_cpu()])  // sti();
+    _intr_write(1);
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name) {
@@ -224,7 +232,7 @@ static void kmt_spin_unlock(spinlock_t *lk) {
     panic("release");
   }
 
-  lk->pcs[0] = 0;
+  // lk->pcs[0] = 0;
   lk->cpu = -1;
 
   // The xchg serializes, so that reads before release are
@@ -246,7 +254,8 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 // semaphore
 
 void sleep(task_t *chan, spinlock_t *lk) {
-  log("sleep name %s, status %d\n", chan->name, chan->status);
+  log("!!!sleep name %s, status %d, cpu: %d\n", chan->name, chan->status,
+      chan->cpu);
   /*
   if (strcmp(chan->name, "input-task") == 0) {
     panic("now sleep");
@@ -264,18 +273,18 @@ void sleep(task_t *chan, spinlock_t *lk) {
 }
 
 void wakeup(task_t *chan) {
-  log("!!!!!!to be wake name: %s, status: %d, cpu: %d\n", chan->name,
-      chan->status, chan->cpu);
+  log("!!!!!!wake name: %s, status: %d, cpu: %d\n", chan->name, chan->status,
+      chan->cpu);
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
-    printf("wakeing name: %s, status: %d, cpu: %d\n", tmp->name, tmp->status,
-           tmp->cpu);
+    // printf("wakeing name: %s, status: %d, cpu: %d\n", tmp->name, tmp->status,
+    // tmp->cpu);
     if (tmp->chan)
-      printf(" chan_name: %s, chan_cpu: %d\n", ((task_t *)tmp->chan)->name,
+      // printf(" chan_name: %s, chan_cpu: %d\n", ((task_t *)tmp->chan)->name,
              ((task_t *)tmp->chan)->cpu);
     if (tmp->status == SLEEPING && tmp->chan == chan) {
       tmp->status = RUNNABLE;
-      log("yes!!!\n");
+      // log("yes!!!\n");
     }
   }
 }
@@ -308,23 +317,23 @@ static void kmt_sem_wait(sem_t *sem) {
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
-  kmt->spin_lock(&ptable.lk);
+  // kmt->spin_lock(&ptable.lk);
   // log("\nkmt spin unlock %s\nsem_value %d\n", sem->name, sem->value);
   // log("signal value b %d\n", sem->value);
   sem->value++;
   // log("signal value a %d\n", sem->value);
   if (sem->value <= 0) {
-    log("before wake sem->start:%d ----- name: %s\n", sem->start,
-        sem->list[sem->start]->name);
+    // log("before wake sem->start:%d ----- name: %s\n", sem->start,
+    // sem->list[sem->start]->name);
 
     wakeup(sem->list[sem->start]);
 
     sem->list[sem->start] = NULL;
     sem->start = (sem->start + 1) % NTASK;
-    log("after wake sem->start:%d ----- name: %s\n", sem->start,
-        sem->list[sem->start]->name);
+    // log("after wake sem->start:%d ----- name: %s\n", sem->start,
+    // sem->list[sem->start]->name);
   }
-  kmt->spin_unlock(&ptable.lk);
+  // kmt->spin_unlock(&ptable.lk);
   kmt->spin_unlock(&sem->lock);
 }
 

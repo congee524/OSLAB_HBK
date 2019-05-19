@@ -66,11 +66,13 @@ void test() {
 }
 */
 static void hello() {
+  kmt->spin_lock(&print_lk);
   for (const char *ptr = "Hello from CPU #"; *ptr; ptr++) {
     _putc(*ptr);
   }
   _putc("12345678"[_cpu()]);
   _putc('\n');
+  kmt->spin_unlock(&print_lk);
 }
 
 static void os_run() {
@@ -90,7 +92,7 @@ static void os_run() {
 
 int cnt_handle = 0;
 static _Context *os_trap(_Event ev, _Context *ctx) {
-  kmt->spin_lock(&os_trap_lk);
+  // kmt->spin_lock(&os_trap_lk);
   _Context *ret = NULL;
   for (int i = 0; i < cnt_handle; i++) {
     if (handlers[i].event == _EVENT_NULL || handlers[i].event == ev.event) {
@@ -99,7 +101,7 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
     }
   }
   assert(ret);
-  kmt->spin_unlock(&os_trap_lk);
+  // kmt->spin_unlock(&os_trap_lk);
   return ret;
 }
 
@@ -113,7 +115,7 @@ static void os_on_irq(int seq, int event, handler_t handler) {
 
   // according to seq, call it
   for (int i = cnt_handle - 1; i > 0; i--) {
-    if (handlers[cnt_handle].seq < handlers[i - 1].seq) {
+    if (handlers[i].seq < handlers[i - 1].seq) {
       struct irq_hand tmp = handlers[i];
       handlers[i] = handlers[i - 1];
       handlers[i - 1] = tmp;
@@ -121,11 +123,12 @@ static void os_on_irq(int seq, int event, handler_t handler) {
       break;
     }
   }
+  /*
   printf("\nirq: ");
   for (int i = 0; i < cnt_handle; i++) {
     printf("%d %d | ", handlers[i].seq, handlers[i].event);
   }
-  printf("\n");
+  */
   kmt->spin_unlock(&os_trap_lk);
 }
 
