@@ -19,10 +19,9 @@ void idle(void *arg) {
 static void os_init() {
   pmm->init();
   kmt->init();
-  kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
-  kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
-  kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
-  kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
+  for (int i = 0; i < _ncpu(); i++) {
+    kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
+  }
   //_vme_init(pmm->alloc, pmm->free);
   dev->init();
   // vfs->init();
