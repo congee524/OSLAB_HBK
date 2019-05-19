@@ -276,9 +276,6 @@ void wakeup(task_t *chan) {
     if (tmp->status == SLEEPING && tmp->chan == chan) {
       tmp->status = RUNNABLE;
       log("yes!!!\n");
-      if (strcmp(tmp->name, "input-task") == 0) {
-        panic("now wake up");
-      }
     }
   }
 }
