@@ -52,6 +52,13 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
       tmp = tmp->next;
       if (tmp == current) {
         log("switch failure\n");
+        task_t ppp = ptable.tasks;
+        while (ppp->next != ptable.tasks) {
+          ppp = ppp->next;
+          printf("name: %s status: %d cpu: %d\n", ppp->name, ppp->status,
+                 ppp->cpu);
+        }
+        printf("\n");
         break;
       }
       log("222");
