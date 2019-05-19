@@ -122,7 +122,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
   // TODO
   kmt->spin_lock(&ptable.lk);
   strcpy(task->name, name);
-  task->cpu = cnt_task % _ncpu();
+  task->cpu = ptable.cnt_task % _ncpu();
   task->status = RUNNABLE;
   _Area stack = (_Area){task->stack, task->fence2};
   task->context = *_kcontext(stack, entry, arg);
@@ -195,8 +195,8 @@ static void kmt_teardown(task_t *task) {
       panic("Wrong flag!");
       break;
   }
-  */
   kmt->spin_unlock(&teard_lk);
+  */
 }
 
 //==========================================
