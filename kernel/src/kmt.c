@@ -246,9 +246,9 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
   t->chan = chan;
   t->status = SLEEPING;
-
+  log("sleep name %s, status %d\n", chan->name, chan->status);
   _yield();
-
+  log("sleep name %s, status %d\n", chan->name, chan->status);
   t->chan = 0;
 
   if (lk != &ptable.lk) {
