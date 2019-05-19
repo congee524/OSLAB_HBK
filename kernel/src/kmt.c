@@ -308,7 +308,7 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
   if (lk != &ptable.lk) {
     kmt->spin_lock(&ptable.lk);
-    kmt->spin_unlock(&lk);
+    kmt->spin_unlock(lk);
   }
   task_t *t = current;
 
@@ -320,7 +320,7 @@ void sleep(task_t *chan, spinlock_t *lk) {
   t->chan = 0;
 
   if (lk != &ptable.lk) {
-    kmt->spin_lock(&lk);
+    kmt->spin_lock(lk);
     kmt->spin_unlock(&ptable.lk);
   }
 }
