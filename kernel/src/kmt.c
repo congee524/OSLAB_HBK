@@ -260,11 +260,11 @@ void sleep(task_t *chan, spinlock_t *lk) {
 
 void wakeup(task_t *chan) {
   kmt->spin_lock(&ptable.lk);
-  log("to be wake name: %s, status: %d", chan->name, chan->status);
+  log("!!!!!!to be wake name: %s, status: %d", chan->name, chan->status);
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
     printf("wakeing name: %s, status: %d", tmp->name, tmp->status);
-    if (tmp->chan) printf(" chan: %s\n", tmp->chan->name);
+    if (tmp->chan) printf(" chan: %s\n", tmp->chan.name);
     if (tmp->status == SLEEPING && tmp->chan == chan) {
       tmp->status = RUNNABLE;
     }
