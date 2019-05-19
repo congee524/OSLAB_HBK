@@ -351,8 +351,8 @@ void wakeupl(task_t *chan) {
   */
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
-    if (tmp->state == SLEEPING && tmp->chan == chan) {
-      tmp->state = RUNNABLE;
+    if (tmp->status == SLEEPING && tmp->chan == chan) {
+      tmp->status = RUNNABLE;
     }
   }
 }
