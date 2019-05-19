@@ -16,12 +16,12 @@ typedef enum {
   RUNNING,
   SLEEPING,
   DEAD,
-} task_status;
+} task_state;
 
 struct task {
   char name[128];
   _Context context;
-  int status;
+  int state;
   int cpu;
   void *chan;
   struct task *next;

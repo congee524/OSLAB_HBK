@@ -40,9 +40,9 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     */
     for (tmp = ptable.tasks; tmp->next != ptable.tasks; tmp = tmp->next) {
       // log("111");
-      if (tmp->cpu == _cpu() && tmp->status == RUNNABLE) {
+      if (tmp->cpu == _cpu() && tmp->state == RUNNABLE) {
         current = tmp;
-        current->status = RUNNING;
+        current->state = RUNNING;
         break;
       }
     }
@@ -58,11 +58,11 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
       }
 
       // log("222");
-    } while (tmp->cpu != _cpu() || tmp->status != RUNNABLE);
+    } while (tmp->cpu != _cpu() || tmp->state != RUNNABLE);
     if (current != tmp) {
-      if (current->status == RUNNING) current->status = RUNNABLE;
+      if (current->state == RUNNING) current->state = RUNNABLE;
       current = tmp;
-      current->status = RUNNING;
+      current->state = RUNNING;
       // log("switch to cpu %d %s\n", current->cpu, current->name);
     }
   }
@@ -71,7 +71,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   task_t *ppp = ptable.tasks;
   while (ppp->next != ptable.tasks) {
     ppp = ppp->next;
-    printf("name: %s status: %d cpu: %d\n", ppp->name, ppp->status, ppp->cpu);
+    printf("name: %s state: %d cpu: %d\n", ppp->name, ppp->state, ppp->cpu);
   }
   printf("\n");
   */
@@ -131,7 +131,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
   kmt->spin_lock(&ptable.lk);
   strcpy(task->name, name);
   task->cpu = ptable.cnt_task % _ncpu();
-  task->status = RUNNABLE;
+  task->state = RUNNABLE;
   _Area stack = (_Area){task->stack, task->fence2};
   task->context = *_kcontext(stack, entry, arg);
 
@@ -254,7 +254,7 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 // semaphore
 
 void sleep(task_t *chan, spinlock_t *lk) {
-  // log("!!!sleep name %s, status %d, cpu: %d\n", chan->name, chan->status,
+  // log("!!!sleep name %s, state %d, cpu: %d\n", chan->name, chan->state,
   // chan->cpu);
   /*
   if (strcmp(chan->name, "input-task") == 0) {
@@ -265,7 +265,7 @@ void sleep(task_t *chan, spinlock_t *lk) {
   if (!lk) panic("sleep without lk");
   task_t *t = current;
   t->chan = chan;
-  t->status = SLEEPING;
+  t->state = SLEEPING;
   kmt->spin_unlock(lk);
   _yield();
   kmt->spin_lock(lk);
@@ -273,19 +273,19 @@ void sleep(task_t *chan, spinlock_t *lk) {
 }
 
 void wakeup(task_t *chan) {
-  // log("!!!!!!wake name: %s, status: %d, cpu: %d\n", chan->name, chan->status,
+  // log("!!!!!!wake name: %s, state: %d, cpu: %d\n", chan->name, chan->state,
   // chan->cpu);
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
     /*
-    printf("wakeing name: %s, status: %d, cpu: %d\n", tmp->name,
-    tmp->status, tmp->cpu); if (tmp->chan) printf(" chan_name: %s, chan_cpu:
+    printf("wakeing name: %s, state: %d, cpu: %d\n", tmp->name,
+    tmp->state, tmp->cpu); if (tmp->chan) printf(" chan_name: %s, chan_cpu:
     %d\n", ((task_t
     *)tmp->chan)->name,
              ((task_t *)tmp->chan)->cpu);
              */
-    if (tmp->status == SLEEPING && tmp->chan == chan) {
-      tmp->status = RUNNABLE;
+    if (tmp->state == SLEEPING && tmp->chan == chan) {
+      tmp->state = RUNNABLE;
       // log("yes!!!\n");
     }
   }
