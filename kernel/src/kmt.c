@@ -299,6 +299,7 @@ void wakeupl(task_t *chan) {
   */
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
+    log("wakeing name: %s, status: %d", tmp->name, tmp->status);
     if (tmp->status == SLEEPING && tmp->chan == chan) {
       tmp->status = RUNNABLE;
     }
@@ -325,9 +326,9 @@ static void kmt_sem_wait(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
   // log("\nkmt spin lock %s\nsem_value %d\n", sem->name, sem->value);
-  log("wait value b %d\n", sem->value);
+  // log("wait value b %d\n", sem->value);
   sem->value--;
-  log("wait value a %d\n", sem->value);
+  // log("wait value a %d\n", sem->value);
   if (sem->value < 0) {
     sem->list[sem->end] = current;
     sem->end = (sem->end + 1) % NTASK;
@@ -340,9 +341,9 @@ static void kmt_sem_signal(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
   // log("\nkmt spin unlock %s\nsem_value %d\n", sem->name, sem->value);
-  log("signal value b %d\n", sem->value);
+  // log("signal value b %d\n", sem->value);
   sem->value++;
-  log("signal value a %d\n", sem->value);
+  // log("signal value a %d\n", sem->value);
   if (sem->value <= 0) {
     wakeup(sem->list[sem->start]);
     sem->list[sem->start] = NULL;
