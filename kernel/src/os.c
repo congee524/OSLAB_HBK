@@ -23,7 +23,7 @@ static void os_init() {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
   }
   //_vme_init(pmm->alloc, pmm->free);
-  // dev->init();
+  dev->init();
   // vfs->init();
 }
 /*
