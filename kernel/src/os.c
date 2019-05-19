@@ -15,7 +15,7 @@ void idle(void *arg) {
     _yield();
   }
 }
-
+/*
 static void echo_task(void *arg) {
   char *name = (char *)arg;
   char line[128] = "", text[128] = "";
@@ -36,7 +36,7 @@ static void create_threads() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty3");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
 }
-
+*/
 static void os_init() {
   pmm->init();
   kmt->init();
