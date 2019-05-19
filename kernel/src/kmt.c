@@ -247,9 +247,11 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 
 void sleep(task_t *chan, spinlock_t *lk) {
   log("sleep name %s, status %d\n", chan->name, chan->status);
+  /*
   if (strcmp(chan->name, "input-task") == 0) {
     panic("now sleep");
   }
+  */
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
   task_t *t = current;
@@ -313,9 +315,14 @@ static void kmt_sem_signal(sem_t *sem) {
   sem->value++;
   // log("signal value a %d\n", sem->value);
   if (sem->value <= 0) {
+    log("before wake sem->start:%d ----- name: %s\n", sem->start,
+        sem->list[sem->start]->name);
     wakeup(sem->list[sem->start]);
+
     sem->list[sem->start] = NULL;
     sem->start = (sem->start + 1) % NTASK;
+    log("after wake sem->start:%d ----- name: %s\n", sem->start,
+        sem->list[sem->start]->name);
   }
   kmt->spin_unlock(&sem->lock);
 }
