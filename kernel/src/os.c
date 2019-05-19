@@ -4,6 +4,8 @@
 
 #define MAX_HANDLER 32
 
+#define ECHO_TASK
+
 struct irq_hand {
   int seq;
   int event;
@@ -15,7 +17,7 @@ void idle(void *arg) {
     _yield();
   }
 }
-/*
+#ifdef ECHO_TASK
 static void echo_task(void *arg) {
   char *name = (char *)arg;
   char line[128] = "", text[128] = "";
@@ -36,14 +38,17 @@ static void create_threads() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty3");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
 }
-*/
+#endif
+
 static void os_init() {
   pmm->init();
   kmt->init();
   for (int i = 0; i < _ncpu(); i++) {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
   }
-  // create_threads();
+#ifdef ECHO_TASK
+  create_threads();
+#endif
   //_vme_init(pmm->alloc, pmm->free);
   dev->init();
   // vfs->init();
@@ -92,7 +97,7 @@ static void os_run() {
 
 int cnt_handle = 0;
 static _Context *os_trap(_Event ev, _Context *ctx) {
-  // kmt->spin_lock(&os_trap_lk);
+  kmt->spin_lock(&os_trap_lk);
   _Context *ret = NULL;
   for (int i = 0; i < cnt_handle; i++) {
     if (handlers[i].event == _EVENT_NULL || handlers[i].event == ev.event) {
@@ -101,7 +106,7 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
     }
   }
   assert(ret);
-  // kmt->spin_unlock(&os_trap_lk);
+  kmt->spin_unlock(&os_trap_lk);
   return ret;
 }
 
