@@ -57,6 +57,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           ptr = &buffer[49];
           *ptr = '\0';
           if (t < 0) {
+            if (t == (-2147483647 - 1)) {
+              printf("INT_MIN!!!\n");
+              assert(0);
+            }
             t = -t;
             sign = 1;
           }
