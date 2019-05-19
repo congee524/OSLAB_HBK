@@ -23,7 +23,9 @@ static inline void panic(const char *s) {
 
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
   // TODO
+  kmt->spin_lock(&ptable.lk);
   if (current) current->context = *ctx;
+  kmt->spin_unlock(&ptable.lk);
   return &current->context;
 }
 
@@ -44,18 +46,6 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     }
     if (!current) panic("no task to switch!");
   } else {
-    /*
-    for (int i = 0; i < tasks[_cpu()].cnt; i++) {
-      if (!current->next) {
-        current = tasks[_cpu()].head;
-      } else {
-        current = current->next;
-      }
-      if (current->status == RUNNABLE) {
-        break;
-      }
-    }
-    */
     task_t *tmp = current;
     do {
       tmp = tmp->next;
@@ -82,7 +72,7 @@ static void kmt_init() {
   for (int i = 0; i < _ncpu(); i++) {
     tasks[i].head = NULL;
     tasks[i].cnt = 0;
-  }
+  }s
   */
   ptable.tasks = pmm->alloc(sizeof(task_t));
   ptable.tasks->prev = ptable.tasks->next = ptable.tasks;
@@ -126,23 +116,9 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
   task->status = RUNNABLE;
   _Area stack = (_Area){task->stack, task->fence2};
   task->context = *_kcontext(stack, entry, arg);
-  /*
-  int j = 0;
-  for (int i = 1; i < _ncpu(); i++) {
-    if (tasks[i].cnt < tasks[j].cnt) {
-      j = i;
-    }
-  }
-  if (!tasks[j].head) {
-    tasks[j].head = task;
-  } else {
-    task_t *tmp = tasks[j].head;
-    while (tmp->next) tmp = tmp->next;
-    tmp->next = task;
-  }
-  tasks[j].cnt++;
-  */
+
   if (task_insert(task)) panic("list insert wrong!");
+
   ptable.cnt_task++;
   kmt->spin_unlock(&ptable.lk);
   return 0;
@@ -152,51 +128,6 @@ static void kmt_teardown(task_t *task) {
   // TODO
   // problem!!!!! if the task in sleeping list
   return;
-  /*
-  kmt->spin_lock(&teard_lk);
-  int flag = 0;
-  task_t *tmp;
-  task_t *last;
-  int i;
-  for (i = 0; i < _ncpu(); i++) {
-    if (tasks[i].cnt > 0) {
-      last = tmp = tasks[i].head;
-      if (strcmp(tmp->name, task->name) == 0) {
-        flag = 2;
-        break;
-      }
-      while (tmp->next) {
-        last = tmp;
-        tmp = tmp->next;
-        if (strcmp(tmp->name, task->name) == 0) {
-          flag = 1;
-          break;
-        }
-      }
-    }
-    if (flag) break;
-  }
-
-  switch (flag) {
-    case 0:
-      panic("No such task!");
-      break;
-    case 1:
-      last->next = tmp->next;
-      pmm->free(tmp);
-      tasks[i].cnt--;
-      break;
-    case 2:
-      tasks[i].head = NULL;
-      pmm->free(tmp);
-      tasks[i].cnt--;
-      break;
-    default:
-      panic("Wrong flag!");
-      break;
-  }
-  kmt->spin_unlock(&teard_lk);
-  */
 }
 
 //==========================================
