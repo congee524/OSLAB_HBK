@@ -234,6 +234,7 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 // semaphore
 
 void sleep(task_t *chan, spinlock_t *lk) {
+  log("sleep name %s, status %d\n", chan->name, chan->status);
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
 
