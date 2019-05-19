@@ -39,6 +39,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     */
     for (task_t *tmp = ptable.tasks; tmp->next != ptable.tasks;
          tmp = tmp->next) {
+      log("111");
       if (tmp->cpu == _cpu() && tmp->status == RUNNABLE) {
         current = tmp;
         break;
@@ -49,6 +50,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     task_t *tmp = current;
     do {
       tmp = tmp->next;
+      log("222");
     } while (tmp->cpu != _cpu() || tmp->status != RUNNABLE);
     if (tmp == current) {
       printf("switch failure\n");
