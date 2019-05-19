@@ -39,7 +39,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
     */
     for (task_t *tmp = ptable.tasks; tmp->next != ptable.tasks;
          tmp = tmp->next) {
-      log("111");
+      // log("111");
       if (tmp->cpu == _cpu() && tmp->status == RUNNABLE) {
         current = tmp;
         break;
@@ -61,7 +61,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
         printf("\n");
         break;
       }
-      log("222");
+      // log("222");
     } while (tmp->cpu != _cpu() || tmp->status != RUNNABLE);
     if (current != tmp) {
       current = tmp;
@@ -245,7 +245,7 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 // semaphore
 
 void sleep(task_t *chan, spinlock_t *lk) {
-  log("sleep name %s, status %d\n", chan->name, chan->status);
+  // log("sleep name %s, status %d\n", chan->name, chan->status);
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
   /*
