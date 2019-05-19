@@ -63,7 +63,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
       if (current->status == RUNNING) current->status = RUNNABLE;
       current = tmp;
       current->status = RUNNING;
-      log("switch to cpu %d %s\n", current->cpu, current->name);
+      // log("switch to cpu %d %s\n", current->cpu, current->name);
     }
   }
   /*
@@ -254,8 +254,8 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 // semaphore
 
 void sleep(task_t *chan, spinlock_t *lk) {
-  log("!!!sleep name %s, status %d, cpu: %d\n", chan->name, chan->status,
-      chan->cpu);
+  // log("!!!sleep name %s, status %d, cpu: %d\n", chan->name, chan->status,
+  // chan->cpu);
   /*
   if (strcmp(chan->name, "input-task") == 0) {
     panic("now sleep");
@@ -273,13 +273,14 @@ void sleep(task_t *chan, spinlock_t *lk) {
 }
 
 void wakeup(task_t *chan) {
-  log("!!!!!!wake name: %s, status: %d, cpu: %d\n", chan->name, chan->status,
-      chan->cpu);
+  // log("!!!!!!wake name: %s, status: %d, cpu: %d\n", chan->name, chan->status,
+  // chan->cpu);
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
     /*
-    printf("wakeing name: %s, status: %d, cpu: %d\n", tmp->name, tmp->status,
-    tmp->cpu); if (tmp->chan) printf(" chan_name: %s, chan_cpu: %d\n", ((task_t
+    printf("wakeing name: %s, status: %d, cpu: %d\n", tmp->name,
+    tmp->status, tmp->cpu); if (tmp->chan) printf(" chan_name: %s, chan_cpu:
+    %d\n", ((task_t
     *)tmp->chan)->name,
              ((task_t *)tmp->chan)->cpu);
              */
