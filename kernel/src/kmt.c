@@ -31,8 +31,11 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   // kmt->spin_lock(&switch_lk);
   if (!current) {
+    /*
     assert(tasks[_cpu()].head);
     current = tasks[_cpu()].head;
+    */
+    assert(ptable)
   } else {
     current->status = RUNNABLE;
     for (int i = 0; i < tasks[_cpu()].cnt; i++) {
@@ -58,10 +61,13 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
 static void kmt_init() {
   // TODO
   // ...
+  /*
   for (int i = 0; i < _ncpu(); i++) {
     tasks[i].head = NULL;
     tasks[i].cnt = 0;
   }
+  */
+  ptable.tasks = NULL;
   memset(ncli, 0, sizeof(ncli));
   memset(intena, 0, sizeof(intena));
   kmt->spin_init(&create_lk, "create_lk");

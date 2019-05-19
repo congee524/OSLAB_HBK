@@ -51,10 +51,12 @@ struct semaphore {
 
 #define MAX_CPU 16
 
+/*
 struct Task_Pool {
   struct task *head;
   int cnt;
 } tasks[MAX_CPU];
+*/
 
 // ptable
 spinlock_t create_lk;
@@ -68,7 +70,7 @@ int8_t ncli[MAX_CPU], intena[MAX_CPU];
 
 struct {
   spinlock_t lk;
-  task_t task[NTASK];
+  task_t tasks[NTASK];
 } ptable;
 
 #endif
