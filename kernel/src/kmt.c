@@ -237,24 +237,28 @@ void sleep(task_t *chan, spinlock_t *lk) {
   log("sleep name %s, status %d\n", chan->name, chan->status);
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
-
-  if (lk != &ptable.lk) {
-    kmt->spin_lock(&ptable.lk);
-    kmt->spin_unlock(lk);
-  }
+  /*
+    if (lk != &ptable.lk) {
+      kmt->spin_lock(&ptable.lk);
+      kmt->spin_unlock(lk);
+    }
+    */
   task_t *t = current;
 
   t->chan = chan;
   t->status = SLEEPING;
-  log("sleep name %s, status %d\n", chan->name, chan->status);
+  log("sleep before yield name %s, status %d\n", chan->name, chan->status);
+  kmt->spin_unlock(lk);
   _yield();
-  log("sleep name %s, status %d\n", chan->name, chan->status);
+  kmt->spin_lock(lk);
+  log("sleep after yield name %s, status %d\n", chan->name, chan->status);
   t->chan = 0;
-
-  if (lk != &ptable.lk) {
-    kmt->spin_lock(lk);
-    kmt->spin_unlock(&ptable.lk);
-  }
+  /*
+    if (lk != &ptable.lk) {
+      kmt->spin_lock(lk);
+      kmt->spin_unlock(&ptable.lk);
+    }
+    */
 }
 
 void wakeupl(task_t *chan) {
