@@ -247,6 +247,9 @@ static void kmt_spin_unlock(spinlock_t *lk) {
 
 void sleep(task_t *chan, spinlock_t *lk) {
   log("sleep name %s, status %d\n", chan->name, chan->status);
+  if (strcmp(chan->name, "input-task") == 0) {
+    panic("now sleep");
+  }
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
   task_t *t = current;
