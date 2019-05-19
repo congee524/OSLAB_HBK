@@ -4,7 +4,7 @@
 
 #define MAX_HANDLER 32
 
-#define ECHO_TASK
+// #define ECHO_TASK
 
 struct irq_hand {
   int seq;
