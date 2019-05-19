@@ -264,7 +264,7 @@ void wakeup(task_t *chan) {
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
     printf("wakeing name: %s, status: %d", tmp->name, tmp->status);
-    if (tmp->chan) printf(" chan: %s\n", tmp->chan.name);
+    if (tmp->chan) printf(" chan: %s\n", (task_t *)(tmp->chan)->name);
     if (tmp->status == SLEEPING && tmp->chan == chan) {
       tmp->status = RUNNABLE;
     }
