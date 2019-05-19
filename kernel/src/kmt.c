@@ -249,54 +249,18 @@ void sleep(task_t *chan, spinlock_t *lk) {
   log("sleep name %s, status %d\n", chan->name, chan->status);
   if (!current) panic("sleep");
   if (!lk) panic("sleep without lk");
-  /*
-    if (lk != &ptable.lk) {
-      kmt->spin_lock(&ptable.lk);
-      kmt->spin_unlock(lk);
-    }
-    */
   task_t *t = current;
-
   t->chan = chan;
   t->status = SLEEPING;
-  // log("sleep before yield name %s, status %d\n", chan->name, chan->status);
   kmt->spin_unlock(lk);
   _yield();
   kmt->spin_lock(lk);
-  // log("sleep after yield name %s, status %d\n", chan->name, chan->status);
   t->chan = 0;
-  /*
-    if (lk != &ptable.lk) {
-      kmt->spin_lock(lk);
-      kmt->spin_unlock(&ptable.lk);
-    }
-    */
 }
 
-void wakeupl(task_t *chan) {
-  /*
-  task_t *tmp;
-  int flag = 0;
-  for (int i = 0; i < _ncpu(); i++) {
-    if (tasks[i].cnt > 0) {
-      tmp = tasks[i].head;
-      if (tmp->status == SLEEPING && tmp->chan == chan) {
-        tmp->status = RUNNABLE;
-        flag = 1;
-        break;
-      }
-      while (tmp->next) {
-        tmp = tmp->next;
-        if (tmp->status == SLEEPING && tmp->chan == chan) {
-          tmp->status = RUNNABLE;
-          flag = 1;
-          break;
-        }
-      }
-    }
-    if (flag) break;
-  }
-  */
+void wakeup(task_t *chan) {
+  kmt->spin_lock(&ptable.lk);
+  log("to be wake name: %s, status: %d", chan->name, chan->status);
   task_t *tmp;
   for (tmp = ptable.tasks->next; tmp != ptable.tasks; tmp = tmp->next) {
     log("wakeing name: %s, status: %d", tmp->name, tmp->status);
@@ -304,11 +268,6 @@ void wakeupl(task_t *chan) {
       tmp->status = RUNNABLE;
     }
   }
-}
-
-void wakeup(task_t *chan) {
-  kmt->spin_lock(&ptable.lk);
-  wakeupl(chan);
   kmt->spin_unlock(&ptable.lk);
 }
 
