@@ -264,7 +264,6 @@ void sleep(task_t *chan, spinlock_t *lk) {
 }
 
 void wakeup(task_t *chan) {
-  kmt->spin_lock(&ptable.lk);
   log("!!!!!!to be wake name: %s, status: %d, cpu: %d\n", chan->name,
       chan->status, chan->cpu);
   task_t *tmp;
@@ -279,7 +278,6 @@ void wakeup(task_t *chan) {
       log("yes!!!\n");
     }
   }
-  kmt->spin_unlock(&ptable.lk);
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
@@ -310,6 +308,7 @@ static void kmt_sem_wait(sem_t *sem) {
 static void kmt_sem_signal(sem_t *sem) {
   // TODO
   kmt->spin_lock(&sem->lock);
+  kmt->spin_lock(&ptable.lk);
   // log("\nkmt spin unlock %s\nsem_value %d\n", sem->name, sem->value);
   // log("signal value b %d\n", sem->value);
   sem->value++;
@@ -324,6 +323,7 @@ static void kmt_sem_signal(sem_t *sem) {
     log("after wake sem->start:%d ----- name: %s\n", sem->start,
         sem->list[sem->start]->name);
   }
+  kmt->spin_unlock(&ptable.lk);
   kmt->spin_unlock(&sem->lock);
 }
 
