@@ -45,11 +45,12 @@ int main(int argc, char *argv[]) {
     fseek(fp, 0L, SEEK_END);
     int fsize = ftell(fp);
     int incre = 0;
+    fseek(fp, 0L, SEEK_SET);
 
     // search file
-    for (int pos = 0; pos < fsize; pos++) {
+    while (ftell(fp) < fsize) {
       BMPHeader head;
-      fseek(fp, pos, SEEK_SET);
+      fseek(fp, 1, SEEK_CUR);
       fread(&head, sizeof(BMPHeader), 1, fp);
       if ((head.bfType[0] != 'B') || (head.bfType[1] != 'M')) continue;
       char outfilename[32];
