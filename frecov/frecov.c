@@ -52,7 +52,9 @@ int main(int argc, char *argv[]) {
       BMPHeader head;
       fseek(fp, 1, SEEK_CUR);
       fread(&head, sizeof(BMPHeader), 1, fp);
-      if ((head.bfType[0] != 'B') || (head.bfType[1] != 'M')) continue;
+      if ((head.bfType[0] != 'B') || (head.bfType[1] != 'M') ||
+          (head.bfReserved1 != 0) || (head.bfReserved2 != 0))
+        continue;
       char outfilename[32];
       snprintf(outfilename, 32, "%s_%d.bmp", filename, ++incre);
 
