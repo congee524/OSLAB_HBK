@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 
       FILE *outfp;
       outfp = fopen(outfilename, "a");
-      char bmptmp[head.bfSize + HEADSIZE];
+      char bmptmp[head.bfSize + head.bfOffBits];
       fread(bmptmp, sizeof(bmptmp), 1, fp);
       fwrite(bmptmp, sizeof(bmptmp), 1, outfp);
       fclose(outfp);
