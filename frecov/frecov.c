@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   while (ca < argc) {
     // read file
     FILE *fp;
-    char *filename = argv[++ca];
+    char *filename = argv[ca++];
     fp = fopen(filename, "r");
     if (!fp) {
       printf("Wrong filename %s!\n", filename);
