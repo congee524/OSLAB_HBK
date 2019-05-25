@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define HEADSIZE 42
+
 typedef struct BMPHEADER {
   char bfType[2];
   unsigned int bfSize;
@@ -43,12 +45,11 @@ int main(int argc, char *argv[]) {
     fseek(fp, 0L, SEEK_END);
     int fsize = ftell(fp);
     int incre = 0;
-    fseek(fp, 0, SEEK_SET);
 
     // search file
-    while (ftell(fp) < fsize) {
+    for (int pos = 0; pos < fsize; pos++) {
       BMPHeader head;
-      fseek(fp, 1, SEEK_CUR);
+      fseek(fp, pos, SEEK_SET);
       fread(&head, sizeof(BMPHeader), 1, fp);
       if ((head.bfType[0] != 'B') || (head.bfType[1] != 'M')) continue;
       char outfilename[32];
@@ -56,7 +57,7 @@ int main(int argc, char *argv[]) {
 
       FILE *outfp;
       outfp = fopen(outfilename, "a");
-      char bmptmp[head.bfSize];
+      char bmptmp[head.bfSize + HEADSIZE];
       fread(bmptmp, sizeof(bmptmp), 1, fp);
       fwrite(bmptmp, sizeof(bmptmp), 1, outfp);
       fclose(outfp);
