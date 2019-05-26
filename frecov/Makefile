@@ -4,3 +4,8 @@ all: $(NAME)-64 $(NAME)-32
 
 include ../Makefile
 include ../Makefile.lab
+
+.PHONY: clc
+
+clc:
+	rm *.bmp

@@ -1,6 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct BootEntry {
+  // __attribute__((packed)) means align according to the actual bytes occupied
+  unsigned char BS_jmpBoot[3] __attribute__((packed));
+  unsigned char BS_OEMName[8] __attribute__((packed));
+  unsigned short BPB_BytsPerSec __attribute__((packed));
+  unsigned char BPB_SecPerClus __attribute__((packed));
+  unsigned short BPB_RsvdSecCnt __attribute__((packed));
+  unsigned char BPB_NumFATs __attribute__((packed));
+  unsigned short BPB_RootEntCnt __attribute__((packed));
+  unsigned short BPB_TotSec16 __attribute__((packed));
+  unsigned char BPB_Media __attribute__((packed));
+  unsigned short BPB_FATSz16 __attribute__((packed));
+  unsigned short BPB_SecPerTrk __attribute__((packed));
+  unsigned short BPB_NumHeads __attribute__((packed));
+  unsigned long BPB_HiddSec __attribute__((packed));
+  unsigned long BPB_TotSec32 __attribute__((packed));
+  unsigned long BPB_FATSz32 __attribute__((packed));
+  unsigned short BPB_ExtFlags __attribute__((packed));
+  unsigned short BPB_FSVer __attribute__((packed));
+  unsigned long BPB_RootClus __attribute__((packed));
+  unsigned short BPB_FSInfo __attribute__((packed));
+  unsigned short BPB_BkBootSec __attribute__((packed));
+  unsigned char BPB_Reserved[12] __attribute__((packed));
+  unsigned char BS_DrvNum __attribute__((packed));
+  unsigned char BS_Reserved1 __attribute__((packed));
+  unsigned char BS_BootSig __attribute__((packed));
+  unsigned long BS_VolID __attribute__((packed));
+  unsigned char BS_VolLab[11] __attribute__((packed));
+  unsigned char BS_FilSysType[8] __attribute__((packed));
+} BootEntry;
+
+typedef struct DirEntry {
+  unsigned char DIR_Name[11] __attribute__((packed));
+  unsigned char DIR_Attr __attribute__((packed));
+  unsigned char DIR_NTRes __attribute__((packed));
+  unsigned char DIR_CrtTimeTenth __attribute__((packed));
+  unsigned short DIR_CrtTime __attribute__((packed));
+  unsigned short DIR_CrtDate __attribute__((packed));
+  unsigned short DIR_LstAccDate __attribute__((packed));
+  unsigned short DIR_FstClusHI __attribute__((packed));
+  unsigned short DIR_WrtTime __attribute__((packed));
+  unsigned short DIR_WrtDate __attribute__((packed));
+  unsigned short DIR_FstClusLO __attribute__((packed));
+  unsigned long DIR_FileSize __attribute__((packed));
+} DirEntry;
+
+/*
 #define HEADSIZE 42
 
 typedef struct BMPHEADER {
@@ -11,7 +58,7 @@ typedef struct BMPHEADER {
   unsigned int bfOffBits;
 } BMPHeader;
 
-/*bmp info header*/
+// bmp info header
 typedef struct BMPInfoHeader {
   unsigned int biSize;
   int biWidth;
@@ -68,3 +115,5 @@ int main(int argc, char *argv[]) {
   }
   return 0;
 }
+
+*/
