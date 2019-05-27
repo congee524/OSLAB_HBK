@@ -6,6 +6,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <wchar.h>
 
 #define DOS_DIR_SIZE 512
 
