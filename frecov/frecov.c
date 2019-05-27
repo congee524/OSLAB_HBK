@@ -145,13 +145,13 @@ int main(int argc, char *argv[]) {
         lname_cnt--;
         while (lname_cnt--) {
           for (int i = 0; i < 5; i++) {
-            *(--nbuffer) = (char)(LFN->name1[i]);
+            if (LFN->name1[i] != 0xf) *(--nbuffer) = (char)(LFN->name1[i]);
           }
           for (int i = 0; i < 6; i++) {
-            *(--nbuffer) = (char)(LFN->name1[i]);
+            if (LFN->name1[i] != 0xf) *(--nbuffer) = (char)(LFN->name1[i]);
           }
           for (int i = 0; i < 2; i++) {
-            *(--nbuffer) = (char)(LFN->name1[i]);
+            if (LFN->name1[i] != 0xf) *(--nbuffer) = (char)(LFN->name1[i]);
           }
         }
         printf("%s\n", nbuffer);
