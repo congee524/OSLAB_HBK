@@ -66,16 +66,16 @@ typedef struct {
 
 typedef struct {
   BYTE SequeNumber;  // 0x00 序列号
-  // wchar_t name1[5];  // 0x01 文件名的第1-5个Unicode码字符
-  char name1[10];
-  BYTE Attr;       // 0x0b 属性标志 0xOF固定值
-  BYTE Reserved1;  // 0x0c 保留未用
-  BYTE CheckSum;   // 0x0d 短文件名检验和
-  // wchar_t name2[6];  // 0x0e 文件名的第6-11个Unicode码字符
-  char name2[12];
-  WORD Reserved2;  // 0x1A 保留未用 始终为0
-  // wchar_t name3[2];  // 0x1c 文件名的第12-13个Unicode码字符
-  char name3[4];
+  wchar_t name1[5];  // 0x01 文件名的第1-5个Unicode码字符
+  // char name1[10];
+  BYTE Attr;         // 0x0b 属性标志 0xOF固定值
+  BYTE Reserved1;    // 0x0c 保留未用
+  BYTE CheckSum;     // 0x0d 短文件名检验和
+  wchar_t name2[6];  // 0x0e 文件名的第6-11个Unicode码字符
+  // char name2[12];
+  WORD Reserved2;    // 0x1A 保留未用 始终为0
+  wchar_t name3[2];  // 0x1c 文件名的第12-13个Unicode码字符
+  // char name3[4];
 } __attribute__((__packed__)) LFNEntry;
 
 int main(int argc, char *argv[]) {
