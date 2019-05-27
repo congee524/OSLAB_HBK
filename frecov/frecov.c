@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
         int lname_cnt = SEQDIR(LFN->SequeNumber);
         // printf("lname_cnt %d: ", lname_cnt);
         char name_buffer[32];
-        name_buffer[31] = '\0';
+        memset(name_buffer, '\0', sizeof(name_buffer));
         char *nbuffer = &name_buffer[31];
         nbuffer = trname(LFN, nbuffer);
         lname_cnt--;
