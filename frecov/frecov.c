@@ -126,7 +126,6 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
         for (int i = 0; i < 4; i++) printf("%c", LFN->name3[i]);
-        printf("\n");
       }
     }
   }
