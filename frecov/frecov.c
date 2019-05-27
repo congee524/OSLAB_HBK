@@ -108,7 +108,8 @@ int main(int argc, char *argv[]) {
 
     DirEntry dirEntry;
     for (int i = 0; i < 10; i++) {
-      printf("dir addr: %d", rootDir_SecNum * bps + i * sizeof(DirEntry));
+      printf("dir addr: %d",
+             (int)(rootDir_SecNum * bps + i * sizeof(DirEntry)));
       memcpy(&dirEntry, addr + rootDir_SecNum * bps + i * sizeof(DirEntry),
              sizeof(DirEntry));
       printf("%d: %s %s (first char = %x)\n", i, dirEntry.Name,
