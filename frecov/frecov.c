@@ -1,5 +1,4 @@
 #include <fcntl.h>
-#include <locale.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +6,6 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <wchar.h>
 
 #define DOS_DIR_SIZE 512
 
@@ -17,6 +15,7 @@ typedef uint32_t DWORD;
 
 #define LASTDIR(num) ((num >> 6) & 1)
 #define SEQDIR(num) (num & 0b11111)
+#define HEAD(num) (num >>)
 
 typedef struct {
   BYTE BS_jmpBoot[3];             // 0X00 跳跃指令
@@ -82,21 +81,23 @@ char *trname(LFNEntry *LFN, char *nbuffer) {
   char tmp_na;
   for (int i = 1; i >= 0; i--) {
     tmp_na = (char)LFN->name3[i];
-    if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    if (tmp_na) *(--nbuffer) = tmp_na;
   }
   for (int i = 5; i >= 0; i--) {
     tmp_na = (char)LFN->name2[i];
-    if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    if (tmp_na) *(--nbuffer) = tmp_na;
   }
   for (int i = 4; i >= 0; i--) {
     tmp_na = (char)LFN->name1[i];
-    if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    if (tmp_na) *(--nbuffer) = tmp_na;
   }
   return nbuffer;
 }
 
 int main(int argc, char *argv[]) {
-  setlocale(LC_ALL, "");
   if (argc <= 1) {
     printf("PLEASE INPUT FILENAME!\n");
     return 0;
