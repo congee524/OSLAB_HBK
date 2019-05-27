@@ -149,6 +149,7 @@ int main(int argc, char *argv[]) {
         lname_cnt--;
         while (lname_cnt--) {
           pos += 32;
+          LFN = (LFNEntry *)(addr + pos);
           for (int i = 1; i >= 0; i--) {
             tmp_na = (char)LFN->name3[i];
             if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
