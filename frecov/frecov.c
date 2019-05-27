@@ -70,8 +70,8 @@ int main(int argc, char *argv[]) {
     char *addr;
     int fd;
     struct stat sb;
-    size_t length;
-    ssize_t s;
+    // size_t length;
+    // ssize_t s;
 
     char *filename = argv[ca++];
     fd = open(filename, O_RDONLY);
@@ -104,6 +104,8 @@ int main(int argc, char *argv[]) {
     // 第二个FAT表还需加上第一个FAT表的扇区数
     FAT_ind[0] = bootEntry.BPBReservedSectorCount;
     FAT_ind[1] = bootEntry.BPBReservedSectorCount + bootEntry.PBPSectorPerFAT;
+    printf("FAT1 : %d\n", FAT_ind[0]);
+    printf("FAT2 : %d\n", FAT_ind[1]);
   }
   return 0;
 }
