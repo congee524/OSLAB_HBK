@@ -120,7 +120,6 @@ int main(int argc, char *argv[]) {
     for (int pos = data_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f) {
-        printf("at pos %d: ", pos);
         printf("%ls", LFN->name1);
         printf("%ls", LFN->name2);
         printf("%ls\n\n", LFN->name3);
