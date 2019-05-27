@@ -130,9 +130,31 @@ int main(int argc, char *argv[]) {
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
         int lname_cnt = SEQDIR(LFN->SequeNumber);
         printf("lname_cnt %d: ", lname_cnt);
-        printf("%s", (char *)LFN->name1);
-        printf("%s", (char *)LFN->name2);
-        printf("%s\n", (char *)LFN->name3);
+        char name_buffer[32];
+        name_buffer[31] = '\0';
+        char *nbuffer = &name_buffer[31];
+        for (int i = 0; i < 5; i++) {
+          *(--nbuffer) = (char)(LFN->name1[i]);
+        }
+        for (int i = 0; i < 5; i++) {
+          *(--nbuffer) = (char)(LFN->name1[i]);
+        }
+        for (int i = 0; i < 5; i++) {
+          *(--nbuffer) = (char)(LFN->name1[i]);
+        }
+        lname_cnt--;
+        while (lname_cnt--) {
+          for (int i = 0; i < 5; i++) {
+            *(--nbuffer) = (char)(LFN->name1[i]);
+          }
+          for (int i = 0; i < 5; i++) {
+            *(--nbuffer) = (char)(LFN->name1[i]);
+          }
+          for (int i = 0; i < 5; i++) {
+            *(--nbuffer) = (char)(LFN->name1[i]);
+          }
+        }
+        printf("%s\n", nbuffer);
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
