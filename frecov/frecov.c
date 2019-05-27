@@ -78,6 +78,25 @@ typedef struct {
   // char name3[4];
 } __attribute__((__packed__)) LFNEntry;
 
+void trname(LFNEntry *LFN, char *nbuffer) {
+  char tmp_na;
+  for (int i = 1; i >= 0; i--) {
+    tmp_na = (char)LFN->name3[i];
+    // if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    if (tmp_na) *(--nbuffer) = tmp_na;
+  }
+  for (int i = 5; i >= 0; i--) {
+    tmp_na = (char)LFN->name2[i];
+    // if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    if (tmp_na) *(--nbuffer) = tmp_na;
+  }
+  for (int i = 4; i >= 0; i--) {
+    tmp_na = (char)LFN->name1[i];
+    // if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
+    if (tmp_na) *(--nbuffer) = tmp_na;
+  }
+}
+
 int main(int argc, char *argv[]) {
   setlocale(LC_ALL, "");
   if (argc <= 1) {
@@ -133,35 +152,12 @@ int main(int argc, char *argv[]) {
         char name_buffer[32];
         name_buffer[31] = '\0';
         char *nbuffer = &name_buffer[31];
-        char tmp_na;
-        for (int i = 1; i >= 0; i--) {
-          tmp_na = (char)LFN->name3[i];
-          if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
-        }
-        for (int i = 5; i >= 0; i--) {
-          tmp_na = (char)LFN->name2[i];
-          if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
-        }
-        for (int i = 4; i >= 0; i--) {
-          tmp_na = (char)LFN->name1[i];
-          if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
-        }
+        trname(LFN, nbuffer);
         lname_cnt--;
         while (lname_cnt--) {
           pos += 32;
           LFN = (LFNEntry *)(addr + pos);
-          for (int i = 1; i >= 0; i--) {
-            tmp_na = (char)LFN->name3[i];
-            if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
-          }
-          for (int i = 5; i >= 0; i--) {
-            tmp_na = (char)LFN->name2[i];
-            if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
-          }
-          for (int i = 4; i >= 0; i--) {
-            tmp_na = (char)LFN->name1[i];
-            if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
-          }
+          trname(LFN, nbuffer);
         }
         printf("%s\n", nbuffer);
         /*
