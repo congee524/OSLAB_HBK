@@ -59,6 +59,17 @@ typedef struct {
   DWORD FileSize;             // 0x1C 文件大小（Byte为单位）
 } __attribute__((__packed__)) DirEntry;
 
+typedef struct {
+  BYTE SequeNumber;  // 0x00 序列号
+  wchar_t name1[5];  // 0x01 文件名的第1-5个Unicode码字符
+  BYTE Attr;         // 0x0b 属性标志 0xOF固定值
+  BYTE Reserved1;    // 0x0c 保留未用
+  BYTE CheckSum;     // 0x0d 短文件名检验和
+  wchar_t name2[6];  // 0x0e 文件名的第6-11个Unicode码字符
+  WORD Reserved2;    // 0x1A 保留未用 始终为0
+  wchar_t name3[2];  // 0x1c 文件名的第12-13个Unicode码字符
+} __attribute__((__packed__)) LFNEntry;
+
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
     printf("PLEASE INPUT FILENAME!\n");
@@ -100,18 +111,19 @@ int main(int argc, char *argv[]) {
     printf("Number of FATs = %d\n", bootEntry.BPBNumberOfFATs);
     printf("Number of FAT sectors = %d\n", bootEntry.PBPSectorPerFAT);
 
-    int data_SecNum =
-        (int)bootEntry.BPBReservedSectorCount +
-        (int)bootEntry.BPBNumberOfFATs * (int)bootEntry.PBPSectorPerFAT;
-    int rootDir_SecNum =
-        data_SecNum + ((int)bootEntry.BPBRootDirectoryCluster - 2) * spc;
-    printf("data %d root %d\n", data_SecNum, rootDir_SecNum);
-    DirEntry *dirEntry;
-    for (int i = 0; i < 16; i++) {
-      dirEntry =
-          (DirEntry *)(addr + rootDir_SecNum * bps + i * sizeof(DirEntry));
-      printf("%d: %s %s (first char = 0x%x)\n", i, dirEntry->Name,
-             dirEntry->ExtendName, dirEntry->Name[5]);
+    int data_SecNum = bootEntry.BPBReservedSectorCount +
+                      bootEntry.BPBNumberOfFATs * bootEntry.PBPSectorPerFAT;
+    // int rootDir_SecNum = data_SecNum + (bootEntry.BPBRootDirectoryCluster -
+    // 2) * spc;
+
+    for (int pos = data_SecNum * bps; pos < sb.st_size; pos += 32) {
+      LFNEntry *LFN = (LFNEntry *)(addr + pos);
+      if (LFN->Attr == 0x0f) {
+        printf("at pos %d: ", pos);
+        printf("%ws", LFN->name1);
+        printf("%ws", LFN->name2);
+        printf("%ws\n\n", LFN->name3);
+      }
     }
   }
   return 0;
