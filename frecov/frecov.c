@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
                       bootEntry.BPBNumberOfFATs * bootEntry.PBPSectorPerFAT;
     int rootDir_SecNum =
         data_SecNum + (bootEntry.BPBRootDirectoryCluster - 2) * spc;
-
+    printf("%d\n\n", sizeof(LFNEntry));
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
