@@ -120,9 +120,9 @@ int main(int argc, char *argv[]) {
     for (int pos = data_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f) {
-        printf("%ls", LFN->name1);
-        printf("%ls", LFN->name2);
-        printf("%ls", LFN->name3);
+        printf("0x%x ", (WORD)LFN->name1[0]);
+        printf("0x%x ", (WORD)LFN->name2[0]);
+        printf("0x%x ", (WORD)LFN->name3[0]);
       }
     }
   }
