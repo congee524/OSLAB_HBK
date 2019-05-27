@@ -65,16 +65,16 @@ typedef struct {
 
 typedef struct {
   BYTE SequeNumber;  // 0x00 序列号
-  wchar_t name1[5];  // 0x01 文件名的第1-5个Unicode码字符
-  // char name1[10];
-  BYTE Attr;         // 0x0b 属性标志 0xOF固定值
-  BYTE Reserved1;    // 0x0c 保留未用
-  BYTE CheckSum;     // 0x0d 短文件名检验和
-  wchar_t name2[6];  // 0x0e 文件名的第6-11个Unicode码字符
-  // char name2[12];
-  WORD Reserved2;    // 0x1A 保留未用 始终为0
-  wchar_t name3[2];  // 0x1c 文件名的第12-13个Unicode码字符
-  // char name3[4];
+  // wchar_t name1[5];  // 0x01 文件名的第1-5个Unicode码字符
+  char name1[10];
+  BYTE Attr;       // 0x0b 属性标志 0xOF固定值
+  BYTE Reserved1;  // 0x0c 保留未用
+  BYTE CheckSum;   // 0x0d 短文件名检验和
+  // wchar_t name2[6];  // 0x0e 文件名的第6-11个Unicode码字符
+  char name2[12];
+  WORD Reserved2;  // 0x1A 保留未用 始终为0
+  // wchar_t name3[2];  // 0x1c 文件名的第12-13个Unicode码字符
+  char name3[4];
 } __attribute__((__packed__)) LFNEntry;
 
 int main(int argc, char *argv[]) {
@@ -127,9 +127,9 @@ int main(int argc, char *argv[]) {
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
-        printf("%S", LFN->name1);
-        printf("%S", LFN->name2);
-        printf("%S\n", LFN->name3);
+        printf("%ls", LFN->name1);
+        printf("%ls", LFN->name2);
+        printf("%ls\n", LFN->name3);
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
