@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
   int ca = 1;
   while (ca < argc) {
     BootEntry bootEntry;
-    DirEntry DirEntry;
+    // DirEntry dirEntry;
     char *addr;
     int fd;
     struct stat sb;
