@@ -136,10 +136,10 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < 5; i++) {
           *(--nbuffer) = (char)(LFN->name1[i]);
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
           *(--nbuffer) = (char)(LFN->name1[i]);
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
           *(--nbuffer) = (char)(LFN->name1[i]);
         }
         lname_cnt--;
@@ -147,10 +147,10 @@ int main(int argc, char *argv[]) {
           for (int i = 0; i < 5; i++) {
             *(--nbuffer) = (char)(LFN->name1[i]);
           }
-          for (int i = 0; i < 5; i++) {
+          for (int i = 0; i < 6; i++) {
             *(--nbuffer) = (char)(LFN->name1[i]);
           }
-          for (int i = 0; i < 5; i++) {
+          for (int i = 0; i < 2; i++) {
             *(--nbuffer) = (char)(LFN->name1[i]);
           }
         }
