@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
     int rootDir_SecNum =
         data_SecNum + ((int)bootEntry.BPBRootDirectoryCluster - 2) * spc;
     printf("data %d root %d\n", data_SecNum, rootDir_SecNum);
-
+    rootDir_SecNum = 2050;
     DirEntry *dirEntry;
     for (int i = 0; i < 16; i++) {
       dirEntry =
