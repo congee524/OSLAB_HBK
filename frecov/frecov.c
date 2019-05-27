@@ -1,4 +1,5 @@
 #include <fcntl.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,9 +9,9 @@
 
 #define DOS_DIR_SIZE 512
 
-typedef unsigned char BYTE;
-typedef unsigned short WORD;
-typedef unsigned long DWORD;
+typedef uint8_t BYTE;
+typedef uint16_t WORD;
+typedef uint32_t DWORD;
 
 typedef struct {
   BYTE BS_jmpBoot[3];             // 0X00 跳跃指令
@@ -98,7 +99,7 @@ int main(int argc, char *argv[]) {
 
     printf("Reserved Sector Count = %d\n", bootEntry.BPBReservedSectorCount);
     printf("Number of FATs = %d\n", bootEntry.BPBNumberOfFATs);
-    printf("Number of FAT sectors = %d\n", bootEntry.PBPSectorPerFAT);
+    printf("Number of FAT sectors = %ld\n", bootEntry.PBPSectorPerFAT);
     int FAT_ind[2];
     // 保留扇区结束后即第一个FAT表,
     // 第二个FAT表还需加上第一个FAT表的扇区数
