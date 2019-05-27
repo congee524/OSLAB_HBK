@@ -121,9 +121,9 @@ int main(int argc, char *argv[]) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f) {
         printf("at pos %d: ", pos);
-        printf("%ws", LFN->name1);
-        printf("%ws", LFN->name2);
-        printf("%ws\n\n", LFN->name3);
+        printf("%ls", LFN->name1);
+        printf("%ls", LFN->name2);
+        printf("%ls\n\n", LFN->name3);
       }
     }
   }
