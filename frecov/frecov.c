@@ -101,15 +101,14 @@ int main(int argc, char *argv[]) {
     printf("Number of FAT sectors = %d\n", bootEntry.PBPSectorPerFAT);
 
     int data_SecNum =
-        bootEntry.BPBReservedSectorCount + 2 * bootEntry.PBPSectorPerFAT;
+        (int)bootEntry.BPBReservedSectorCount +
+        (int)bootEntry.BPBNumberOfFATs * (int)bootEntry.PBPSectorPerFAT;
     int rootDir_SecNum =
-        data_SecNum + (bootEntry.BPBRootDirectoryCluster - 2) * spc;
+        data_SecNum + ((int)bootEntry.BPBRootDirectoryCluster - 2) * spc;
     printf("data %d root %d\n", data_SecNum, rootDir_SecNum);
 
     DirEntry dirEntry;
-    for (int i = 0; i < 10; i++) {
-      printf("dir addr: %d",
-             (int)(rootDir_SecNum * bps + i * sizeof(DirEntry)));
+    for (int i = 0; i < 16; i++) {
       memcpy(&dirEntry, addr + rootDir_SecNum * bps + i * sizeof(DirEntry),
              sizeof(DirEntry));
       printf("%d: %s %s (first char = %x)\n", i, dirEntry.Name,
