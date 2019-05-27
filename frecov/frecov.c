@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
-        printf("%ls%ls%ls\n", (*LFN->name1), (*LFN->name2), (*LFN->name3));
+        printf("%ls%ls%ls\n", (LFN->name1), (LFN->name2), (LFN->name3));
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
