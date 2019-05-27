@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
         printf("0x%x ", (WORD)LFN->name1[0]);
         printf("0x%x ", (WORD)LFN->name2[0]);
         printf("0x%x ", (WORD)LFN->name3[0]);
+        printf("\n");
       }
     }
   }
