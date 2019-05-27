@@ -129,6 +129,7 @@ int main(int argc, char *argv[]) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
         int lname_cnt = SEQDIR(LFN->SequeNumber);
+        printf("lname_cnt %d: ", lname_cnt);
         char namebuffer[32];
         char *nbuffer = &namebuffer[31];
         for (int i = 1; i < 12; i += 2) {
