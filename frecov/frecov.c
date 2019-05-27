@@ -123,9 +123,10 @@ int main(int argc, char *argv[]) {
     for (int pos = data_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LFN->SequeNumber == 0xe5) {
-        printf("%s", LFN->name1);
-        printf("%s", LFN->name2);
-        printf("%s\n", LFN->name3);
+        for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
+        for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
+        for (int i = 0; i < 4; i++) printf("%c", LFN->name3[i]);
+        printf("\n");
       }
     }
   }
