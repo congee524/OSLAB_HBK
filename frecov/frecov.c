@@ -100,7 +100,6 @@ int main(int argc, char *argv[]) {
     printf("Number of FATs = %d\n", bootEntry.BPBNumberOfFATs);
     printf("Number of FAT sectors = %ld\n", bootEntry.PBPSectorPerFAT);
     int FAT_ind[2];
-    char *FAT;
     // 保留扇区结束后即第一个FAT表,
     // 第二个FAT表还需加上第一个FAT表的扇区数
     FAT_ind[0] = bootEntry.BPBReservedSectorCount;
