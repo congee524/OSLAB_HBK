@@ -107,6 +107,12 @@ int main(int argc, char *argv[]) {
     FAT_ind[1] = bootEntry.BPBReservedSectorCount + bootEntry.PBPSectorPerFAT;
     printf("FAT1 : %d\n", FAT_ind[0]);
     printf("FAT2 : %d\n", FAT_ind[1]);
+
+    int data_SecNum =
+        bootEntry.BPBReservedSectorCount + 2 * bootEntry.PBPSectorPerFAT;
+    int rootDir_SecNum =
+        data_SecNum + (bootEntry.BPBRootDirectoryCluster - 2) * spc;
+    printf("data %d root %d\n", data_SecNum, rootDir_SecNum);
   }
   return 0;
 }
