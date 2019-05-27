@@ -134,30 +134,30 @@ int main(int argc, char *argv[]) {
         name_buffer[31] = '\0';
         char *nbuffer = &name_buffer[31];
         char tmp_na;
-        for (int i = 4; i >= 0; i--) {
-          tmp_na = (char)LFN->name1[i];
+        for (int i = 1; i >= 0; i--) {
+          tmp_na = (char)LFN->name3[i];
           if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
         }
         for (int i = 5; i >= 0; i--) {
           tmp_na = (char)LFN->name2[i];
           if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
         }
-        for (int i = 1; i >= 0; i--) {
-          tmp_na = (char)LFN->name3[i];
+        for (int i = 4; i >= 0; i--) {
+          tmp_na = (char)LFN->name1[i];
           if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
         }
         lname_cnt--;
         while (lname_cnt--) {
-          for (int i = 4; i >= 0; i--) {
-            tmp_na = (char)LFN->name1[i];
+          for (int i = 1; i >= 0; i--) {
+            tmp_na = (char)LFN->name3[i];
             if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
           }
           for (int i = 5; i >= 0; i--) {
             tmp_na = (char)LFN->name2[i];
             if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
           }
-          for (int i = 1; i >= 0; i--) {
-            tmp_na = (char)LFN->name3[i];
+          for (int i = 4; i >= 0; i--) {
+            tmp_na = (char)LFN->name1[i];
             if (tmp_na >= 0x20 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
           }
         }
