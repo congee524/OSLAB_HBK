@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
         int lname_cnt = SEQDIR(LFN->SequeNumber);
-        printf("lname_cnt %d: ", lname_cnt);
+        // printf("lname_cnt %d: ", lname_cnt);
         char name_buffer[32];
         name_buffer[31] = '\0';
         char *nbuffer = &name_buffer[31];
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
           LFN = (LFNEntry *)(addr + pos);
           nbuffer = trname(LFN, nbuffer);
         }
-        printf("%s\n", nbuffer);
+        if (nbuffer != &name_buffer[31]) printf("%s\n", nbuffer);
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
