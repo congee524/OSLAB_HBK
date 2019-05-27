@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
       dirEntry =
           (DirEntry *)(addr + rootDir_SecNum * bps + i * sizeof(DirEntry));
       printf("%d: %s %s (first char = 0x%x)\n", i, dirEntry->Name,
-             dirEntry->ExtendName, dirEntry->Name[1]);
+             dirEntry->ExtendName, dirEntry->Name[5]);
     }
   }
   return 0;
