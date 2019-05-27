@@ -133,31 +133,32 @@ int main(int argc, char *argv[]) {
         char name_buffer[32];
         name_buffer[31] = '\0';
         char *nbuffer = &name_buffer[31];
+        char tmp_na;
         for (int i = 4; i >= 0; i--) {
-          if (LFN->name1[i] != 0xf && LFN->name1[i] != 0x0)
-            *(--nbuffer) = (char)(LFN->name1[i]);
+          tmp_na = (char)LFN->name1[i];
+          if (tmp_na) *(--nbuffer) = tmp_na;
         }
         for (int i = 5; i >= 0; i--) {
-          if (LFN->name2[i] != 0xf && LFN->name2[i] != 0x0)
-            *(--nbuffer) = (char)(LFN->name2[i]);
+          tmp_na = (char)LFN->name2[i];
+          if (tmp_na) *(--nbuffer) = tmp_na;
         }
         for (int i = 1; i >= 0; i--) {
-          if (LFN->name3[i] != 0xf && LFN->name3[i] != 0x0)
-            *(--nbuffer) = (char)(LFN->name3[i]);
+          tmp_na = (char)LFN->name3[i];
+          if (tmp_na) *(--nbuffer) = tmp_na;
         }
         lname_cnt--;
         while (lname_cnt--) {
           for (int i = 4; i >= 0; i--) {
-            if (LFN->name1[i] != 0xf && LFN->name1[i] != 0x0)
-              *(--nbuffer) = (char)(LFN->name1[i]);
+            tmp_na = (char)LFN->name1[i];
+            if (tmp_na) *(--nbuffer) = tmp_na;
           }
           for (int i = 5; i >= 0; i--) {
-            if (LFN->name2[i] != 0xf && LFN->name2[i] != 0x0)
-              *(--nbuffer) = (char)(LFN->name2[i]);
+            tmp_na = (char)LFN->name2[i];
+            if (tmp_na) *(--nbuffer) = tmp_na;
           }
           for (int i = 1; i >= 0; i--) {
-            if (LFN->name3[i] != 0xf && LFN->name3[i] != 0x0)
-              *(--nbuffer) = (char)(LFN->name3[i]);
+            tmp_na = (char)LFN->name3[i];
+            if (tmp_na) *(--nbuffer) = tmp_na;
           }
         }
         printf("%s\n", nbuffer);
