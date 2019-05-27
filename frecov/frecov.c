@@ -59,10 +59,6 @@ typedef struct {
   DWORD FileSize;             // 0x1C 文件大小（Byte为单位）
 } __attribute__((__packed__)) DirEntry;
 
-int read_sectors(int sector_number, unsigned char *buffer, int num_sectors) {
-  // 读取扇区,以扇区为最小单位
-}
-
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
     printf("PLEASE INPUT FILENAME!\n");
