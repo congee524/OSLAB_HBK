@@ -130,37 +130,9 @@ int main(int argc, char *argv[]) {
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
         int lname_cnt = SEQDIR(LFN->SequeNumber);
         printf("lname_cnt %d: ", lname_cnt);
-        char namebuffer[32];
-        char *nbuffer = &namebuffer[31];
-        for (int i = 1; i < 12; i += 2) {
-          if (LFN->name1[i] != 0x0 && LFN->name1[i] != 0xff)
-            *(--nbuffer) = LFN->name1[i];
-        }
-        for (int i = 1; i < 10; i += 2) {
-          if (LFN->name2[i] != 0x0 && LFN->name2[i] != 0xff)
-            *(--nbuffer) = LFN->name2[i];
-        }
-        for (int i = 1; i < 4; i += 2) {
-          if (LFN->name3[i] != 0x0 && LFN->name3[i] != 0xff)
-            *(--nbuffer) = LFN->name3[i];
-        }
-        while (lname_cnt--) {
-          pos += 32;
-          LFN = (LFNEntry *)(addr + pos);
-          for (int i = 1; i < 12; i += 2) {
-            if (LFN->name1[i] != 0x0 && LFN->name1[i] != 0xff)
-              *(--nbuffer) = LFN->name1[i];
-          }
-          for (int i = 1; i < 10; i += 2) {
-            if (LFN->name2[i] != 0x0 && LFN->name2[i] != 0xff)
-              *(--nbuffer) = LFN->name2[i];
-          }
-          for (int i = 1; i < 4; i += 2) {
-            if (LFN->name3[i] != 0x0 && LFN->name3[i] != 0xff)
-              *(--nbuffer) = LFN->name3[i];
-          }
-        }
-        printf("%s\n", nbuffer);
+        printf("%s", (char *)LFN->name1);
+        printf("%s", (char *)LFN->name2);
+        printf("%s\n", (char *)LFN->name3);
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
