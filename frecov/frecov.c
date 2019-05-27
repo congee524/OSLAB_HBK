@@ -133,29 +133,29 @@ int main(int argc, char *argv[]) {
         char name_buffer[32];
         name_buffer[31] = '\0';
         char *nbuffer = &name_buffer[31];
-        for (int i = 0; i < 5; i++) {
+        for (int i = 4; i >= 0; i--) {
           if (LFN->name1[i] != 0xf && LFN->name1[i] != 0x0)
             *(--nbuffer) = (char)(LFN->name1[i]);
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 5; i >= 0; i--) {
           if (LFN->name2[i] != 0xf && LFN->name2[i] != 0x0)
             *(--nbuffer) = (char)(LFN->name2[i]);
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 1; i >= 0; i--) {
           if (LFN->name3[i] != 0xf && LFN->name3[i] != 0x0)
             *(--nbuffer) = (char)(LFN->name3[i]);
         }
         lname_cnt--;
         while (lname_cnt--) {
-          for (int i = 0; i < 5; i++) {
+          for (int i = 4; i >= 0; i--) {
             if (LFN->name1[i] != 0xf && LFN->name1[i] != 0x0)
               *(--nbuffer) = (char)(LFN->name1[i]);
           }
-          for (int i = 0; i < 6; i++) {
+          for (int i = 5; i >= 0; i--) {
             if (LFN->name2[i] != 0xf && LFN->name2[i] != 0x0)
               *(--nbuffer) = (char)(LFN->name2[i]);
           }
-          for (int i = 0; i < 2; i++) {
+          for (int i = 1; i >= 0; i--) {
             if (LFN->name3[i] != 0xf && LFN->name3[i] != 0x0)
               *(--nbuffer) = (char)(LFN->name3[i]);
           }
