@@ -134,24 +134,30 @@ int main(int argc, char *argv[]) {
         name_buffer[31] = '\0';
         char *nbuffer = &name_buffer[31];
         for (int i = 0; i < 5; i++) {
-          *(--nbuffer) = (char)(LFN->name1[i]);
+          if (LFN->name1[i] != 0xf && LFN->name1[i] != 0x0)
+            *(--nbuffer) = (char)(LFN->name1[i]);
         }
         for (int i = 0; i < 6; i++) {
-          *(--nbuffer) = (char)(LFN->name2[i]);
+          if (LFN->name2[i] != 0xf && LFN->name2[i] != 0x0)
+            *(--nbuffer) = (char)(LFN->name2[i]);
         }
         for (int i = 0; i < 2; i++) {
-          *(--nbuffer) = (char)(LFN->name3[i]);
+          if (LFN->name3[i] != 0xf && LFN->name3[i] != 0x0)
+            *(--nbuffer) = (char)(LFN->name3[i]);
         }
         lname_cnt--;
         while (lname_cnt--) {
           for (int i = 0; i < 5; i++) {
-            if (LFN->name1[i] != 0xf) *(--nbuffer) = (char)(LFN->name1[i]);
+            if (LFN->name1[i] != 0xf && LFN->name1[i] != 0x0)
+              *(--nbuffer) = (char)(LFN->name1[i]);
           }
           for (int i = 0; i < 6; i++) {
-            if (LFN->name2[i] != 0xf) *(--nbuffer) = (char)(LFN->name2[i]);
+            if (LFN->name2[i] != 0xf && LFN->name2[i] != 0x0)
+              *(--nbuffer) = (char)(LFN->name2[i]);
           }
           for (int i = 0; i < 2; i++) {
-            if (LFN->name3[i] != 0xf) *(--nbuffer) = (char)(LFN->name3[i]);
+            if (LFN->name3[i] != 0xf && LFN->name3[i] != 0x0)
+              *(--nbuffer) = (char)(LFN->name3[i]);
           }
         }
         printf("%s\n", nbuffer);
