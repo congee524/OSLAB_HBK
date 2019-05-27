@@ -122,7 +122,8 @@ int main(int argc, char *argv[]) {
       if (LFN->Attr == 0x0f) {
         printf("%ls", LFN->name1);
         printf("%ls", LFN->name2);
-        printf("%ls\n\n", LFN->name3);
+        printf("%ls", LFN->name3);
+        printf("\n");
       }
     }
   }
