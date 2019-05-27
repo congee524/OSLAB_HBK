@@ -59,6 +59,10 @@ typedef struct {
   DWORD FileSize;             // 0x1C 文件大小（Byte为单位）
 } __attribute__((__packed__)) DirEntry;
 
+int read_sectors(int sector_number, unsigned char *buffer, int num_sectors) {
+  // 读取扇区,以扇区为最小单位
+}
+
 int main(int argc, char *argv[]) {
   if (argc <= 1) {
     printf("PLEASE INPUT FILENAME!\n");
@@ -67,7 +71,6 @@ int main(int argc, char *argv[]) {
   int ca = 1;
   while (ca < argc) {
     BootEntry bootEntry;
-    // DirEntry dirEntry;
     char *addr;
     int fd;
     struct stat sb;
@@ -100,19 +103,20 @@ int main(int argc, char *argv[]) {
     printf("Reserved Sector Count = %d\n", bootEntry.BPBReservedSectorCount);
     printf("Number of FATs = %d\n", bootEntry.BPBNumberOfFATs);
     printf("Number of FAT sectors = %d\n", bootEntry.PBPSectorPerFAT);
-    int FAT_ind[2];
-    // 保留扇区结束后即第一个FAT表,
-    // 第二个FAT表还需加上第一个FAT表的扇区数
-    FAT_ind[0] = bootEntry.BPBReservedSectorCount;
-    FAT_ind[1] = bootEntry.BPBReservedSectorCount + bootEntry.PBPSectorPerFAT;
-    printf("FAT1 : %d\n", FAT_ind[0]);
-    printf("FAT2 : %d\n", FAT_ind[1]);
 
     int data_SecNum =
         bootEntry.BPBReservedSectorCount + 2 * bootEntry.PBPSectorPerFAT;
     int rootDir_SecNum =
         data_SecNum + (bootEntry.BPBRootDirectoryCluster - 2) * spc;
     printf("data %d root %d\n", data_SecNum, rootDir_SecNum);
+
+    DirEntry dirEntry;
+    for (int i = 0; i < 10; i++) {
+      memcpy(&dirEntry, addr + rootDir_SecNum * bps + i * sizeof(DirEntry),
+             sizeof(DirEntry));
+      printf("%d: %s %s (first char = %x)\n", i, dirEntry.Name,
+             dirEntry.ExtendName, dirEntry.Name[0]);
+    }
   }
   return 0;
 }
