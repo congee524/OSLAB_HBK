@@ -107,12 +107,11 @@ int main(int argc, char *argv[]) {
         data_SecNum + ((int)bootEntry.BPBRootDirectoryCluster - 2) * spc;
     printf("data %d root %d\n", data_SecNum, rootDir_SecNum);
 
-    DirEntry dirEntry;
+    DirEntry *dirEntry;
     for (int i = 0; i < 16; i++) {
-      memcpy(&dirEntry, addr + rootDir_SecNum * bps + i * sizeof(DirEntry),
-             sizeof(DirEntry));
-      printf("%d: %s %s (first char = %x)\n", i, dirEntry.Name,
-             dirEntry.ExtendName, dirEntry.Name[0]);
+      dirEntry = addr + rootDir_SecNum * bps + i * sizeof(DirEntry);
+      printf("%d: %s %s (first char = %x)\n", i, dirEntry->Name,
+             dirEntry->ExtendName, dirEntry->Name[0]);
     }
   }
   return 0;
