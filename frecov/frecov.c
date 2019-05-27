@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
           LFN = (LFNEntry *)(addr + pos);
           nbuffer = trname(LFN, nbuffer);
         }
-        if (nbuffer != &name_buffer[31]) printf("%s\n", nbuffer);
+        if ((&name_buffer[31] - nbuffer) > 8) printf("%s\n", nbuffer);
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
