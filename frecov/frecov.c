@@ -16,6 +16,7 @@ typedef uint16_t WORD;
 typedef uint32_t DWORD;
 
 #define LASTDIR(num) ((num >> 6) & 1)
+#define SEQDIR(num) (num & 0b11111)
 
 typedef struct {
   BYTE BS_jmpBoot[3];             // 0X00 跳跃指令
@@ -127,9 +128,38 @@ int main(int argc, char *argv[]) {
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       LFNEntry *LFN = (LFNEntry *)(addr + pos);
       if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
-        printf("%ls", (wchar_t *)L(*LFN->name1));
-        printf("%ls", (wchar_t *)L(*LFN->name2));
-        printf("%ls\n", (wchar_t *)L(*LFN->name3));
+        int lname_cnt = SEQDIR(LFN->SequeNumber);
+        char namebuffer[32];
+        char *nbuffer = &namebuffer[31];
+        for (int i = 1; i < 12; i += 2) {
+          if (LFN->name1[i] != 0x0 && LFN->name1[i] != 0xff)
+            *(--nbuffer) = LFN->name1[i];
+        }
+        for (int i = 1; i < 10; i += 2) {
+          if (LFN->name2[i] != 0x0 && LFN->name2[i] != 0xff)
+            *(--nbuffer) = LFN->name2[i];
+        }
+        for (int i = 1; i < 4; i += 2) {
+          if (LFN->name3[i] != 0x0 && LFN->name3[i] != 0xff)
+            *(--nbuffer) = LFN->name3[i];
+        }
+        while (lname_cnt--) {
+          pos += 32;
+          LFN = (LFNEntry *)(addr + pos);
+          for (int i = 1; i < 12; i += 2) {
+            if (LFN->name1[i] != 0x0 && LFN->name1[i] != 0xff)
+              *(--nbuffer) = LFN->name1[i];
+          }
+          for (int i = 1; i < 10; i += 2) {
+            if (LFN->name2[i] != 0x0 && LFN->name2[i] != 0xff)
+              *(--nbuffer) = LFN->name2[i];
+          }
+          for (int i = 1; i < 4; i += 2) {
+            if (LFN->name3[i] != 0x0 && LFN->name3[i] != 0xff)
+              *(--nbuffer) = LFN->name3[i];
+          }
+        }
+        printf("%s\n", nbuffer);
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
