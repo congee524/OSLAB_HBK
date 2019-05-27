@@ -162,6 +162,7 @@ int main(int argc, char *argv[]) {
           nbuffer = trname(LFN, nbuffer);
         }
         if ((&name_buffer[31] - nbuffer) > 8) printf("%s\n", nbuffer);
+        printf("%d\n", (&name_buffer[31] - nbuffer));
         /*
         for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
         for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
