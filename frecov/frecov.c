@@ -161,8 +161,9 @@ int main(int argc, char *argv[]) {
     memcpy(&bootEntry, addr, sizeof(bootEntry));
     int bps = bootEntry.BPBBytesPerSector;      // 每扇区字节
     int spc = bootEntry.BPBSectorsPerClusters;  // 每簇扇区
-    printf("Name = %s\n", bootEntry.BS_OEMName);
     /*
+    printf("Name = %s\n", bootEntry.BS_OEMName);
+
     printf("Bytes per Sector = %d\n", bps);
     printf("Sector per Cluster = %d\n", spc);
 
@@ -174,7 +175,7 @@ int main(int argc, char *argv[]) {
                       bootEntry.BPBNumberOfFATs * bootEntry.PBPSectorPerFAT;
     int rootDir_SecNum =
         data_SecNum + (bootEntry.BPBRootDirectoryCluster - 2) * spc;
-    printf("%d\n\n", (int)sizeof(LFNEntry));
+    // printf("%d\n\n", (int)sizeof(LFNEntry));
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
       if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
