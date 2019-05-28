@@ -106,8 +106,8 @@ typedef struct {
 
 char *trname(LFNEntry *LFN, char *nbuffer) {
   char tmp_na;
-  for (int i = 4; i >= 0; i--) {
-    tmp_na = (char)LFN->Name1[i];
+  for (int i = 1; i >= 0; i--) {
+    tmp_na = (char)LFN->Name3[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
     *(nbuffer++) = tmp_na;
@@ -118,8 +118,8 @@ char *trname(LFNEntry *LFN, char *nbuffer) {
     // if (tmp_na) *(--nbuffer) = tmp_na;
     *(nbuffer++) = tmp_na;
   }
-  for (int i = 1; i >= 0; i--) {
-    tmp_na = (char)LFN->Name3[i];
+  for (int i = 4; i >= 0; i--) {
+    tmp_na = (char)LFN->Name1[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
     *(nbuffer++) = tmp_na;
