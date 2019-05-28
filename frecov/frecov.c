@@ -203,10 +203,16 @@ int main(int argc, char *argv[]) {
           // printf("%s\n", tmp_name);
 
         } else {
-          memcpy(tmp_name, dirE->Name, min(sizeof(dirE->Name), 8));
-          memcpy(tmp_name + strlen(tmp_name), ".", 1);
-          memcpy(tmp_name + strlen(tmp_name), dirE->ExtendName, 3);
-          printf("%s\n", tmp_name);
+          int i = 0;
+          for (; i < 8 && dirE->Name[i] != 0x20 && dirE->Name[i] != 0; i++) {
+            tmp_name[i] = dirE->Name[i];
+          }
+          tmp_name[i++] = '.';
+          for (;
+               i < 3 && dirE->ExtendName[i] != 0x20 && dirE->ExtendName[i] != 0;
+               i++) {
+            tmp_name[i] = dirE->ExtendName[i];
+          }
         }
 
         int fcluster =
