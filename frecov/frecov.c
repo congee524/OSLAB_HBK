@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
           }
           memcpy(tmp_name, nbuffer, 32);
           if (tmp_name[0] < 0x30 || tmp_name[1] > 0x7a) continue;
-          printf("%s\n", tmp_name);
+          // printf("%s\n", tmp_name);
 
         } else {
           memcpy(tmp_name, dirE->Name, 8);
