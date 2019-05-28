@@ -110,19 +110,20 @@ char *trname(LFNEntry *LFN, char *nbuffer) {
     tmp_na = (char)LFN->Name3[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
-    *(nbuffer++) = tmp_na;
+    *(--nbuffer) = tmp_na;
   }
+
   for (int i = 5; i >= 0; i--) {
     tmp_na = (char)LFN->Name2[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
-    *(nbuffer++) = tmp_na;
+    *(--nbuffer) = tmp_na;
   }
   for (int i = 4; i >= 0; i--) {
     tmp_na = (char)LFN->Name1[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
-    *(nbuffer++) = tmp_na;
+    *(--nbuffer) = tmp_na;
   }
   return nbuffer;
 }
@@ -183,25 +184,31 @@ int main(int argc, char *argv[]) {
 
         LFNEntry *LFN = (LFNEntry *)(addr + pos - 32);
         if (LFN->Attr == 0x0f) {
-          char *nbuffer = &tmp_name[0];
-          while (1) {
-            nbuffer = trname(LFN, nbuffer);
-            if (LASTDIR(LFN->SequeNumber) == 1) break;
+          char name_buffer[32];
+          memset(name_buffer, '\0', sizeof(name_buffer));
+          char *nbuffer = &name_buffer[32];
+
+          while (LASTDIR(LFN->SequeNumber) != 1) {
             LFN--;
-            if (LFN->Attr != 0x0f) break;
           }
+          while (LFN->Attr == 0x0f) {
+            nbuffer = trname(LFN, nbuffer);
+            LFN++;
+          }
+          memcpy(tmp_name, name_buffer, 32);
         } else {
           memcpy(tmp_name, dirE->Name, 8);
           memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
         }
         printf("%s\n", tmp_name);
-
+        /*
         int fcluster =
             dirE->FileStartClusterLow + (dirE->FileStartClusterHigh << 16);
         int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc;
         FILE *outfp = fopen(tmp_name, "a");
         fwrite(addr + (Bmp_SecNum * bps), dirE->FileSize, 1, outfp);
         fclose(outfp);
+        */
       }
     }
   }
