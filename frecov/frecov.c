@@ -149,11 +149,11 @@ int main(int argc, char *argv[]) {
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
       if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
-        printf("%s\n", dirE->Name);
+        printf("%s%s\n", dirE->Name, dirE->ExtendName);
       }
     }
   }
-  printf("%d\n", (int)sizeof(DirEntry));
+  // printf("%d\n", (int)sizeof(DirEntry));
   return 0;
 }
 
