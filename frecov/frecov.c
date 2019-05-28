@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
         memset(tmp_name, '\0', sizeof(tmp_name));
         memcpy(tmp_name, dirE->Name, 8);
         memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
-        printf("%s%s\n", tmp_name);
+        printf("%s\n", tmp_name);
       }
     }
   }
