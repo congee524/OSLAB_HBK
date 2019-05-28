@@ -151,12 +151,12 @@ int main(int argc, char *argv[]) {
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
       if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
-        if (dirE->Name[1] < 0x30 || dirE->Name[1] > 0x7A) continue;
-        // char tmp_name[32];
-        // memset(tmp_name, '\0', sizeof(tmp_name));
-        // memcpy(tmp_name, dirE->Name, 11);
-        // memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
-        printf("%s%s\n", dirE->Name, dirE->ExtendName);
+        if (strncmp(dirE->ExtendName, "BMP", 3) != 0) continue;
+        char tmp_name[32];
+        memset(tmp_name, '\0', sizeof(tmp_name));
+        memcpy(tmp_name, dirE->Name, 8);
+        memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
+        printf("%s%s\n", tmp_name);
       }
     }
   }
