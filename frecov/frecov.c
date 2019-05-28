@@ -162,13 +162,14 @@ int main(int argc, char *argv[]) {
     int bps = bootEntry.BPBBytesPerSector;      // 每扇区字节
     int spc = bootEntry.BPBSectorsPerClusters;  // 每簇扇区
     printf("Name = %s\n", bootEntry.BS_OEMName);
+    /*
     printf("Bytes per Sector = %d\n", bps);
     printf("Sector per Cluster = %d\n", spc);
 
     printf("Reserved Sector Count = %d\n", bootEntry.BPBReservedSectorCount);
     printf("Number of FATs = %d\n", bootEntry.BPBNumberOfFATs);
     printf("Number of FAT sectors = %d\n", bootEntry.PBPSectorPerFAT);
-
+*/
     int data_SecNum = bootEntry.BPBReservedSectorCount +
                       bootEntry.BPBNumberOfFATs * bootEntry.PBPSectorPerFAT;
     int rootDir_SecNum =
