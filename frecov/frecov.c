@@ -150,13 +150,15 @@ int main(int argc, char *argv[]) {
     printf("%d\n\n", (int)sizeof(LFNEntry));
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
-      if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
+      if (dirE->Attr == 0x10) {
         if (strncmp(dirE->ExtendName, "BMP", 3) != 0) continue;
+        /*
         char tmp_name[32];
         memset(tmp_name, '\0', sizeof(tmp_name));
         memcpy(tmp_name, dirE->Name, 8);
         memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
         printf("%s\n", tmp_name);
+        */
       }
     }
   }
