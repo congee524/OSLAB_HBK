@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
           // printf("%s\n", tmp_name);
 
         } else {
-          memcpy(tmp_name, dirE->Name, 8);
+          memcpy(tmp_name, dirE->Name, min(sizeof(dirE->Name), 8));
           memcpy(tmp_name + strlen(tmp_name), ".", 1);
           memcpy(tmp_name + strlen(tmp_name), dirE->ExtendName, 3);
           printf("%s\n", tmp_name);
