@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
           memcpy(tmp_name, dirE->Name, 8);
           memcpy(tmp_name + strlen(tmp_name), ".", 1);
           memcpy(tmp_name + strlen(tmp_name), dirE->ExtendName, 3);
-          // printf("%s\n", tmp_name);
+          printf("%s\n", tmp_name);
         }
 
         int fcluster =
