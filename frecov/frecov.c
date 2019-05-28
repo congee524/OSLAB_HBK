@@ -206,15 +206,19 @@ int main(int argc, char *argv[]) {
           memcpy(tmp_name, dirE->Name, 8);
           memcpy(tmp_name + strlen(tmp_name), ".", 1);
           memcpy(tmp_name + strlen(tmp_name), dirE->ExtendName, 3);
-          printf("%s\n", tmp_name);
+          // printf("%s\n", tmp_name);
         }
-        /*
-                int fcluster =
-                    dirE->FileStartClusterLow + (dirE->FileStartClusterHigh <<
-           16); int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc; FILE *outfp
-           = fopen(tmp_name, "a"); fwrite(addr + (Bmp_SecNum * bps),
-           dirE->FileSize, 1, outfp); fclose(outfp);
-                */
+
+        int fcluster =
+            dirE->FileStartClusterLow + (dirE->FileStartClusterHigh << 16);
+        int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc;
+        FILE *outfp = fopen(tmp_name, "a");
+        fwrite(addr + (Bmp_SecNum * bps), dirE->FileSize, 1, outfp);
+        fclose(outfp);
+        char cflags[50];
+        memcpy(cflags, "sha1sum ", 8);
+        memcpy(cflags + 8, tmp_name, sizeof(tmp_name));
+        system(cflags);
       }
     }
   }
