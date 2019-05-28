@@ -152,6 +152,7 @@ int main(int argc, char *argv[]) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
       if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
         char tmp_name[32];
+        memset(tmp_name, '\0', sizeof(tmp_name));
         memcpy(tmp_name, dirE->Name, 11);
         // memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
         printf("%s\n", dirE->Name);
