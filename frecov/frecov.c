@@ -185,34 +185,35 @@ int main(int argc, char *argv[]) {
         memset(tmp_name, '\0', sizeof(tmp_name));
 
         LFNEntry *LFN = (LFNEntry *)(addr + pos - 32);
-        if (LFN->Attr == 0x0f) {
-          char name_buffer[32];
-          memset(name_buffer, '\0', sizeof(name_buffer));
-          char *nbuffer = &name_buffer[32];
+        // if (LFN->Attr == 0x0f) {
+        char name_buffer[32];
+        memset(name_buffer, '\0', sizeof(name_buffer));
+        char *nbuffer = &name_buffer[32];
 
-          while (LASTDIR(LFN->SequeNumber) != 1) {
-            LFN--;
-          }
-          while (LFN->Attr == 0x0f) {
-            nbuffer = trname(LFN, nbuffer);
-            LFN++;
-          }
-          memcpy(tmp_name, nbuffer, 32);
-          if (tmp_name[0] < 0x30 || tmp_name[1] > 0x7a) continue;
-          printf("%s\n", tmp_name);
-        } else {
-          memcpy(tmp_name, dirE->Name, 8);
-          memcpy(tmp_name + strlen(tmp_name), ".", 1);
-          memcpy(tmp_name + strlen(tmp_name), dirE->ExtendName, 3);
-          printf("%s\n", tmp_name);
+        while (LASTDIR(LFN->SequeNumber) != 1) {
+          LFN--;
         }
-
-        int fcluster =
-            dirE->FileStartClusterLow + (dirE->FileStartClusterHigh << 16);
-        int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc;
-        FILE *outfp = fopen(tmp_name, "a");
-        fwrite(addr + (Bmp_SecNum * bps), dirE->FileSize, 1, outfp);
-        fclose(outfp);
+        while (LFN->Attr == 0x0f) {
+          nbuffer = trname(LFN, nbuffer);
+          LFN++;
+        }
+        memcpy(tmp_name, nbuffer, 32);
+        if (tmp_name[0] < 0x30 || tmp_name[1] > 0x7a) continue;
+        printf("%s\n", tmp_name);
+        /*
+      } else {
+       memcpy(tmp_name, dirE->Name, 8);
+        memcpy(tmp_name + strlen(tmp_name), ".", 1);
+        memcpy(tmp_name + strlen(tmp_name), dirE->ExtendName, 3);
+        printf("%s\n", tmp_name);
+      }*/
+        /*
+                int fcluster =
+                    dirE->FileStartClusterLow + (dirE->FileStartClusterHigh <<
+           16); int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc; FILE *outfp
+           = fopen(tmp_name, "a"); fwrite(addr + (Bmp_SecNum * bps),
+           dirE->FileSize, 1, outfp); fclose(outfp);
+                */
       }
     }
   }
