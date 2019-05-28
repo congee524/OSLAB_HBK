@@ -207,14 +207,12 @@ int main(int argc, char *argv[]) {
           printf("%s\n", tmp_name);
         }
 
-        /*
         int fcluster =
             dirE->FileStartClusterLow + (dirE->FileStartClusterHigh << 16);
         int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc;
         FILE *outfp = fopen(tmp_name, "a");
         fwrite(addr + (Bmp_SecNum * bps), dirE->FileSize, 1, outfp);
         fclose(outfp);
-        */
       }
     }
   }
