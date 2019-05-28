@@ -195,12 +195,14 @@ int main(int argc, char *argv[]) {
             nbuffer = trname(LFN, nbuffer);
             LFN++;
           }
-          memcpy(tmp_name, name_buffer, 32);
+          memcpy(tmp_name, nbuffer, 32);
+          printf("%s\n", tmp_name);
         } else {
           memcpy(tmp_name, dirE->Name, 8);
           memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
+          printf("%s\n", tmp_name);
         }
-        printf("%s\n", tmp_name);
+
         /*
         int fcluster =
             dirE->FileStartClusterLow + (dirE->FileStartClusterHigh << 16);
