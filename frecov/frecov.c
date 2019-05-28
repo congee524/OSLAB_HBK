@@ -106,23 +106,23 @@ typedef struct {
 
 char *trname(LFNEntry *LFN, char *nbuffer) {
   char tmp_na;
-  for (int i = 1; i >= 0; i--) {
-    tmp_na = (char)LFN->Name3[i];
+  for (int i = 4; i >= 0; i--) {
+    tmp_na = (char)LFN->Name1[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
-    *(--nbuffer) = tmp_na;
+    *(nbuffer++) = tmp_na;
   }
   for (int i = 5; i >= 0; i--) {
     tmp_na = (char)LFN->Name2[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
-    *(--nbuffer) = tmp_na;
+    *(nbuffer++) = tmp_na;
   }
-  for (int i = 4; i >= 0; i--) {
-    tmp_na = (char)LFN->Name1[i];
+  for (int i = 1; i >= 0; i--) {
+    tmp_na = (char)LFN->Name3[i];
     // if (tmp_na >= 0x30 && tmp_na <= 0x7e) *(--nbuffer) = tmp_na;
     // if (tmp_na) *(--nbuffer) = tmp_na;
-    *(--nbuffer) = tmp_na;
+    *(nbuffer++) = tmp_na;
   }
   return nbuffer;
 }
@@ -180,8 +180,20 @@ int main(int argc, char *argv[]) {
         if (dirE->FileSize <= 0) continue;
         char tmp_name[32];
         memset(tmp_name, '\0', sizeof(tmp_name));
-        memcpy(tmp_name, dirE->Name, 8);
-        memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
+
+        LFNEntry *LFN = (LFNEntry *)(addr + pos - 32);
+        if (LFN->Attr == 0x0f) {
+          char *nbuffer = &tmp_name[0];
+          while (1) {
+            nbuffer = trname(LFN, nbuffer);
+            if (LASTDIR(LFN->SequeNumber) == 1) break;
+            LFN--;
+            if (LFN->Attr != 0x0f) break;
+          }
+        } else {
+          memcpy(tmp_name, dirE->Name, 8);
+          memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
+        }
         printf("%s\n", tmp_name);
 
         int fcluster =
