@@ -16,6 +16,7 @@ typedef uint32_t DWORD;
 #define LASTDIR(num) ((num >> 6) & 1)
 #define SEQDIR(num) (num & 0b11111)
 #define HEAD(num) (num >>)
+#define min(x, y) (((x) < (y)) ? ((x) : (y)))
 
 typedef struct {
   BYTE BS_jmpBoot[3];             // 0X00 跳跃指令
