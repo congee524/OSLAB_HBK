@@ -49,9 +49,9 @@ typedef struct {
 } __attribute__((__packed__)) BootEntry;
 
 typedef struct {
-  // char Name[8];               // 0x00 主文件名
-  // char ExtendName[3];         // 0x08 扩展名
-  char Name[11];
+  char Name[8];        // 0x00 主文件名
+  char ExtendName[3];  // 0x08 扩展名
+  // char Name[11];
   BYTE Attr;                  // 0x0B 文件属性
   BYTE Reserved;              // 0x0C 未用
   BYTE FileCreateTimeSecond;  // 0x0D 文件创建时间精确到秒
@@ -152,11 +152,11 @@ int main(int argc, char *argv[]) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
       if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
         if (dirE->Name[1] < 0x30 || dirE->Name[1] > 0x7A) continue;
-        char tmp_name[32];
-        memset(tmp_name, '\0', sizeof(tmp_name));
-        memcpy(tmp_name, dirE->Name, 11);
+        // char tmp_name[32];
+        // memset(tmp_name, '\0', sizeof(tmp_name));
+        // memcpy(tmp_name, dirE->Name, 11);
         // memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
-        printf("%s\n", tmp_name);
+        printf("%s%s\n", dirE->Name, dirE->ExtendName);
       }
     }
   }
