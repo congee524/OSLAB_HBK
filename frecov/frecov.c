@@ -79,6 +79,31 @@ typedef struct {
   // char name3[4];
 } __attribute__((__packed__)) LFNEntry;
 
+#define HEADSIZE 42
+
+typedef struct {
+  char bfType[2];
+  unsigned int bfSize;
+  unsigned short bfReserved1;
+  unsigned short bfReserved2;
+  unsigned int bfOffBits;
+} __attribute__((__packed__)) BMPHeader;
+
+// bmp info header
+typedef struct {
+  unsigned int biSize;
+  int biWidth;
+  int biHeight;
+  unsigned short biPlanes;
+  unsigned short biBitCount;
+  unsigned int biCompression;
+  unsigned int biSizeImage;
+  int biXPelsPerMeter;
+  int biYPelsPerMeter;
+  unsigned int biClrUsed;
+  unsigned int biClrImportant;
+} __attribute__((__packed__)) InfoHeader;
+
 char *trname(LFNEntry *LFN, char *nbuffer) {
   char tmp_na;
   for (int i = 1; i >= 0; i--) {
@@ -150,15 +175,21 @@ int main(int argc, char *argv[]) {
     printf("%d\n\n", (int)sizeof(LFNEntry));
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
-      if (dirE->Attr == 0x10) {
+      if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
         if (strncmp(dirE->ExtendName, "BMP", 3) != 0) continue;
-        /*
+
         char tmp_name[32];
         memset(tmp_name, '\0', sizeof(tmp_name));
         memcpy(tmp_name, dirE->Name, 8);
         memcpy(tmp_name + min(strlen(dirE->Name), 8), dirE->ExtendName, 3);
         printf("%s\n", tmp_name);
-        */
+
+        int fcluster =
+            dirE->FileStartClusterLow + (dirE->FileStartClusterHigh << 16);
+        int Bmp_SecNum = data_SecNum + (fcluster - 2) * spc;
+        FILE *outfp = fopen(tmp_name, "a");
+        fwrite(addr + (Bmp_SecNum * bps), dirE->FileSize, 1, outfp);
+        fclose(outfp);
       }
     }
   }
