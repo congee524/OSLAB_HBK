@@ -151,6 +151,7 @@ int main(int argc, char *argv[]) {
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
       DirEntry *dirE = (DirEntry *)(addr + pos);
       if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
+        if (dirE->Name[1] < 0x30 || dirE->Name[1] > 0x7A) continue;
         char tmp_name[32];
         memset(tmp_name, '\0', sizeof(tmp_name));
         memcpy(tmp_name, dirE->Name, 11);
