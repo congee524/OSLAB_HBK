@@ -50,7 +50,7 @@ typedef struct {
 typedef struct {
   char Name[8];               // 0x00 主文件名
   char ExtendName[3];         // 0x08 扩展名
-  BYTE Attribute;             // 0x0B 文件属性
+  BYTE Attr;                  // 0x0B 文件属性
   BYTE Reserved;              // 0x0C 未用
   BYTE FileCreateTimeSecond;  // 0x0D 文件创建时间精确到秒
   WORD FileCreateTime;        // 0x0E 文件创建时间
@@ -65,15 +65,15 @@ typedef struct {
 
 typedef struct {
   BYTE SequeNumber;  // 0x00 序列号
-  WORD name1[5];     // 0x01 文件名的第1-5个Unicode码字符
+  WORD Name1[5];     // 0x01 文件名的第1-5个Unicode码字符
   // char name1[10];
   BYTE Attr;       // 0x0b 属性标志 0xOF固定值
   BYTE Reserved1;  // 0x0c 保留未用
   BYTE CheckSum;   // 0x0d 短文件名检验和
-  WORD name2[6];   // 0x0e 文件名的第6-11个Unicode码字符
+  WORD Name2[6];   // 0x0e 文件名的第6-11个Unicode码字符
   // char name2[12];
   WORD Reserved2;  // 0x1A 保留未用 始终为0
-  WORD name3[2];   // 0x1c 文件名的第12-13个Unicode码字符
+  WORD Name3[2];   // 0x1c 文件名的第12-13个Unicode码字符
   // char name3[4];
 } __attribute__((__packed__)) LFNEntry;
 
@@ -147,9 +147,17 @@ int main(int argc, char *argv[]) {
         data_SecNum + (bootEntry.BPBRootDirectoryCluster - 2) * spc;
     printf("%d\n\n", (int)sizeof(LFNEntry));
     for (int pos = rootDir_SecNum * bps; pos < sb.st_size; pos += 32) {
-      LFNEntry *LFN = (LFNEntry *)(addr + pos);
-      if (LFN->Attr == 0x0f && LASTDIR(LFN->SequeNumber) == 1) {
-        int lname_cnt = SEQDIR(LFN->SequeNumber);
+      DirEntry *dirE = (DirEntry *)(addr + pos);
+      if (dirE->Attr == 0x20 || dirE->Attr == 0x10) {
+        printf("%s\n", dirE->Name);
+      }
+    }
+  }
+  return 0;
+}
+
+/*
+int lname_cnt = SEQDIR(LFN->SequeNumber);
         // printf("lname_cnt %d: ", lname_cnt);
         char name_buffer[32];
         memset(name_buffer, '\0', sizeof(name_buffer));
@@ -163,14 +171,4 @@ int main(int argc, char *argv[]) {
         }
         if ((int)(&name_buffer[31] - nbuffer) > 8) printf("%s\n", nbuffer);
         printf("%d\n", (int)((&name_buffer[31] - nbuffer) / sizeof(char)));
-        /*
-        for (int i = 0; i < 10; i++) printf("%c", LFN->name1[i]);
-        for (int i = 0; i < 12; i++) printf("%c", LFN->name2[i]);
-        for (int i = 0; i < 4; i++) printf("%c", LFN->name3[i]);
-        printf("\n");
-        */
-      }
-    }
-  }
-  return 0;
-}
+*/
