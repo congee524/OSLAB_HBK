@@ -208,10 +208,10 @@ int main(int argc, char *argv[]) {
             tmp_name[i] = dirE->Name[i];
           }
           tmp_name[i++] = '.';
-          for (;
-               i < 3 && dirE->ExtendName[i] != 0x20 && dirE->ExtendName[i] != 0;
-               i++) {
-            tmp_name[i] = dirE->ExtendName[i];
+          for (int j = 0;
+               j < 3 && dirE->ExtendName[j] != 0x20 && dirE->ExtendName[j] != 0;
+               j++) {
+            tmp_name[i++] = dirE->ExtendName[j];
           }
         }
 
