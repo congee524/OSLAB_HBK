@@ -10,8 +10,6 @@ int kvdb_open(kvdb_t *db, const char *filename) {
 
 int kvdb_close(kvdb_t *db) {
   fclose(db->fp);
-  free(key_buf);
-  free(val_buf);
   return 0;
 }
 
