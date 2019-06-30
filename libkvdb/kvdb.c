@@ -22,6 +22,7 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
     printf("the file was unlocked\n");
   }
+  return 0;
 }
 
 char *kvdb_get(kvdb_t *db, const char *key) {
@@ -29,8 +30,8 @@ char *kvdb_get(kvdb_t *db, const char *key) {
     printf("the file was locked\n");
   }
   fseek(db->fp, 0, SEEK_SET);
-  char key_buf[2048];
-  char val_buf[2048];
+  char *key_buf = malloc(2048);
+  char *val_buf = malloc(2048);
   while (1) {
     if (!fgets(key_buf, 2048, db->fp)) break;
     if (!fgets(val_buf, 2048, db->fp)) break;
@@ -38,5 +39,8 @@ char *kvdb_get(kvdb_t *db, const char *key) {
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
     printf("the file was unlocked\n");
   }
+  char *result = val_buf;
+  free(key_buf);
+  free(val_buf);
   return val_buf;
 }
