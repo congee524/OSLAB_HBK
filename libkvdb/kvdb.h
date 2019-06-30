@@ -5,6 +5,7 @@
 #include <malloc.h>
 #include <pthread.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/types.h>
