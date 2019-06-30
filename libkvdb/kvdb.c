@@ -44,11 +44,11 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
   }
 
   fseek(db->fp, 0, SEEK_END);
-  fprintf(db->fp, "%s\n", key);
-  fprintf(db->fp, "%s\n", value);
+  fprintf(db->fp, "key:%s\n", key);
+  fprintf(db->fp, "val:%s$$\n", value);
 
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
-    printf("the file was unlocked\n");
+    printf("the file was unlocked$$\n");
   }
 
   if (pthread_mutex_unlock(&db->mutex)) {
@@ -69,18 +69,37 @@ char *kvdb_get(kvdb_t *db, const char *key) {
   fseek(db->fp, 0, SEEK_SET);
   char *key_buf = malloc(2048);
   char *val_buf = malloc(2048);
+  char *res = malloc(2048);
+  int flag = 0;
   while (1) {
-    if (!fgets(key_buf, 2048, db->fp)) break;
+    if (!flag) {
+      if (!fgets(key_buf, 2048, db->fp)) break;
+      if (strncmp(key_buf, "key:", 4) != 0) continue;
+    } else {
+      flag = 0;
+    }
+
     if (!fgets(val_buf, 2048, db->fp)) break;
+    if (strncmp(val_buf, "val:", 4) != 0) {
+      if (strncmp(val_buf, "key:", 4) == 0) {
+        strcpy(key_buf, val_buf);
+        flag = 1;
+      }
+      continue;
+    }
+    if (strncmp(key_buf + 4, key, strlen(key)) != 0) continue;
+    if (strncmp(val_buf + (strlen(val_buf) - 3), "$$", 2) != 0) continue;
+    val_buf[strlen(val_buf) - 3] = '\0';
+    strcpy(res, val_buf + 4);
   }
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
     printf("the file was unlocked\n");
   }
   free(key_buf);
-  val_buf[strlen(val_buf) - 1] = '\0';
+  free(val_buf);
   if (pthread_mutex_unlock(&db->mutex)) {
     errlog("close mutex unlock error");
     return NULL;
   }
-  return val_buf;
+  return res;
 }
