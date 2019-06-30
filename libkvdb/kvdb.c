@@ -42,5 +42,5 @@ char *kvdb_get(kvdb_t *db, const char *key) {
   char *result = val_buf;
   free(key_buf);
   free(val_buf);
-  return val_buf;
+  return result;
 }
