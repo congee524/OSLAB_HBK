@@ -17,10 +17,8 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
     printf("the file was locked\n");
   }
   fseek(db->fp, 0, SEEK_END);
-  fprintf(db->fp, key);
-  fprintf(db->fp, "\n");
-  fprintf(db->fp, value);
-  fprintf(db->fp, "\n");
+  fprintf(db->fp, "%s\n", key);
+  fprintf(db->fp, "%s\n", value);
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
     printf("the file was unlocked\n");
   }
