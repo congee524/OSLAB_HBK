@@ -41,5 +41,6 @@ char *kvdb_get(kvdb_t *db, const char *key) {
     printf("the file was unlocked\n");
   }
   free(key_buf);
+  val_buf[strlen(val_buf) - 1] = '\0';
   return val_buf;
 }
