@@ -112,7 +112,7 @@ int pthread_test() {
 }
 
 int main() {
-  /*test1(100);*/
+  test1(100);
 
   // pid_t pid = fork();
   // if(pid == 0){
@@ -126,22 +126,23 @@ int main() {
   // }
 
   /*pthread_test(1);*/
-
-  kvdb_open(&db, "a.db");
-  const char *key = "operating-systems";
-  kvdb_put(&db, key, "three-easy-pieces");
-  char *value = kvdb_get(&db, key);
-  printf("[%s]:[%s]\n", key, value);
-  kvdb_put(&db, key, "three-easy-pieces-pk");
-  value = kvdb_get(&db, key);
-  printf("[%s]:[%s]\n", key, value);
-  kvdb_put(&db, key, "three-easy");
-  kvdb_put(&db, "helloworld", "three-easy");
-  value = kvdb_get(&db, "helloworld");
-  printf("[helloworld]:[%s]\n", value);
-  value = kvdb_get(&db, key);
-  printf("[%s]:[%s]\n", key, value);
-  free(value);
-  kvdb_close(&db);
+  /*
+    kvdb_open(&db, "a.db");
+    const char *key = "operating-systems";
+    kvdb_put(&db, key, "three-easy-pieces");
+    char *value = kvdb_get(&db, key);
+    printf("[%s]:[%s]\n", key, value);
+    kvdb_put(&db, key, "three-easy-pieces-pk");
+    value = kvdb_get(&db, key);
+    printf("[%s]:[%s]\n", key, value);
+    kvdb_put(&db, key, "three-easy");
+    kvdb_put(&db, "helloworld", "three-easy");
+    value = kvdb_get(&db, "helloworld");
+    printf("[helloworld]:[%s]\n", value);
+    value = kvdb_get(&db, key);
+    printf("[%s]:[%s]\n", key, value);
+    free(value);
+    kvdb_close(&db);
+    */
   return 0;
 }
