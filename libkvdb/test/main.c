@@ -136,7 +136,7 @@ int main() {
   value = kvdb_get(&db, key);
   printf("[%s]:[%s]\n", key, value);
   kvdb_put(&db, key, "three-easy");
-  kvdb_put(&db, "helloworld", "three-easy-pieces");
+  kvdb_put(&db, "helloworld", "three-easy");
   value = kvdb_get(&db, "helloworld");
   printf("[helloworld]:[%s]\n", value);
   value = kvdb_get(&db, key);
