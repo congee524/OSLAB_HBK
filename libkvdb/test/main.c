@@ -112,19 +112,19 @@ int pthread_test() {
 }
 
 int main() {
-  // test1(100);
-
-  pid_t pid = fork();
-  if (pid == 0) {
-    pthread_test();
-  } else {
-    pid_t ppid = fork();
-    if (ppid == 0)
+  test1(100);
+  /*
+    pid_t pid = fork();
+    if (pid == 0) {
       pthread_test();
-    else
-      pthread_test();
-  }
-
+    } else {
+      pid_t ppid = fork();
+      if (ppid == 0)
+        pthread_test();
+      else
+        pthread_test();
+    }
+  */
   /*pthread_test(1);*/
   /*
     kvdb_open(&db, "a.db");
