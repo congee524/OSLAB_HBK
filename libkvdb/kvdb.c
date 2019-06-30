@@ -40,7 +40,7 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
   }
 
   if (flock(db->fp->_fileno, LOCK_EX) == 0) {
-    printf("the file was locked\n");
+    // printf("the file was locked\n");
   }
 
   fseek(db->fp, 0, SEEK_END);
@@ -48,7 +48,7 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
   fprintf(db->fp, "val:%s$$\n", value);
 
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
-    printf("the file was unlocked$$\n");
+    // printf("the file was unlocked\n");
   }
 
   if (pthread_mutex_unlock(&db->mutex)) {
@@ -64,7 +64,7 @@ char *kvdb_get(kvdb_t *db, const char *key) {
     return NULL;
   }
   if (flock(db->fp->_fileno, LOCK_EX) == 0) {
-    printf("the file was locked\n");
+    // printf("the file was locked\n");
   }
   fseek(db->fp, 0, SEEK_SET);
   char *key_buf = malloc(2048);
@@ -93,7 +93,7 @@ char *kvdb_get(kvdb_t *db, const char *key) {
     strcpy(res, val_buf + 4);
   }
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
-    printf("the file was unlocked\n");
+    // printf("the file was unlocked\n");
   }
   free(key_buf);
   free(val_buf);
