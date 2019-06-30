@@ -57,7 +57,7 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
 char *kvdb_get(kvdb_t *db, const char *key) {
   if (pthread_mutex_lock(&db->mutex)) {
     errlog("close mutex lock error");
-    return -1;
+    return NULL;
   }
   if (flock(db->fp->_fileno, LOCK_EX) == 0) {
     printf("the file was locked\n");
@@ -76,7 +76,7 @@ char *kvdb_get(kvdb_t *db, const char *key) {
   val_buf[strlen(val_buf) - 1] = '\0';
   if (pthread_mutex_unlock(&db->mutex)) {
     errlog("close mutex unlock error");
-    return -1;
+    return NULL;
   }
   return val_buf;
 }
