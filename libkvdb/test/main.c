@@ -133,13 +133,13 @@ int main() {
   char *value = kvdb_get(&db, key);
   printf("[%s]:[%s]\n", key, value);
   kvdb_put(&db, key, "three-easy-pieces-pk");
-  char *value = kvdb_get(&db, key);
+  value = kvdb_get(&db, key);
   printf("[%s]:[%s]\n", key, value);
   kvdb_put(&db, key, "three-easy");
   kvdb_put(&db, "helloworld", "three-easy-pieces");
-  char *value = kvdb_get(&db, "helloworld");
+  value = kvdb_get(&db, "helloworld");
   printf("[helloworld]:[%s]\n", value);
-  char *value = kvdb_get(&db, key);
+  value = kvdb_get(&db, key);
   printf("[%s]:[%s]\n", key, value);
   free(value);
   kvdb_close(&db);
