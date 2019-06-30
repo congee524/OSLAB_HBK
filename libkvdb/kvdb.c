@@ -38,15 +38,19 @@ int kvdb_put(kvdb_t *db, const char *key, const char *value) {
     errlog("close mutex lock error");
     return -1;
   }
+
   if (flock(db->fp->_fileno, LOCK_EX) == 0) {
     printf("the file was locked\n");
   }
+
   fseek(db->fp, 0, SEEK_END);
   fprintf(db->fp, "%s\n", key);
   fprintf(db->fp, "%s\n", value);
+
   if (flock(db->fp->_fileno, LOCK_UN) == 0) {
     printf("the file was unlocked\n");
   }
+
   if (pthread_mutex_unlock(&db->mutex)) {
     errlog("close mutex unlock error");
     return -1;
