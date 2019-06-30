@@ -1,9 +1,14 @@
 #include "kvdb.h"
 
+int errlog(char *buf) { return printf("\33[1;33m %s \33[0m\n", buf); }
+
 // 文件里是key 和 value一行接着一行，读到最后一个
 int kvdb_open(kvdb_t *db, const char *filename) {
   strcpy(db->name, filename);
-  db->fp = fopen(filename, "a+");
+  if ((db->fp = fopen(filename, "a+")) == NULL) {
+    errlog("file open fail!");
+    return -1;
+  };
 
   return 0;
 }
