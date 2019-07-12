@@ -4,8 +4,9 @@
 #include <vfs.h>
 
 /*======== global variables =======*/
-
 mptable_t mptable[MAXMOUNTPOINT];
+int mptable_cnt;
+/*????????????????vfs_init???? */
 
 int find_fd(task_t *cur_task) {
   for (int i = 0; i < NOFILE; i++) {
@@ -22,24 +23,39 @@ int find_fd(task_t *cur_task) {
 
 void vfs_init() {
   // TODO
-  devfs_init();
-
+  // devfs_init();
+  mptable_cnt = 0;
   return;
 }
 
 int vfs_access(const char *path, int mode) {
   // TODO
+  /*???????????????????0?? */
   return 0;
 }
 
+/*???mount point table? */
+/*?????????????????????????????? */
 int vfs_mount(const char *path, filesystem_t *fs) {
-  // TODO
+  if (mptable_cnt >= MAXMOUNTPOINT) {
+    log("cannot mount more filesystem!");
+    return -1;
+  }
+  mptable[mptable_cnt].path = path;
+  mptable[mptable_cnt++].fs = fs;
   return 0;
 }
 
 int vfs_unmount(const char *path) {
-  // TODO
-  return 0;
+  for (int i = 0; i < mptable_cnt; i++) {
+    if (strcmp(mptable[i].path, path) == 0) {
+      mptable[i].path = mptable[--mptable_cnt].path;
+      mptable[i].fs = mptable[mptable_cnt].fs;
+      return 0;
+    }
+  }
+  log("unmount failed, no such mount point");
+  return -1;
 }
 
 int vfs_mkdir(const char *path) {
@@ -54,20 +70,27 @@ int vfs_rmdir(const char *path) {
 
 int vfs_link(const char *oldpath, const char *newpath) {
   // TODO
+  // ?oldpath?inode number??newpath?
+  // ??newpath???????
   return 0;
 }
 int vfs_unlink(const char *path) {
   // TODO
+  // unlink???path?????????
+  // ?refcnt??????????link????inode?????
   return 0;
 }
 
 int vfs_open(const char *path, int flags) {
   // TODO
+  /*???????fd?????Lookup????inode????fd?inode???????fd
+   */
   int new_fd = find_fd(current_task);
   if (new_fd == -1) {
     log("open file failed, no free fd!");
     return -1;
   }
+
   return 0;
 }
 

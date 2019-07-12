@@ -8,7 +8,9 @@ typedef struct filesystem filesystem_t;
 typedef struct fsops fsops_t;
 typedef struct inode inode_t;
 typedef struct inodeops inodeops_t;
-typedef struct mount_point_table mptable;
+typedef struct mount_point_table mptable_t;
+
+#define MAXMOUNTPOINT 16
 
 typedef struct {
   void (*init)();
@@ -75,9 +77,10 @@ struct inodeops {
 
 /*关于mount
 https://landoflinux.com/linux_fstab.html
+https://blog.51cto.com/lspgyy/1297432
  */
 struct mount_point_table {
-  const char *name;        /*设备名称 ramdisk0之类的*/
+  // const char *name;        /*设备名称 ramdisk0之类的*/
   const char *mount_point; /*挂载点 */
   filesystem_t *fs;        /*文件系统类型*/
   // int options; /*设置选项 */
