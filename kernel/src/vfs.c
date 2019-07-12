@@ -1,6 +1,11 @@
 #include <common.h>
 #include <kernel.h>
 #include <klib.h>
+#include <vfs.h>
+
+/*======== global variables =======*/
+
+mptable_t mptable[MAXMOUNTPOINT];
 
 int find_fd(task_t *cur_task) {
   for (int i = 0; i < NOFILE; i++) {
@@ -13,7 +18,7 @@ int find_fd(task_t *cur_task) {
   return -1;
 }
 
-/*======== vfs function ======*/
+/*======== vfs function =======*/
 
 void vfs_init() {
   // TODO

@@ -53,6 +53,8 @@ typedef struct {
   void (*init)();
 } MODULE(dev);
 
+/*
+//不在kernel中？暂时放在vfs.h中
 typedef struct {
   void (*init)();
   int (*access)(const char *path, int mode);
@@ -68,5 +70,5 @@ typedef struct {
   off_t (*lseek)(int fd, off_t offset, int whence);
   int (*close)(int fd);
 } MODULE(vfs);
-
+*/
 #endif
