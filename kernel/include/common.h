@@ -5,8 +5,9 @@
 #include <klib.h>
 #include <nanos.h>
 
-#define STK_SZ 4096  // the size of stack
+#define STK_SZ 4096 /* the size of stack*/
 #define NTASK 32
+#define NOFILE 32 /*最大文件描述符数量*/
 
 #define log(fmt, ...) \
   printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
@@ -20,6 +21,8 @@ typedef enum {
 
 struct task {
   char name[128];
+  // 文件描述符是基于线程的
+  file_t *fileds[NOFILE];
   _Context context;
   int state;
   int cpu;
