@@ -63,12 +63,6 @@ int vfs_open(const char *path, int flags) {
     log("open file failed, no free fd!");
     return -1;
   }
-
-  if (strncmp(path, "/dev/", 5) == 0) {
-    // 文件系统 devfs
-  }
-
-  TODO();
   return 0;
 }
 
