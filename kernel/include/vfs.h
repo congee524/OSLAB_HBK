@@ -36,17 +36,24 @@ struct vfile {
 };
 
 // 暂时三个，两个blkfs(ramdisk0\1),一个devfs
+/* 关于inode_table，
+ * 可以做一个全局的，也就是所有文件系统，不管挂载在哪里，都在一个
+ * inode_table中找，当然这不符合常识，还可以每个文件系统中单独存
+ * 一个inode_table，实际在lookup的时候，总是先解析mount
+ * point，得到fs之后读inode_table
+ * */
 struct filesystem {
   const char *name;
   fsops_t *ops;
   device_t dev;
   inodeops_t inodeops;
+  inode_t *itable; /*记得在初始化时分配相应的空间 */
 };
 
 enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };
 
 struct inode {
-  int refcnt;  // 硬链接数 可能不作实现
+  int refcnt;  // 硬链接数 unlink link create需要关注
   void *ptr;   // private data
   filesystem_t *fs;
   inodeops_t *ops;  // 在inode被创建时，由文件系统的实现赋值
