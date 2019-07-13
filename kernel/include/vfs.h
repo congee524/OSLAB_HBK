@@ -17,7 +17,7 @@ enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 typedef struct {
   void (*init)();
   int (*access)(const char *path, int mode);
-  int (*mount)(const char *path, filesystem *fs);
+  int (*mount)(const char *path, filesystem_t *fs);
   int (*unmount)(const char *path);
   int (*mkdir)(const char *path);
   int (*rmdir)(const char *path);
