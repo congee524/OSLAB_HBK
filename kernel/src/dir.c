@@ -53,9 +53,11 @@ inode_t *path_parse(const char *path) {
     return NULL;
   }
 
+  char *tmp_path = pmm->alloc(MAXPATHLEN);
+  strcpy(tmp_path, path);
   dir_t *predir;
   inode_t *ret = rootdir_inode;
-  char *pch = strtok(path, "/");
+  char *pch = strtok(tmp_path, "/");
   while (pch != NULL && ret->type == VFILE_DIR) {
     predir = (dir_t *)(ret->ptr);
     if (strcmp(pch, "..") == 0) {
