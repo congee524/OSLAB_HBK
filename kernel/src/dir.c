@@ -37,6 +37,10 @@ inode_t *path_parse(const char *path) {
   resolvedpath = realpath(path, resolvedpath);
   if (!reslovedpath) return NULL;
    */
+  /*
+  想到一个严重的问题，应当根据挂载点选择根目录才对
+  后面修改
+   */
   if (!path) {
     log("no path!");
     return NULL;

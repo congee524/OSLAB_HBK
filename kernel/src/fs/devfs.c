@@ -6,12 +6,18 @@
 
 void devfs_init(filesystem_t *fs, const char *name, dev_t *dev) {
   // TODO
+  // devfs？
   return;
 }
 
 inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   // TODO
-  return;
+  // 暂时不考虑挂载的不同的文件系统，统一弄个inode出阿里
+  char *resolvedpath;
+  resolvedpath = realpath(path, resolvedpath);
+  if (!reslovedpath) return NULL;
+
+  inode_t *ret = path_parse(const char *reslovedpath) ； return ret;
 }
 
 int devfs_close(inode_t *inode) {
@@ -20,9 +26,9 @@ int devfs_close(inode_t *inode) {
 }
 
 fsops_t devfs_ops = {
-    .init = devfs_init,
-    .lookup = devfs_lookup,
-    .close = devfs_close,
+    .init = &devfs_init,
+    .lookup = &devfs_lookup,
+    .close = &devfs_close,
 };
 
 filesystem_t devfs = {

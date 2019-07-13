@@ -41,6 +41,11 @@ int vfs_mount(const char *path, filesystem_t *fs) {
     log("cannot mount more filesystem!");
     return -1;
   }
+
+  char *resolvedpath;
+  resolvedpath = realpath(path, resolvedpath);
+  if (!reslovedpath) return NULL;
+
   mptable[mptable_cnt].path = path;
   mptable[mptable_cnt++].fs = fs;
   return 0;
