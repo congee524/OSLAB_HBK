@@ -45,7 +45,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
 
   char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
-  if (!reslovedpath) return NULL;
+  if (!resolvedpath) return NULL;
 
   mptable[mptable_cnt].path = path;
   mptable[mptable_cnt++].fs = fs;
