@@ -25,9 +25,9 @@ int devfs_close(inode_t *inode) {
 }
 
 fsops_t devfs_ops = {
-    .init = &devfs_init,
-    .lookup = &devfs_lookup,
-    .close = &devfs_close,
+    .init = devfs_init,
+    .lookup = devfs_lookup,
+    .close = devfs_close,
 };
 
 /*======= devfs_inodeops =======*/
