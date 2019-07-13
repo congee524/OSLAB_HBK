@@ -54,8 +54,8 @@ int vfs_mount(const char *path, filesystem_t *fs) {
 
 int vfs_unmount(const char *path) {
   for (int i = 0; i < mptable_cnt; i++) {
-    if (strcmp(mptable[i].path, path) == 0) {
-      mptable[i].path = mptable[--mptable_cnt].path;
+    if (strcmp(mptable[i].mount_point, path) == 0) {
+      mptable[i].mount_point = mptable[--mptable_cnt].mount_point;
       mptable[i].fs = mptable[mptable_cnt].fs;
       return 0;
     }
