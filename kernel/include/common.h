@@ -51,12 +51,6 @@ struct semaphore {
   int start;
 };
 
-#define MAX_CPU 16
-
-task_t *current_task[MAX_CPU];
-
-#define current (current_task[_cpu()])
-
 /*
 struct Task_Pool {
   struct task *head;

@@ -1,12 +1,16 @@
 #include <common.h>
 #include <kernel.h>
 #include <klib.h>
+#include <kmt.h>
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
-#define INT_MAX 2147483647
-#define INT_MIN (-INT_MAX)  // printf cannot printf INT_MIN
-typedef unsigned int uint;
+
+
+static inline void panic(const char *s) {
+  printf("%s\n", s);
+  _halt(1);
+}
 
 //==========================================
 //==========================================

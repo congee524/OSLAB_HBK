@@ -2,6 +2,7 @@
 #include <dir.h>
 #include <kernel.h>
 #include <klib.h>
+#include <kmt.h>
 #include <vfs.h>
 
 /*======== global variables =======*/
