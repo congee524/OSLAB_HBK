@@ -16,50 +16,50 @@ static inline void panic(const char *s) {
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
   // TODO
   kmt->spin_lock(&ptable.lk);
-  if (current) current->context = *ctx;
+  if (cur_task) cur_task->context = *ctx;
   kmt->spin_unlock(&ptable.lk);
-  return &current->context;
+  return &cur_task->context;
 }
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   // TODO
   kmt->spin_lock(&ptable.lk);
   task_t *tmp;
-  if (!current) {
+  if (!cur_task) {
     /*
     assert(tasks[_cpu()].head);
-    current = tasks[_cpu()].head;
+    cur_task = tasks[_cpu()].head;
     */
     for (tmp = ptable.tasks; tmp->next != ptable.tasks; tmp = tmp->next) {
       // log("111");
       if (tmp->cpu == _cpu() && tmp->state == RUNNABLE) {
-        current = tmp;
-        current->state = RUNNING;
+        cur_task = tmp;
+        cur_task->state = RUNNING;
         break;
       }
     }
-    if (!current) panic("no task to switch!");
+    if (!cur_task) panic("no task to switch!");
   } else {
-    tmp = current;
+    tmp = cur_task;
     do {
       tmp = tmp->next;
 
-      if (tmp == current) {
+      if (tmp == cur_task) {
         // log("switch failure\n");
         break;
       }
 
       // log("222");
     } while (tmp->cpu != _cpu() || tmp->state != RUNNABLE);
-    if (current != tmp) {
-      if (current->state == RUNNING) current->state = RUNNABLE;
-      current = tmp;
-      current->state = RUNNING;
-      // log("switch to cpu %d %s\n", current->cpu, current->name);
+    if (cur_task != tmp) {
+      if (cur_task->state == RUNNING) cur_task->state = RUNNABLE;
+      cur_task = tmp;
+      cur_task->state = RUNNING;
+      // log("switch to cpu %d %s\n", cur_task->cpu, cur_task->name);
     }
   }
   /*
-  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
+  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), cur_task->name);
   task_t *ppp = ptable.tasks;
   while (ppp->next != ptable.tasks) {
     ppp = ppp->next;
@@ -68,7 +68,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   printf("\n");
   */
   kmt->spin_unlock(&ptable.lk);
-  return &current->context;
+  return &cur_task->context;
 }
 
 //==========================================
@@ -158,7 +158,7 @@ static inline uint readeflags(void) {
 
 static inline void cli(void) { asm volatile("cli"); }
 
-// Record the current call stack in pcs[] by following the %ebp chain.
+// Record the cur_task call stack in pcs[] by following the %ebp chain.
 void getcallerpcs(void *v, uint pcs[]) {
   uint *ebp;
   int i;
@@ -253,9 +253,9 @@ void sleep(task_t *chan, spinlock_t *lk) {
     panic("now sleep");
   }
   */
-  if (!current) panic("sleep");
+  if (!cur_task) panic("sleep");
   if (!lk) panic("sleep without lk");
-  task_t *t = current;
+  task_t *t = cur_task;
   t->chan = chan;
   t->state = SLEEPING;
   kmt->spin_unlock(lk);
@@ -301,9 +301,9 @@ static void kmt_sem_wait(sem_t *sem) {
   sem->value--;
   // log("wait value a %d\n", sem->value);
   if (sem->value < 0) {
-    sem->list[sem->end] = current;
+    sem->list[sem->end] = cur_task;
     sem->end = (sem->end + 1) % NTASK;
-    sleep(current, &sem->lock);
+    sleep(cur_task, &sem->lock);
   }
   kmt->spin_unlock(&sem->lock);
 }
