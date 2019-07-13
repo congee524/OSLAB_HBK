@@ -15,7 +15,7 @@ inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   // 暂时不考虑挂载的不同的文件系统，统一弄个inode出阿里
   char *resolvedpath;
   resolvedpath = realpath(path, resolvedpath);
-  if (!reslovedpath) return NULL;
+  if (!resolvedpath) return NULL;
 
   inode_t *ret = path_parse(const char *reslovedpath) ； return ret;
 }
