@@ -13,12 +13,7 @@
 #define log(fmt, ...) \
   printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
 
-typedef enum {
-  RUNNABLE = 0,
-  RUNNING,
-  SLEEPING,
-  DEAD,
-} task_state;
+enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 
 struct task {
   char name[128];
