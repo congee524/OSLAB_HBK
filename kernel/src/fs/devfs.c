@@ -22,7 +22,7 @@ inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
 
 int devfs_close(inode_t *inode) {
   // TODO
-  return;
+  return 0;
 }
 
 fsops_t devfs_ops = {
