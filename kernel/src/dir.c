@@ -2,6 +2,7 @@
 #include <dir.h>
 #include <kernel.h>
 #include <klib.h>
+/*use strtok */
 
 static char pwd[MAXPATHLEN];
 
