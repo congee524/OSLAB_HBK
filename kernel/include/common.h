@@ -14,6 +14,11 @@
 #define log(fmt, ...) \
   printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
 
+void panic(const char *s) {
+  printf("%s\n", s);
+  _halt(1);
+}
+
 enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 
 struct task {
@@ -52,6 +57,10 @@ struct semaphore {
 };
 
 #define MAX_CPU 16
+
+task_t *current_task[MAX_CPU];
+
+#define current (current_task[_cpu()])
 
 /*
 struct Task_Pool {

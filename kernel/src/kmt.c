@@ -8,15 +8,6 @@
 #define INT_MIN (-INT_MAX)  // printf cannot printf INT_MIN
 typedef unsigned int uint;
 
-task_t *current_task[MAX_CPU];
-
-#define current (current_task[_cpu()])
-
-static inline void panic(const char *s) {
-  printf("%s\n", s);
-  _halt(1);
-}
-
 //==========================================
 //==========================================
 // handler
