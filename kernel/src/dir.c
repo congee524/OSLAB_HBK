@@ -48,27 +48,20 @@ inode_t *path_parse(const char *path) {
 
   dir_t *predir;
   inode_t *ret = rootdir_inode;
-  int flag = 0;
   char *pch = strtok(path, "/");
   while (pch != NULL && ret->type == VFILE_DIR) {
     predir = (dir_t *)(ret->ptr);
-    flag = 0;
     if (strcmp(pch, "..") == 0) {
-      predir = predir->pa;
-      flag = 1;
+      ret = predir->pa;
     } else if (strcmp(pch, ".") == 0) {
-      predir = predir->self;
-      flag = 1
+      ret = predir->self;
     } else {
       for (int i = 0; i < MAXDIRITEM; i++) {
         if (predir->names[i] && strcmp(pch, predir->name[i]) == 0) {
           ret = predir->inodes[i];
-          flag = 1;
           break;
         }
       }
-    }
-    if (!flag) {
       log("cannot find %s in %s!", pch, path);
       return NULL;
     }

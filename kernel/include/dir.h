@@ -11,9 +11,9 @@ typedef struct DIRE dir_t;
 char *realpath(const char *path, char *resolvedpath);
 
 struct DIRE {
-  dir_t *self;
-  dir_t *pa;
-  char *names[MAXDIRITEM];
+  inode_t *self;
+  inode_t *pa;
+  char *names[MAXDIRITEM]; /*不要初始化, 用的时候再分配 */
   inode_t *inodes[MAXDIRITEM];
 };
 
