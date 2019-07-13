@@ -11,6 +11,12 @@
 /*最大文件描述符数量*/
 #define NOFILE 32
 
+#define INT_MAX 2147483647
+#define INT_MIN (-INT_MAX)
+/*printf cannot printf INT_MIN */
+#define MAX_CPU 16
+typedef unsigned int uint;
+
 #define log(fmt, ...) \
   printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
 
@@ -51,6 +57,12 @@ struct semaphore {
   int start;
 };
 
+task_t *current_task[MAX_CPU];
+
+#define current (current_task[_cpu()])
+
+int8_t ncli[MAX_CPU], intena[MAX_CPU];
+
 /*
 struct Task_Pool {
   struct task *head;
@@ -62,8 +74,6 @@ struct Task_Pool {
 spinlock_t alloc_lk;
 spinlock_t os_trap_lk;
 spinlock_t print_lk;
-
-int8_t ncli[MAX_CPU], intena[MAX_CPU];
 
 struct {
   spinlock_t lk;
