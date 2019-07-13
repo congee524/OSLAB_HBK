@@ -65,7 +65,7 @@ inode_t *path_parse(const char *path) {
     } else {
       int i;
       for (i = 0; i < MAXDIRITEM; i++) {
-        if (predir->names[i] && strcmp(pch, predir->name[i]) == 0) {
+        if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
           ret = predir->inodes[i];
           break;
         }
