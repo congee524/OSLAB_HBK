@@ -56,14 +56,17 @@ inode_t *path_parse(const char *path) {
     } else if (strcmp(pch, ".") == 0) {
       ret = predir->self;
     } else {
-      for (int i = 0; i < MAXDIRITEM; i++) {
+      int i;
+      for (i = 0; i < MAXDIRITEM; i++) {
         if (predir->names[i] && strcmp(pch, predir->name[i]) == 0) {
           ret = predir->inodes[i];
           break;
         }
       }
-      log("cannot find %s in %s!", pch, path);
-      return NULL;
+      if (i >= MAXDIRITEM) {
+        log("cannot find %s in %s!", pch, path);
+        return NULL;
+      }
     }
     pch = strtok(NULL, "/");
   }
