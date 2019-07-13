@@ -14,11 +14,6 @@
 #define log(fmt, ...) \
   printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
 
-void panic(const char *s) {
-  printf("%s\n", s);
-  _halt(1);
-}
-
 enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 
 struct task {
