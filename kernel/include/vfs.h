@@ -12,6 +12,8 @@ typedef struct mount_point_table mptable_t;
 
 #define MAXMOUNTPOINT 16
 
+enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
+
 typedef struct {
   void (*init)();
   int (*access)(const char *path, int mode);

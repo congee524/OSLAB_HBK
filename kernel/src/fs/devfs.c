@@ -2,11 +2,10 @@
 #include <devices.h>
 #include <vfs.h>
 
-/*注意到kernel.h中有device的module devops直接拿来用 */
-
 void devfs_init(filesystem_t *fs, const char *name, dev_t *dev) {
   // TODO
-  // devfs？
+  // ????
+  // dev->ops->init();
   return;
 }
 
@@ -34,3 +33,63 @@ fsops_t devfs_ops = {
 filesystem_t devfs = {
     .ops = devfs_ops,
 };
+
+/*======= devfs_inodeops =======*/
+int devfs_iopen(file_t *file, int flags) {
+  file->offset = 0;
+  file->refcnt++;
+  return 0;
+}
+
+int devfs_iclose(file_t *file) {
+  file->offset = 0;
+  file->refcnt--;
+  return 0;
+}
+
+ssize_t devfs_iread(file_t *file, char *buf, size_t size) {
+  device_t *dev = (device_t *)(file->inode->ptr);
+  return dev->ops->read(dev, file->offset, buf, size);
+}
+
+ssize_t devfs_iwrite(file_t *file, const char *buf, size_t size) {
+  device_t *dev = (device_t *)(file->inode->ptr);
+  return dev->ops->write(dev, file->offset, buf, size);
+}
+
+off_t devfs_ilseek(file_t *file, off_t offset, int whence) {
+  switch (whence) {
+    case SEEK_SET:
+      file->offset = offset;
+      break;
+    case SEEK_CUR:
+      file->offset += offset;
+      break;
+    case SEEK_END:
+      file->offset = file->inode->fsize;
+      break;
+    default:
+      return -1;
+  }
+  return file->offset;
+}
+
+int devfs_imkdir(const char *name) { return -1; }
+
+int devfs_irmdir(const char *name) { return -1; }
+
+int devfs_ilink(const char *name, inode_t *inode) { return -1; }
+
+int devfs_iunlink(const char *name) { return -1; }
+
+inodeops_t devfs_iops = {
+    .open = &devfs_iopen,
+    .close = &devfs_iclose,
+    .read = &devfs_iread,
+    .write = &devfs_iwrite,
+    .lseek = &devfs_ilseek,
+    .mkdir = &devfs_imkdir,
+    .rmdir = &devfs_irmdir,
+    .link = &devfs_ilink,
+    .unlink = &devfs_iunlink,
+}
