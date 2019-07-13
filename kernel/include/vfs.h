@@ -66,7 +66,7 @@ struct inode {
 
 struct fsops {
   // 具体文件系统API的实现
-  void (*init)(struct filesystem *fs, const char *name, dev_t *dev);
+  void (*init)(struct filesystem *fs, const char *name, device_t *dev);
   inode_t *(*lookup)(struct filesystem *fs, const char *path, int flags);
   int (*close)(inode_t *inode);
 };
