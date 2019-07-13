@@ -1,8 +1,9 @@
 #include <common.h>
 #include <devices.h>
+#include <dir.h>
 #include <vfs.h>
 
-void devfs_init(filesystem_t *fs, const char *name, dev_t *dev) {
+void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO
   // ????
   // dev->ops->init();
