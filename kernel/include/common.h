@@ -8,7 +8,8 @@
 
 #define STK_SZ 4096 /* the size of stack*/
 #define NTASK 32
-#define NOFILE 32 /*最大文件描述符数量*/
+/*最大文件描述符数量*/
+#define NOFILE 32
 
 #define log(fmt, ...) \
   printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
