@@ -26,9 +26,9 @@ int devfs_close(inode_t *inode) {
 }
 
 fsops_t devfs_ops = {
-    .init = &devfs_init,
-    .lookup = &devfs_lookup,
-    .close = &devfs_close,
+    .init = devfs_init,
+    .lookup = devfs_lookup,
+    .close = devfs_close,
 };
 
 /*======= devfs_inodeops =======*/
@@ -84,15 +84,15 @@ int devfs_ilink(const char *name, inode_t *inode) { return -1; }
 int devfs_iunlink(const char *name) { return -1; }
 
 inodeops_t devfs_iops = {
-    .open = &devfs_iopen,
-    .close = &devfs_iclose,
-    .read = &devfs_iread,
-    .write = &devfs_iwrite,
-    .lseek = &devfs_ilseek,
-    .mkdir = &devfs_imkdir,
-    .rmdir = &devfs_irmdir,
-    .link = &devfs_ilink,
-    .unlink = &devfs_iunlink,
+    .open = devfs_iopen,
+    .close = devfs_iclose,
+    .read = devfs_iread,
+    .write = devfs_iwrite,
+    .lseek = devfs_ilseek,
+    .mkdir = devfs_imkdir,
+    .rmdir = devfs_irmdir,
+    .link = devfs_ilink,
+    .unlink = devfs_iunlink,
 };
 
 filesystem_t devfs = {
