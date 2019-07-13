@@ -9,6 +9,7 @@
 typedef struct DIRE dir_t;
 
 char *realpath(const char *path, char *resolvedpath);
+inode_t *path_parse(const char *path);
 
 struct DIRE {
   inode_t *self;
