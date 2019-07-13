@@ -13,8 +13,8 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
 inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   // TODO
   // 暂时不考虑挂载的不同的文件系统，统一弄个inode出阿里
-  char *resolvedpath;
-  realpath(path, resolvedpath);
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
+  resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return NULL;
   inode_t *ret = path_parse(resolvedpath);
   return ret;

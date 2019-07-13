@@ -16,7 +16,10 @@ char *realpath(const char *path, char *resolvedpath) {
     return NULL;
   }
 
-  if (!resolvedpath) resolvedpath = pmm->alloc(MAXPATHLEN);
+  if (!resolvedpath) {
+    log("resolved path pointer is NULL!");
+    return NULL;
+  }
 
   if (path[0] == '/') {
     strcpy(resolvedpath, path);
