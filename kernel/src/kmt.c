@@ -4,9 +4,6 @@
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
-task_t *current_task[MAX_CPU];
-#define current (current_task[_cpu()])
-
 static inline void panic(const char *s) {
   printf("%s\n", s);
   _halt(1);

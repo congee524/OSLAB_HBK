@@ -91,7 +91,7 @@ int vfs_open(const char *path, int flags) {
   // TODO
   /*???????fd?????Lookup????inode????fd?inode???????fd
    */
-  int new_fd = find_fd(current_task);
+  int new_fd = find_fd(current);
   if (new_fd == -1) {
     log("open file failed, no free fd!");
     return -1;
