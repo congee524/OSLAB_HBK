@@ -7,7 +7,7 @@
 static char pwd[MAXPATHLEN];
 // TODO 记得初始化
 // dir_t *rootdirt;
-inode_t rootdir_inode;
+inode_t *rootdir_inode;
 
 /*转换为绝对路径，还要进行路径解析 */
 char *realpath(const char *path, char *resolvedpath) {
