@@ -17,7 +17,7 @@ inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return NULL;
 
-  inode_t *ret = path_parse(const char *reslovedpath) ； return ret;
+  inode_t *ret = path_parse(resolvedpath) ； return ret;
 }
 
 int devfs_close(inode_t *inode) {
