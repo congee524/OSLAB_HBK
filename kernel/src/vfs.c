@@ -1,4 +1,5 @@
 #include <common.h>
+#include <dir.h>
 #include <kernel.h>
 #include <klib.h>
 #include <vfs.h>
@@ -42,7 +43,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
     return -1;
   }
 
-  char *resolvedpath;
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   if (!reslovedpath) return NULL;
 
