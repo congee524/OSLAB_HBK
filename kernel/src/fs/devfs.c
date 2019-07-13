@@ -30,10 +30,6 @@ fsops_t devfs_ops = {
     .close = &devfs_close,
 };
 
-filesystem_t devfs = {
-    .ops = devfs_ops,
-};
-
 /*======= devfs_inodeops =======*/
 int devfs_iopen(file_t *file, int flags) {
   file->offset = 0;
@@ -96,4 +92,9 @@ inodeops_t devfs_iops = {
     .rmdir = &devfs_irmdir,
     .link = &devfs_ilink,
     .unlink = &devfs_iunlink,
-}
+};
+
+filesystem_t devfs = {
+    .ops = devfs_ops,
+    .dev = NULL,
+};
