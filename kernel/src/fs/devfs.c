@@ -96,6 +96,6 @@ inodeops_t devfs_iops = {
 };
 
 filesystem_t devfs = {
-    .ops = devfs_ops,
+    .ops = &devfs_ops,
     .dev = NULL,
 };
