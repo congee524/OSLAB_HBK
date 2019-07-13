@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include <klib.h>
 #include <nanos.h>
+#include <vfs.h>
 
 #define STK_SZ 4096 /* the size of stack*/
 #define NTASK 32
