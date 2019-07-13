@@ -11,7 +11,7 @@ int mptable_cnt;
 int find_fd(task_t *cur_task) {
   for (int i = 0; i < NOFILE; i++) {
     if (!cur_task->fildes[i]) {
-      cur_task->fildes = pmm->alloc(sizeof(file_t));
+      cur_task->fildes[i] = pmm->alloc(sizeof(file_t));
       return i;
     }
   }
