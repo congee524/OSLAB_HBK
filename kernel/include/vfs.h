@@ -95,6 +95,6 @@ struct mount_point_table {
   // int options; /*设置选项 */
   // int dump; /*是否备份 */
   // int pass; /*如何使用fsck */
-}
+};
 
 #endif

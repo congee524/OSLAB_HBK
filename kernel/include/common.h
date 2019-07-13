@@ -11,6 +11,9 @@
 /*最大文件描述符数量*/
 #define NOFILE 32
 
+#define log(fmt, ...) \
+  printf("\n%s:%d: \n" fmt, __func__, __LINE__, ##__VA_ARGS__)
+
 enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 
 struct task {
