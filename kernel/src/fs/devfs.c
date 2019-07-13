@@ -49,12 +49,16 @@ int devfs_iclose(file_t *file) {
 
 ssize_t devfs_iread(file_t *file, char *buf, size_t size) {
   device_t *dev = (device_t *)(file->inode->ptr);
-  return dev->ops->read(dev, file->offset, buf, size);
+  ssize_t nread = dev->ops->read(dev, file->offset, buf, size);
+  file->offset += nread;
+  return nread;
 }
 
 ssize_t devfs_iwrite(file_t *file, const char *buf, size_t size) {
   device_t *dev = (device_t *)(file->inode->ptr);
-  return dev->ops->write(dev, file->offset, buf, size);
+  ssize_t nwrite = dev->ops->write(dev, file->offset, buf, size);
+  file->offset += nwrite;
+  return nwrite;
 }
 
 off_t devfs_ilseek(file_t *file, off_t offset, int whence) {

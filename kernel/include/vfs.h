@@ -49,6 +49,7 @@ struct filesystem {
   fsops_t *ops;
   device_t dev;
   inodeops_t inodeops;
+  // 我现在的实现好像不需要inode table，目录项都指向指针了
   inode_t *itable; /*记得在初始化时分配相应的空间 */
 };
 
