@@ -19,7 +19,7 @@ enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 struct task {
   char name[128];
   // 文件描述符是基于线程的
-  file_t *fileds[NOFILE];
+  file_t *fildes[NOFILE];
   _Context context;
   int state;
   int cpu;
