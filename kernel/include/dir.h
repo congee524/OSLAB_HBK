@@ -4,7 +4,17 @@
  */
 
 #define MAXPATHLEN 512
+#define MAXDIRITEM 32
+
+typedef struct DIRE dir_t;
 
 char *realpath(const char *path, char *resolvedpath);
+
+struct DIRE {
+  dir_t *self;
+  dir_t *pa;
+  char *names[MAXDIRITEM];
+  inode_t *inodes[MAXDIRITEM];
+};
 
 #endif

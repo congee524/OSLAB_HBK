@@ -5,6 +5,9 @@
 /*use strtok */
 
 static char pwd[MAXPATHLEN];
+// TODO 记得初始化
+// dir_t *rootdirt;
+inode_t rootdir_inode;
 
 /*转换为绝对路径，还要进行路径解析 */
 char *realpath(const char *path, char *resolvedpath) {
@@ -25,4 +28,55 @@ char *realpath(const char *path, char *resolvedpath) {
     strcat(resolvedpath, path);
     return resolvedpath;
   }
+}
+
+inode_t *path_parse(const char *path) {
+  /*
+  // 解析中调用绝对路径转换？看实现
+  char *resolvedpath;
+  resolvedpath = realpath(path, resolvedpath);
+  if (!reslovedpath) return NULL;
+   */
+  if (!path) {
+    log("no path!");
+    return NULL;
+  }
+  if (path[0] != '/') {
+    log("not resolvedpath!");
+    return NULL;
+  }
+
+  dir_t *predir;
+  inode_t *ret = rootdir_inode;
+  int flag = 0;
+  char *pch = strtok(path, "/");
+  while (pch != NULL && ret->type == VFILE_DIR) {
+    predir = (dir_t *)(ret->ptr);
+    flag = 0;
+    if (strcmp(pch, "..") == 0) {
+      predir = predir->pa;
+      flag = 1;
+    } else if (strcmp(pch, ".") == 0) {
+      predir = predir->self;
+      flag = 1
+    } else {
+      for (int i = 0; i < MAXDIRITEM; i++) {
+        if (predir->names[i] && strcmp(pch, predir->name[i]) == 0) {
+          ret = predir->inodes[i];
+          flag = 1;
+          break;
+        }
+      }
+    }
+    if (!flag) {
+      log("cannot find %s in %s!", pch, path);
+      return NULL;
+    }
+    pch = strtok(NULL, "/");
+  }
+  if (pch) {
+    log("%s is not a sub_direct_item in %s", pch, path);
+    return NULL;
+  }
+  return ret;
 }
