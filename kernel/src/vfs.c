@@ -9,10 +9,10 @@ mptable_t mptable[MAXMOUNTPOINT];
 int mptable_cnt;
 /*????????????????vfs_init???? */
 
-int find_fd(task_t *cur_task) {
+int find_fd(task_t *curr_task) {
   for (int i = 0; i < NOFILE; i++) {
-    if (!cur_task->fildes[i]) {
-      cur_task->fildes[i] = pmm->alloc(sizeof(file_t));
+    if (!curr_task->fildes[i]) {
+      curr_task->fildes[i] = pmm->alloc(sizeof(file_t));
       return i;
     }
   }
