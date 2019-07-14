@@ -15,7 +15,7 @@ struct DIRE {
   inode_t *self;
   inode_t *pa;
   char *names[MAXDIRITEM]; /*不要初始化, 用的时候再分配 */
-  inode_t *inodes[MAXDIRITEM];
+  uint32_t inodes_ind[MAXDIRITEM];
 };
 
 char pwd[MAXPATHLEN];
