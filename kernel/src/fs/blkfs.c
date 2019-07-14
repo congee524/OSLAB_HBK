@@ -1,4 +1,5 @@
 #include <common.h>
+#include <devices.h>
 #include <dir.h>
 #include <vfs.h>
 
@@ -9,7 +10,6 @@ void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
 
 inode_t *blkfs_lookup(filesystem_t *fs, const char *path, int flags) {
   // TODO
-  // 暂时不考虑挂载的不同的文件系统，统一弄个inode
 }
 
 int blkfs_close(inode_t *inode) {
@@ -28,13 +28,26 @@ int blkfs_iopen(file_t *file, int flags) { return 0; }
 
 int blkfs_iclose(file_t *file) { return 0; }
 
-ssize_t blkfs_iread(file_t *file, char *buf, size_t size) { return nread; }
+ssize_t blkfs_iread(file_t *file, char *buf, size_t size) {}
 
-ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {
-  return nwrite;
+ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {}
+
+off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {
+  switch (whence) {
+    case SEEK_SET:
+      file->offset = offset;
+      break;
+    case SEEK_CUR:
+      file->offset += offset;
+      break;
+    case SEEK_END:
+      file->offset = file->inode->fsize;
+      break;
+    default:
+      return -1;
+  }
+  return file->offset;
 }
-
-off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {}
 
 int blkfs_imkdir(const char *name) {}
 
@@ -56,7 +69,13 @@ inodeops_t blkfs_iops = {
     .unlink = blkfs_iunlink,
 };
 
-filesystem_t blkfs = {
-    .ops = &blkfs_ops,
-    .blk = NULL,
+filesystem_t blkfs[2] = {
+    {
+        .ops = &blkfs_ops,
+        .dev = dev_lookup("ramdisk0"),
+    },
+    {
+        .ops = &blkfs_ops,
+        .dev = dev_lookup("ramdisk1"),
+    },
 };

@@ -7,12 +7,25 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO
   // ????
   // dev->ops->init();
+  fs->name = name;
+  fs->dev = dev;
+  // devfs直接挂载所有的设备，分配inode
+  fs->inodes = pmm->alloc(sizeof(struct inode) * LENGTH(devices));
+  for (int i = 0; i < LENGTH(devices); i++) {
+    inode_t *inode = fs->inodes + i;
+    inode->refcnt = 0;
+    inode->ptr = devices[i];
+    inode->fs = fs;
+    inode->ops = &devfs_iops;
+    inode->type = VFILE_FILE;
+    inode->fsize = sizeof(struct divice);
+  }
   return;
 }
 
 inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   // TODO
-  // 暂时不考虑挂载的不同的文件系统，统一弄个inode出阿里
+  // 暂时不考虑挂载的不同的文件系统，统一弄个inode出来
   char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return NULL;

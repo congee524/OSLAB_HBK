@@ -4,7 +4,6 @@
 #include <klib.h>
 /*use strtok */
 
-static char pwd[MAXPATHLEN];
 // TODO 记得初始化
 // dir_t *rootdirt;
 inode_t *rootdir_inode;
@@ -34,24 +33,18 @@ char *realpath(const char *path, char *resolvedpath) {
 }
 
 inode_t *path_parse(const char *path) {
-  /*
   // 解析中调用绝对路径转换？看实现
-  char *resolvedpath;
-  resolvedpath = realpath(path, resolvedpath);
-  if (!reslovedpath) return NULL;
-   */
-  /*
-  想到一个严重的问题，应当根据挂载点选择根目录才对
-  后面修改
-   */
   if (!path) {
     log("no path!");
     return NULL;
   }
-  if (path[0] != '/') {
-    log("not resolvedpath!");
-    return NULL;
-  }
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
+  resolvedpath = realpath(path, resolvedpath);
+  if (!resolvedpath) return NULL;
+  /*
+  想到一个严重的问题，应当根据挂载点选择根目录才对
+  后面修改
+   */
 
   char *tmp_path = pmm->alloc(MAXPATHLEN);
   strcpy(tmp_path, path);

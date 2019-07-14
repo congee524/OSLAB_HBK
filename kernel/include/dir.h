@@ -18,4 +18,6 @@ struct DIRE {
   inode_t *inodes[MAXDIRITEM];
 };
 
+char pwd[MAXPATHLEN];
+
 #endif

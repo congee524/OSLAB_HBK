@@ -26,6 +26,7 @@ void vfs_init() {
   // TODO
   // devfs_init();
   mptable_cnt = 0;
+  strcpy(pwd, "/dev");
   return;
 }
 

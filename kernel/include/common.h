@@ -26,6 +26,7 @@ struct task {
   char name[128];
   // 文件描述符是基于线程的
   file_t *fildes[NOFILE];
+  char pwd[MAXPATHLEN];
   _Context context;
   int state;
   int cpu;
