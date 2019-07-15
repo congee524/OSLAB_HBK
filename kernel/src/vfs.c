@@ -27,7 +27,7 @@ void vfs_init() {
   // TODO
   // devfs_init();
   mptable_cnt = 0;
-  strcpy(cur->pwd, "/dev");
+  strcpy(cur_task->pwd, "/dev");
   vfs->mount("/dev", &devfs);
   // 没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
