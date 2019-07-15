@@ -102,7 +102,7 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
     inode->fs = fs;
     inode->ops = &devfs_iops;
     inode->type = VFILE_FILE;
-    inode->fsize = sizeof(struct divice);
+    inode->fsize = sizeof(struct device);
     dev_root_dir->names[i] = pmm->alloc(MAXNAMELEN);
     strcpy(dev_root_dir->names[i], devices[i]->name);
     dev_root_dir->inodes_ind[i] = i + 1;
