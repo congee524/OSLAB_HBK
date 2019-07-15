@@ -11,7 +11,7 @@ typedef struct inodeops inodeops_t;
 typedef struct mount_point_table mptable_t;
 
 #define MAXMOUNTPOINT 16
-#define MAXINODENUM 128;
+#define MAXINODENUM 128
 
 enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 
