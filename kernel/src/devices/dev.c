@@ -15,6 +15,7 @@ extern devops_t tty_ops, fb_ops, rd_ops, input_ops;
 
 #define DEV_CNT(...) +1
 device_t *devices[0 DEVICES(DEV_CNT)];
+int dev_cnt = LENGTH(devices);
 
 device_t *dev_lookup(const char *name) {
   for (int i = 0; i < LENGTH(devices); i++)

@@ -7,6 +7,7 @@
 
 // from dev.c
 extern device_t *devices[];
+extern dev_cnt;
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO
@@ -14,9 +15,8 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // dev->ops->init();
   fs->name = name;
   fs->dev = dev;
-  // devfs直接挂载所有的设备，分配inode
-  int dev_cnt = LENGTH(devices);
 
+  // devfs直接挂载所有的设备，分配inode
   // set the root dir of devfs
   fs->itable[0] = pmm->alloc(sizeof(struct inode));
   inode_t inode = fs->itable[0];
