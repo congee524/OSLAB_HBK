@@ -1,6 +1,8 @@
 #include <common.h>
 #include <devices.h>
 #include <dir.h>
+#include <fs.h>
+#include <klib.h>
 #include <vfs.h>
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
@@ -10,15 +12,30 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   fs->name = name;
   fs->dev = dev;
   // devfs直接挂载所有的设备，分配inode
-  fs->inodes = pmm->alloc(sizeof(struct inode) * LENGTH(devices));
-  for (int i = 0; i < LENGTH(devices); i++) {
-    inode_t *inode = fs->inodes + i;
+  int dev_cnt = LENGTH(devices);
+
+  // set the root dir of devfs
+  inode_t *inode = fs->itable[0];
+  inode->refcnt = 0;
+  inode->ptr = pmm->alloc(sizeof(struct DIRE));
+  inode->fs = fs;
+  inode->ops = NULL;
+  inode->type = VFILE_DIR;
+  inode->fsize = sizeof(struct DIRE);
+  dir_t *dev_root_dir = inode->ptr;
+  dev_root_dir->self = 0;
+  dev_root_dir->pa = 0;
+  for (int i = 0; i < dev_cnt; i++) {
+    inode_t *inode = fs->itable[i + 1];
     inode->refcnt = 0;
     inode->ptr = devices[i];
     inode->fs = fs;
     inode->ops = &devfs_iops;
     inode->type = VFILE_FILE;
     inode->fsize = sizeof(struct divice);
+    dev_root_dir->names[i] = pmm->alloc(MAXNAMELEN);
+    strcpy(dev_root_dir->names[i], devices[i]->name);
+    dev_root_dir->inodes_ind[i] = i + 1;
   }
   return;
 }

@@ -12,12 +12,13 @@ char *realpath(const char *path, char *resolvedpath);
 inode_t *path_parse(const char *path);
 
 struct DIRE {
-  inode_t *self;
-  inode_t *pa;
+  uint32_t self;
+  uint32_t pa;
   char *names[MAXDIRITEM]; /*不要初始化, 用的时候再分配 */
   uint32_t inodes_ind[MAXDIRITEM];
 };
 
-char pwd[MAXPATHLEN];
+// char pwd[MAXPATHLEN];
+// 所有线程都应该有一个pwd，放到task_t结构体中
 
 #endif

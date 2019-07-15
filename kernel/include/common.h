@@ -10,6 +10,7 @@
 #define NTASK 32
 /*最大文件描述符数量*/
 #define NOFILE 32
+#define MAXNAMELEN 128
 
 #define INT_MAX 2147483647
 #define INT_MIN (-INT_MAX)
@@ -23,7 +24,7 @@ typedef unsigned int uint;
 enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 
 struct task {
-  char name[128];
+  char name[MAXNAMELEN];
   // 文件描述符是基于线程的
   file_t *fildes[NOFILE];
   char pwd[MAXPATHLEN];
@@ -42,8 +43,8 @@ struct task {
 struct spinlock {
   volatile intptr_t locked;  // Is the lock held?
   // For debugging:
-  char name[128];  // Name of lock.
-  int cpu;         // The cpu holding the lock.
+  char name[MAXNAMELEN];  // Name of lock.
+  int cpu;                // The cpu holding the lock.
   // unsigned int pcs[10];  // The call stack (an array of program counters)
   // that locked the lock.
 };
@@ -52,7 +53,7 @@ struct semaphore {
   // TODO
   spinlock_t lock;
   int value;
-  char name[128];
+  char name[MAXNAMELEN];
   task_t *list[NTASK];
   int end;
   int start;

@@ -1,5 +1,6 @@
 #include <common.h>
 #include <dir.h>
+#include <fs.h>
 #include <kernel.h>
 #include <klib.h>
 #include <vfs.h>
@@ -26,7 +27,10 @@ void vfs_init() {
   // TODO
   // devfs_init();
   mptable_cnt = 0;
-  strcpy(pwd, "/dev");
+  strcpy(cur->pwd, "/dev");
+  vfs->mount("/dev", &devfs);
+  // 没有实际挂载的设备，设为NULL
+  devfs.ops->init(&devfs, "devfs", NULL);
   return;
 }
 

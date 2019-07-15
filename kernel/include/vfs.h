@@ -11,6 +11,7 @@ typedef struct inodeops inodeops_t;
 typedef struct mount_point_table mptable_t;
 
 #define MAXMOUNTPOINT 16
+#define MAXINODENUM 128;
 
 enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 
@@ -49,7 +50,7 @@ struct filesystem {
   fsops_t *ops;
   device_t *dev;
   // 我现在的实现好像不需要inode table，目录项都指向指针了
-  inode_t *itable; /*记得在初始化时分配相应的空间 */
+  inode_t itable[MAXINODENUM]; /*记得在初始化时分配相应的空间 */
 };
 
 enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };
@@ -89,7 +90,7 @@ https://landoflinux.com/linux_fstab.html
 https://blog.51cto.com/lspgyy/1297432
  */
 struct mount_point_table {
-  // const char *name;        /*设备名称 ramdisk0之类的*/
+  const char *name;        /*设备名称 ramdisk0之类的*/
   const char *mount_point; /*挂载点 */
   filesystem_t *fs;        /*文件系统类型*/
   // int options; /*设置选项 */

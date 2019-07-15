@@ -48,6 +48,7 @@ inode_t *path_parse(const char *path) {
 
   char *tmp_path = pmm->alloc(MAXPATHLEN);
   strcpy(tmp_path, path);
+
   dir_t *predir;
   inode_t *ret = rootdir_inode;
   char *pch = strtok(tmp_path, "/");
