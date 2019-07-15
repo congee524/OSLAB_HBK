@@ -7,7 +7,7 @@
 
 // from dev.c
 extern device_t *devices[];
-extern dev_cnt;
+extern int dev_cnt;
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO
