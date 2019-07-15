@@ -5,6 +5,9 @@
 #include <klib.h>
 #include <vfs.h>
 
+// from dev.c
+extern device_t *devices[];
+
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO
   // ????
