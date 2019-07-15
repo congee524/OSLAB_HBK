@@ -5,67 +5,6 @@
 #include <klib.h>
 #include <vfs.h>
 
-// from dev.c
-extern device_t *devices[];
-extern int dev_cnt;
-
-void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
-  // TODO
-  // ????
-  // dev->ops->init();
-  fs->name = name;
-  fs->dev = dev;
-
-  // devfs直接挂载所有的设备，分配inode
-  // set the root dir of devfs
-  fs->itable[0] = pmm->alloc(sizeof(struct inode));
-  inode_t *inode = fs->itable[0];
-  inode->refcnt = 0;
-  inode->ptr = pmm->alloc(sizeof(struct DIRE));
-  inode->fs = fs;
-  inode->ops = NULL;
-  inode->type = VFILE_DIR;
-  inode->fsize = sizeof(struct DIRE);
-  dir_t *dev_root_dir = inode->ptr;
-  dev_root_dir->self = 0;
-  dev_root_dir->pa = 0;
-  for (int i = 0; i < dev_cnt; i++) {
-    fs->itable[i + 1] = pmm->alloc(sizeof(struct inode));
-    inode_t *inode = fs->itable[i + 1];
-    inode->refcnt = 0;
-    inode->ptr = devices[i];
-    inode->fs = fs;
-    inode->ops = &devfs_iops;
-    inode->type = VFILE_FILE;
-    inode->fsize = sizeof(struct divice);
-    dev_root_dir->names[i] = pmm->alloc(MAXNAMELEN);
-    strcpy(dev_root_dir->names[i], devices[i]->name);
-    dev_root_dir->inodes_ind[i] = i + 1;
-  }
-  return;
-}
-
-inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
-  // TODO
-  // 暂时不考虑挂载的不同的文件系统，统一弄个inode出来
-  char *resolvedpath = pmm->alloc(MAXPATHLEN);
-  resolvedpath = realpath(path, resolvedpath);
-  if (!resolvedpath) return NULL;
-  inode_t *ret = path_parse(resolvedpath);
-  return ret;
-}
-
-int devfs_close(inode_t *inode) {
-  // TODO
-  return 0;
-}
-
-fsops_t devfs_ops = {
-    .init = devfs_init,
-    .lookup = devfs_lookup,
-    .close = devfs_close,
-};
-
 /*======= devfs_inodeops =======*/
 int devfs_iopen(file_t *file, int flags) {
   file->offset = 0;
@@ -128,6 +67,68 @@ inodeops_t devfs_iops = {
     .rmdir = devfs_irmdir,
     .link = devfs_ilink,
     .unlink = devfs_iunlink,
+};
+
+/*======= devfs_fsops =======*/
+// from dev.c
+extern device_t *devices[];
+extern int dev_cnt;
+
+void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
+  // TODO
+  // ????
+  // dev->ops->init();
+  fs->name = name;
+  fs->dev = dev;
+
+  // devfs直接挂载所有的设备，分配inode
+  // set the root dir of devfs
+  fs->itable[0] = pmm->alloc(sizeof(struct inode));
+  inode_t *inode = fs->itable[0];
+  inode->refcnt = 0;
+  inode->ptr = pmm->alloc(sizeof(struct DIRE));
+  inode->fs = fs;
+  inode->ops = NULL;
+  inode->type = VFILE_DIR;
+  inode->fsize = sizeof(struct DIRE);
+  dir_t *dev_root_dir = inode->ptr;
+  dev_root_dir->self = 0;
+  dev_root_dir->pa = 0;
+  for (int i = 0; i < dev_cnt; i++) {
+    fs->itable[i + 1] = pmm->alloc(sizeof(struct inode));
+    inode_t *inode = fs->itable[i + 1];
+    inode->refcnt = 0;
+    inode->ptr = devices[i];
+    inode->fs = fs;
+    inode->ops = &devfs_iops;
+    inode->type = VFILE_FILE;
+    inode->fsize = sizeof(struct divice);
+    dev_root_dir->names[i] = pmm->alloc(MAXNAMELEN);
+    strcpy(dev_root_dir->names[i], devices[i]->name);
+    dev_root_dir->inodes_ind[i] = i + 1;
+  }
+  return;
+}
+
+inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
+  // TODO
+  // 暂时不考虑挂载的不同的文件系统，统一弄个inode出来
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
+  resolvedpath = realpath(path, resolvedpath);
+  if (!resolvedpath) return NULL;
+  inode_t *ret = path_parse(resolvedpath);
+  return ret;
+}
+
+int devfs_close(inode_t *inode) {
+  // TODO
+  return 0;
+}
+
+fsops_t devfs_ops = {
+    .init = devfs_init,
+    .lookup = devfs_lookup,
+    .close = devfs_close,
 };
 
 filesystem_t devfs = {
