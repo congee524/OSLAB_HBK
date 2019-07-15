@@ -23,6 +23,9 @@ typedef unsigned int uint;
 
 enum task_state { RUNNABLE = 0, RUNNING, SLEEPING, DEAD };
 
+#define MAXPATHLEN 512
+#define MAXDIRITEM 32
+
 struct task {
   char name[MAXNAMELEN];
   // 文件描述符是基于线程的
