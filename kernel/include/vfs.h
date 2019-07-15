@@ -50,7 +50,7 @@ struct filesystem {
   fsops_t *ops;
   device_t *dev;
   // 我现在的实现好像不需要inode table，目录项都指向指针了
-  inode_t itable[MAXINODENUM]; /*记得在初始化时分配相应的空间 */
+  inode_t *itable[MAXINODENUM]; /*记得在初始化时分配相应的空间 */
 };
 
 enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };
