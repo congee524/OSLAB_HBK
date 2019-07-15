@@ -1,3 +1,4 @@
+/*
 #include <common.h>
 #include <devices.h>
 #include <dir.h>
@@ -22,8 +23,9 @@ fsops_t blkfs_ops = {
     .lookup = blkfs_lookup,
     .close = blkfs_close,
 };
-
+*/
 /*======= blkfs_inodeops =======*/
+/*
 int blkfs_iopen(file_t *file, int flags) { return 0; }
 
 int blkfs_iclose(file_t *file) { return 0; }
@@ -80,3 +82,4 @@ filesystem_t blkfs[2] = {
         //.dev = dev_lookup("ramdisk1"),
     },
 };
+* /
