@@ -19,9 +19,9 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // devfs直接挂载所有的设备，分配inode
   // set the root dir of devfs
   fs->itable[0] = pmm->alloc(sizeof(struct inode));
-  inode_t inode = fs->itable[0];
-  inode.refcnt = 0;
-  inode.ptr = pmm->alloc(sizeof(struct DIRE));
+  inode_t *inode = fs->itable[0];
+  inode->refcnt = 0;
+  inode->ptr = pmm->alloc(sizeof(struct DIRE));
   inode->fs = fs;
   inode->ops = NULL;
   inode->type = VFILE_DIR;
