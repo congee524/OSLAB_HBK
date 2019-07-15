@@ -38,6 +38,18 @@ struct vfile {
   inode_t *inode;
 };
 
+enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };
+
+struct inode {
+  int refcnt;  // 硬链接数 unlink link create需要关注
+  void *ptr;   // private data
+  filesystem_t *fs;
+  inodeops_t *ops;  // 在inode被创建时，由文件系统的实现赋值
+                    // inode ops也是文件系统的一部分
+  int type;         // 普通文件 目录 管道
+  ssize_t fsize;    // 文件大小
+};
+
 // 暂时三个，两个blkfs(ramdisk0\1),一个devfs
 /* 关于inode_table，
  * 可以做一个全局的，也就是所有文件系统，不管挂载在哪里，都在一个
@@ -50,19 +62,7 @@ struct filesystem {
   fsops_t *ops;
   device_t *dev;
   // 我现在的实现好像不需要inode table，目录项都指向指针了
-  inode_t *itable[MAXINODENUM]; /*记得在初始化时分配相应的空间 */
-};
-
-enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };
-
-struct inode {
-  int refcnt;  // 硬链接数 unlink link create需要关注
-  void *ptr;   // private data
-  filesystem_t *fs;
-  inodeops_t *ops;  // 在inode被创建时，由文件系统的实现赋值
-                    // inode ops也是文件系统的一部分
-  int type;         // 普通文件 目录 管道
-  ssize_t fsize;    // 文件大小
+  inode_t itable[MAXINODENUM]; /*记得在初始化时分配相应的空间 */
 };
 
 struct fsops {
