@@ -72,10 +72,11 @@ inodeops_t blkfs_iops = {
 filesystem_t blkfs[2] = {
     {
         .ops = &blkfs_ops,
-        .dev = dev_lookup("ramdisk0"),
+        // dev_lookup are not constant, must init in function
+        //.dev = dev_lookup("ramdisk0"),
     },
     {
         .ops = &blkfs_ops,
-        .dev = dev_lookup("ramdisk1"),
+        //.dev = dev_lookup("ramdisk1"),
     },
 };
