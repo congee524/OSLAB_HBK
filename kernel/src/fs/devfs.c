@@ -15,9 +15,10 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   int dev_cnt = LENGTH(devices);
 
   // set the root dir of devfs
-  inode_t *inode = fs->itable[0];
-  inode->refcnt = 0;
-  inode->ptr = pmm->alloc(sizeof(struct DIRE));
+  fs->itable[0] = pmm->alloc(sizeof(struct inode));
+  inode_t inode = fs->itable[0];
+  inode.refcnt = 0;
+  inode.ptr = pmm->alloc(sizeof(struct DIRE));
   inode->fs = fs;
   inode->ops = NULL;
   inode->type = VFILE_DIR;
@@ -26,6 +27,7 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   dev_root_dir->self = 0;
   dev_root_dir->pa = 0;
   for (int i = 0; i < dev_cnt; i++) {
+    fs->itable[i + 1] = pmm->alloc(sizeof(struct inode));
     inode_t *inode = fs->itable[i + 1];
     inode->refcnt = 0;
     inode->ptr = devices[i];
