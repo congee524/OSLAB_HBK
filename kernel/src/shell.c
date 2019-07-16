@@ -5,13 +5,14 @@
 
 void shell_thread(void *tty_id) {
   char buf[128];
+  task_t *cur = cur_task;
   sprintf(buf, "/dev/tty%s", tty_id);
   int stdin = vfs->open(buf, O_RDONLY);
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
     char line[128], text[128];
-    printf("cur_task%d->pwd: %s\n", _cpu(), cur_task->pwd);
-    sprintf(text, "(%s) %s $ ", buf, cur_task->pwd);
+    printf("cur_task%d->pwd: %s\n", _cpu(), cur->pwd);
+    sprintf(text, "(%s) [%s] $ ", buf, cur->pwd);
     printf("text: %s", text);
     printf("sh1\n");
     vfs->write(stdout, text, sizeof(text));
