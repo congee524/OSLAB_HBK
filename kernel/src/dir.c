@@ -85,6 +85,7 @@ int path_parse(filesystem_t *fs, const char *path) {
       }
     }
     pch = strtok(NULL, "/");
+    printf("pch: %s\n", pch);
   }
   if (pch) {
     log("%s is not a sub_direct_item in %s", pch, path);
