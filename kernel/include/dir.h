@@ -6,7 +6,7 @@
 typedef struct DIRE dir_t;
 
 char *realpath(const char *path, char *resolvedpath);
-inode_t *path_parse(const char *path);
+int path_parse(filesystem_t *fs, const char *path);
 
 struct DIRE {
   uint32_t self;
