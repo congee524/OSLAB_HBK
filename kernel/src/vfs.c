@@ -28,7 +28,7 @@ void vfs_init() {
   // devfs_init();
   mptable_cnt = 0;
   strcpy(cur_task->pwd, "/dev");
-  printf("cur_task->pwd: %s\n", cur_task->pwd);
+  // printf("cur_task->pwd: %s\n", cur_task->pwd);
   vfs->mount("/dev", &devfs);
   // 没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
@@ -104,13 +104,13 @@ int vfs_open(const char *path, int flags) {
   }
   filesystem_t *tmp_fs = NULL;
   size_t tmp_mount_point_len = 0;
-  printf("mptable_cnt: %d\n", mptable_cnt);
+  // printf("mptable_cnt: %d\n", mptable_cnt);
   for (int i = 0; i < mptable_cnt; i++) {
     printf("%s\n", mptable[i].mount_point);
     if (tmp_mount_point_len < strlen(mptable[i].mount_point)) {
       tmp_mount_point_len = strlen(mptable[i].mount_point);
       if (strncmp(mptable[i].mount_point, path, tmp_mount_point_len) == 0) {
-        log("finddddddddddd\n");
+        // log("finddddddddddd\n");
         tmp_fs = mptable[i].fs;
       }
     }
