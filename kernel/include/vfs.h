@@ -36,6 +36,7 @@ struct vfile {
   int refcnt;  // 引用次数
   uint64_t offset;
   inode_t *inode;
+  int flags;
 };
 
 // 暂时三个，两个blkfs(ramdisk0\1),一个devfs
