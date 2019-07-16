@@ -114,6 +114,9 @@ static void os_run() {
   */
   _intr_write(1);
   while (1) {
+    kmt->spin_lock(&print_lk);
+    log("cur_task->pwd: %s\n", cur_task->pwd);
+    kmt->spin_unlock(&print_lk);
     _yield();
   }
 }
