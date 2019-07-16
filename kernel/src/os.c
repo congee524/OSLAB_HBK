@@ -50,6 +50,7 @@ static void create_threads() {
 static void os_init() {
   pmm->init();
   kmt->init();
+  dev->init();
   vfs->init();
   for (int i = 0; i < _ncpu(); i++) {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
