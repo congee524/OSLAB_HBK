@@ -25,7 +25,7 @@ char *realpath(const char *path, char *resolvedpath) {
     strcpy(resolvedpath, path);
     return resolvedpath;
   } else {
-    strcpy(resolvedpath, pwd);
+    strcpy(resolvedpath, cur_task->pwd);
     /*多个‘/’视作一个 */
     strcat(resolvedpath, "/");
     strcat(resolvedpath, path);
