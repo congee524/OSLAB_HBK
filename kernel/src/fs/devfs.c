@@ -126,7 +126,7 @@ inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return NULL;
-  int ret = path_parse(resolvedpath);
+  int ret = path_parse(fs, resolvedpath);
   return fs->itable[ret];
 }
 
