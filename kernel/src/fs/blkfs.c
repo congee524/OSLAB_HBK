@@ -1,15 +1,28 @@
+#include <blkfs.h>
 #include <common.h>
 #include <devices.h>
 #include <dir.h>
 #include <vfs.h>
-
 /*
 blkfs的bitmap和目录项都存在内存中，汗。。。
 额外开一个结构体
  */
 
+/*======= blkfs_helper =======*/
+bit_map bitmap[BLOCK_NUM];  // indicate the block used or not
+int find_free_bit() {
+  int i;
+  for (i = 0; i < BLOCK_NUM; i++) {
+    if (!bitmap[i].used) return i;
+  }
+  log("no free block!");
+  return -1;
+}
+/*======= blkfs_fsops =======*/
+
 void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
+  bitmap = 0;
   fs->dev = dev;
   fs->name = name;
   // set the root dir of blkfs
@@ -64,24 +77,77 @@ ssize_t blkfs_iread(file_t *file, char *buf, size_t size) {
     log("no access to read!");
     return 0;
   }
+  blk_inode *b_inode = file->inode->ptr;
+  device_t *dev = file->inode->fs->dev;
+  if (file->offset + size > b_inode->fsize) {
+    if (file->offset >= b_inode->fsize) {
+      return 0;
+    }
+    size = b_inode->fsize - file->offset;
+  }
+  int block_fid = file->offset / BLOCK_SIZE;
+  size_t pre_block_off = file->offset - block_fid * BLOCK_SIZE;
+  char *tmp_buf = buf;
+  size_t tmp_size = size;
+  while (tmp_size + pre_block_off >= BLOCK_SIZE) {
+    size_t nread = dev->ops->read(
+        dev, (b_inode->ptr_point[block_fid] * BLOCK_SIZE) + pre_block_off,
+        tmp_buf, BLOCK_SIZE - pre_block_off);
+    tmp_buf += nread;
+    tmp_size -= nread;
+    pre_block_off = 0;
+    block_fid++;
+  }
+  dev->ops->read(dev,
+                 (b_inode->ptr_point[block_fid] * BLOCK_SIZE) + pre_block_off,
+                 tmp_buf, tmp_size);
+  file->offset += size;
+  return size;
 }
 
-ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {}
+ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {
+  if (!(file->flags & O_WRONLY) && !(file->flags & O_RDWR)) {
+    log("no access to write!");
+    return 0;
+  }
+
+  blk_inode *b_inode = file->inode->ptr;
+  device_t *dev = file->inode->fs->dev;
+  if (file->offset + size > b_inode->fsize) {
+    int low_fid = b_inode->fsize / BLOCK_SIZE + 1;
+    if (file->offset + size >= MAX_FSIZE) {
+      b_inode->fsize = MAX_FSIZE;
+    } else {
+      b_inode->fsize = file->offset + size;
+    }
+    int up_fid = b_inode->fsize / BLOCK_SIZE;
+    while (low_fid <= up_fid) {
+      b_inode->ptr_point[low_fid++] = find_free_bit();
+    }
+    size = b_inode->fsize - file->offset;
+  }
+  int block_fid = file->offset / BLOCK_SIZE;
+  size_t pre_block_off = file->offset - block_fid * BLOCK_SIZE;
+  char *tmp_buf = buf;
+  size_t tmp_size = size;
+  while (tmp_size + pre_block_off >= BLOCK_SIZE) {
+    size_t nwrite = dev->ops->write(
+        dev, (b_inode->ptr_point[block_fid] * BLOCK_SIZE) + pre_block_off,
+        tmp_buf, BLOCK_SIZE - pre_block_off);
+    tmp_buf += nwrite;
+    tmp_size -= nwrite;
+    pre_block_off = 0;
+    block_fid++;
+  }
+  dev->ops->write(dev,
+                  (b_inode->ptr_point[block_fid] * BLOCK_SIZE) + pre_block_off,
+                  tmp_buf, tmp_size);
+  file->offset += size;
+  return size;
+}
 
 off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {
-  switch (whence) {
-    case SEEK_SET:
-      file->offset = offset;
-      break;
-    case SEEK_CUR:
-      file->offset += offset;
-      break;
-    case SEEK_END:
-      file->offset = file->inode->fsize;
-      break;
-    default:
-      return -1;
-  }
+  // TODO:
   return file->offset;
 }
 
