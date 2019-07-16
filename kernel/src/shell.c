@@ -2,9 +2,9 @@
 #include <dir.h>
 #include <shell.h>
 
-void shell_thread(int tty_id) {
+void shell_thread(void *tty_id) {
   char buf[128];
-  sprintf(buf, "/dev/tty%d", tty_id);
+  sprintf(buf, "/dev/tty%s", tty_id);
   int stdin = vfs->open(buf, O_RDONLY);
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
