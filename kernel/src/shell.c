@@ -5,7 +5,7 @@
 
 void shell_thread(void *tty_id) {
   kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
+  log("cur_pwd[%d]: %s\n", _cpu(), cur_pwd);
   kmt->spin_unlock(&print_lk);
   char buf[128];
   sprintf(buf, "/dev/tty%s", tty_id);
@@ -14,10 +14,10 @@ void shell_thread(void *tty_id) {
   while (1) {
     char line[128], text[128];
     // printf("sizeof text before: %d", strlen(text));
-    sprintf(text, "(%s) [%s] $ ", buf, cur_task->pwd);
+    sprintf(text, "(%s) [%s] $ ", buf, cur_pwd);
 
     kmt->spin_lock(&print_lk);
-    printf("cur pwd: %s\n", cur_task->pwd);
+    printf("cur pwd: %s\n", cur_pwd);
     kmt->spin_unlock(&print_lk);
 
     vfs->write(stdout, text, strlen(text));

@@ -57,9 +57,6 @@ static void os_init() {
   for (int i = 0; i < _ncpu(); i++) {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
   }
-  kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_pwd);
-  kmt->spin_unlock(&print_lk);
 #ifdef ECHO_TASK
   create_threads();
 #endif

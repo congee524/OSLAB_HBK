@@ -13,9 +13,6 @@ extern mptable_t mptable[];
 /*转换为绝对路径，还要进行路径解析 */
 char *realpath(const char *path, char *resolvedpath) {
   kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_pwd);
-  kmt->spin_unlock(&print_lk);
-  kmt->spin_lock(&print_lk);
   if (!path) {
     log("no path!");
     kmt->spin_unlock(&print_lk);
@@ -34,7 +31,6 @@ char *realpath(const char *path, char *resolvedpath) {
     return resolvedpath;
   } else {
     strcpy(resolvedpath, cur_pwd);
-    printf("dir aft cur_task->pwd: %s\n", cur_pwd);
     /*多个‘/’视作一个 */
     strcat(resolvedpath, "/");
     strcat(resolvedpath, path);
