@@ -32,6 +32,7 @@ ssize_t devfs_iread(file_t *file, char *buf, size_t size) {
 }
 
 ssize_t devfs_iwrite(file_t *file, const char *buf, size_t size) {
+  printf("iwriting~\n");
   if (!(file->flags & O_WRONLY) && !(file->flags & O_RDWR)) {
     log("no access to write!");
     return 0;
