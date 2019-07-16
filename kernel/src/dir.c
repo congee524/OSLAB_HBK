@@ -46,10 +46,10 @@ int path_parse(filesystem_t *fs, const char *path) {
   想到一个严重的问题，应当根据挂载点选择根目录才对
   后面修改
    */
-  char *root_path;
+  char *root_path = pmm->alloc(MAXPATHLEN);
   for (int i = 0; i < mptable_cnt; i++) {
     if (mptable[i].fs == fs) {
-      root_path = mptable[i].mount_point;
+      strcpy(root_path, mptable[i].mount_point);
       break;
     }
   }
