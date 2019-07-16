@@ -6,13 +6,14 @@
 
 // TODO 记得初始化
 // dir_t *rootdirt;
+
 extern int mptable_cnt;
 extern mptable_t mptable[];
 
 /*转换为绝对路径，还要进行路径解析 */
 char *realpath(const char *path, char *resolvedpath) {
   kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
+  log("cur_task->pwd: %s\n", cur_pwd);
   kmt->spin_unlock(&print_lk);
   kmt->spin_lock(&print_lk);
   if (!path) {
@@ -32,9 +33,8 @@ char *realpath(const char *path, char *resolvedpath) {
     kmt->spin_unlock(&print_lk);
     return resolvedpath;
   } else {
-    printf("dir bef cur_task->pwd: %s\n", cur_task->pwd);
-    strcpy(resolvedpath, cur_task->pwd);
-    printf("dir aft cur_task->pwd: %s\n", cur_task->pwd);
+    strcpy(resolvedpath, cur_pwd);
+    printf("dir aft cur_task->pwd: %s\n", cur_pwd);
     /*多个‘/’视作一个 */
     strcat(resolvedpath, "/");
     strcat(resolvedpath, path);

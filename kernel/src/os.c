@@ -42,16 +42,10 @@ static void create_threads() {
 }
 */
 static void create_threads() {
-  kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
-  kmt->spin_unlock(&print_lk);
   kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "1");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "2");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "3");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "4");
-  kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
-  kmt->spin_unlock(&print_lk);
 }
 #endif
 
@@ -60,14 +54,11 @@ static void os_init() {
   kmt->init();
   dev->init();
   vfs->init();
-  kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
-  kmt->spin_unlock(&print_lk);
   for (int i = 0; i < _ncpu(); i++) {
     kmt->create(pmm->alloc(sizeof(task_t)), "idle", idle, 0);
   }
   kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
+  log("cur_task->pwd: %s\n", cur_pwd);
   kmt->spin_unlock(&print_lk);
 #ifdef ECHO_TASK
   create_threads();
@@ -98,9 +89,6 @@ static void hello() {
   _putc("12345678"[_cpu()]);
   _putc('\n');
   kmt->spin_unlock(&print_lk);
-  kmt->spin_lock(&print_lk);
-  log("cur_task->pwd: %s\n", cur_task->pwd);
-  kmt->spin_unlock(&print_lk);
 }
 
 static void os_run() {
@@ -114,9 +102,6 @@ static void os_run() {
   */
   _intr_write(1);
   while (1) {
-    kmt->spin_lock(&print_lk);
-    log("cur_task->pwd: %s\n", cur_task->pwd);
-    kmt->spin_unlock(&print_lk);
     _yield();
   }
 }

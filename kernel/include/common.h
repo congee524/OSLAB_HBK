@@ -91,7 +91,9 @@ struct semaphore {
 int8_t ncli[MAX_CPU], intena[MAX_CPU];
 
 task_t *current_task[MAX_CPU];
+char *pwds[MAX_CPU];
 #define cur_task (current_task[_cpu()])
+#define cur_pwd (pwds[_cpu()])
 
 /*
 struct Task_Pool {
