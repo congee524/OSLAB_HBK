@@ -85,7 +85,7 @@ char *strtok(char *str, const char *delim) {
       }
     }
   }
-
+  _buffer = b;
   return ret;
 }
 
