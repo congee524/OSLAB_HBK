@@ -1,6 +1,7 @@
 #include <common.h>
 #include <devices.h>
 #include <klib.h>
+#include <shell.h>
 
 #define MAX_HANDLER 32
 
@@ -18,7 +19,6 @@ void idle(void *arg) {
   }
 }
 #ifdef ECHO_TASK
-extern void shell_thread(int tty_id);
 /*
 static void echo_task(void *arg) {
   char *name = (char *)arg;
