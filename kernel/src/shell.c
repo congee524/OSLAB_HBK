@@ -4,6 +4,9 @@
 #include <shell.h>
 
 void shell_thread(void *tty_id) {
+  kmt->spin_lock(&print_lk);
+  log("cur_task->pwd: %s\n", cur_task->pwd);
+  kmt->spin_unlock(&print_lk);
   char buf[128];
   sprintf(buf, "/dev/tty%s", tty_id);
   int stdin = vfs->open(buf, O_RDONLY);
