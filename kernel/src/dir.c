@@ -41,7 +41,7 @@ int path_parse(filesystem_t *fs, const char *path) {
   }
   char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
-  if (!resolvedpath) return NULL;
+  if (!resolvedpath) return -1;
   /*
   想到一个严重的问题，应当根据挂载点选择根目录才对
   后面修改
