@@ -14,6 +14,7 @@ void shell_thread(void *tty_id) {
     kmt->spin_lock(&print_lk);
     printf("cur_task%d->pwd: %s\n", _cpu(), cur->pwd);
     kmt->spin_unlock(&print_lk);
+    printf("sizeof text before: %d", sizeof(text));
     sprintf(text, "(%s) [%s] $ ", buf, cur->pwd);
     kmt->spin_lock(&print_lk);
     printf("text: %s", text);
