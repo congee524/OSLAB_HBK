@@ -14,20 +14,20 @@ void shell_thread(void *tty_id) {
     kmt->spin_lock(&print_lk);
     printf("cur_task%d->pwd: %s\n", _cpu(), cur->pwd);
     kmt->spin_unlock(&print_lk);
-    printf("sizeof text before: %d", sizeof(text));
+    printf("sizeof text before: %d", strlen(text));
     sprintf(text, "(%s) [%s] $ ", buf, cur->pwd);
     kmt->spin_lock(&print_lk);
     printf("text: %s", text);
     printf("sh1\n");
-    printf("sizeof text: %d", sizeof(text));
+    printf("sizeof text: %d", strlen(text));
     kmt->spin_unlock(&print_lk);
-    vfs->write(stdout, text, sizeof(text));
+    vfs->write(stdout, text, strlen(text));
     printf("sh2\n");
-    int nread = vfs->read(stdin, line, sizeof(line));
+    int nread = vfs->read(stdin, line, strlen(text));
     printf("sh3\n");
     line[nread - 1] = '\0';
     sprintf(text, "Echo: %s.\n", line);
-    vfs->write(stdout, text, sizeof(text));
+    vfs->write(stdout, text, strlen(text));
     printf("sh4\n");
   }
 }
