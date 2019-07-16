@@ -115,7 +115,7 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
     inode->fsize = sizeof(struct device);
     dev_root_dir->names[i] = pmm->alloc(MAXNAMELEN);
     strcpy(dev_root_dir->names[i], devices[i]->name);
-    printf("dev name: %s\n", dev_root_dir->names[i]);
+    printf("dev name: %s in %d\n", dev_root_dir->names[i], i + 1);
     dev_root_dir->inodes_ind[i] = i + 1;
   }
   return;
