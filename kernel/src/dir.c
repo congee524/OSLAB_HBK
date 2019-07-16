@@ -37,7 +37,7 @@ int path_parse(filesystem_t *fs, const char *path) {
   // 解析中调用绝对路径转换？看实现
   if (!path) {
     log("no path!");
-    return NULL;
+    return -1;
   }
   char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
@@ -80,14 +80,14 @@ int path_parse(filesystem_t *fs, const char *path) {
       }
       if (i >= MAXDIRITEM) {
         log("cannot find %s in %s!", pch, path);
-        return NULL;
+        return -1;
       }
     }
     pch = strtok(NULL, "/");
   }
   if (pch) {
     log("%s is not a sub_direct_item in %s", pch, path);
-    return NULL;
+    return -1;
   }
   return ret;
 }
