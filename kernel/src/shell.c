@@ -11,6 +11,7 @@ void shell_thread(void *tty_id) {
   while (1) {
     char line[128], text[128];
     sprintf(text, "(%s) %s $ ", buf, cur_task->pwd);
+    printf("text: %s", text);
     printf("sh1\n");
     vfs->write(stdout, text, sizeof(text));
     printf("sh2\n");
