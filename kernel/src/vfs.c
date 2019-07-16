@@ -124,6 +124,7 @@ int vfs_open(const char *path, int flags) {
 
 ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
   // TODO
+  printf("reading~!\n");
   file_t *cur_file = cur_task->fildes[fd];
   if (cur_file) {
     return cur_file->inode->ops->read(cur_file, buf, nbyte);
@@ -135,7 +136,7 @@ ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 
 ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
   // TODO
-  printf("writing~!");
+  printf("writing~!\n");
   file_t *cur_file = cur_task->fildes[fd];
   if (cur_file) {
     return cur_file->inode->ops->write(cur_file, buf, nbyte);
