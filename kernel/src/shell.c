@@ -11,11 +11,15 @@ void shell_thread(void *tty_id) {
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
     char line[128], text[128];
+    kmt->spin_lock(&print_lk);
     printf("cur_task%d->pwd: %s\n", _cpu(), cur->pwd);
+    kmt->spin_unlock(&print_lk);
     sprintf(text, "(%s) [%s] $ ", buf, cur->pwd);
+    kmt->spin_lock(&print_lk);
     printf("text: %s", text);
     printf("sh1\n");
     printf("sizeof text: %d", sizeof(text));
+    kmt->spin_unlock(&print_lk);
     vfs->write(stdout, text, sizeof(text));
     printf("sh2\n");
     int nread = vfs->read(stdin, line, sizeof(line));
