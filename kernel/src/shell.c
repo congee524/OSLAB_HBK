@@ -10,7 +10,7 @@ void shell_thread(void *tty_id) {
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
     char line[128], text[128];
-    printf("cur_task->pwd: %s", cur_task->pwd);
+    printf("cur_task%d->pwd: %s\n", _cpu(), cur_task->pwd);
     sprintf(text, "(%s) %s $ ", buf, cur_task->pwd);
     printf("text: %s", text);
     printf("sh1\n");

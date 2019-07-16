@@ -27,6 +27,7 @@ void vfs_init() {
   // TODO
   // devfs_init();
   mptable_cnt = 0;
+  printf("pwd cur cpu: %d\n", _cpu());
   strcpy(cur_task->pwd, "/dev");
   // printf("cur_task->pwd: %s\n", cur_task->pwd);
   vfs->mount("/dev", &devfs);
