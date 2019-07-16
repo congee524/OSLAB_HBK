@@ -43,7 +43,7 @@ static void create_threads() {
 */
 static void create_threads() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "1");
-  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "2");
+  // kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "2");
 }
 #endif
 
