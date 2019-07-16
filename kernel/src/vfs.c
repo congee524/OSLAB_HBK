@@ -101,8 +101,21 @@ int vfs_open(const char *path, int flags) {
     log("open file failed, no free fd!");
     return -1;
   }
-
-  return 0;
+  filesystem_t *tmp_fs;
+  size_t tmp_mount_point_len = 0;
+  for (int i = 0; i < mptable_cnt; i++) {
+    if (tmp_mount_point_len < strlen(mptable[i].name)) {
+      tmp_mount_point_len = strlen(mptable[i].name);
+      if (strncmp(mptable[i].name, path, tmp_mount_point_len) == 0) {
+        tmp_fs = mptable[i].fs;
+      }
+    }
+  }
+  assert(tmp_fs);
+  inode_t *inode = tmp_fs->ops->lookup(tmp_fs, path, flags);
+  cur_task->fildes[new_fd]->inode = inode;
+  inode->ops->open(cur_task->fildes[new_fd], flags);
+  return new_fd;
 }
 
 ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
