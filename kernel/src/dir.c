@@ -64,7 +64,7 @@ int path_parse(filesystem_t *fs, const char *path) {
   dir_t *predir;
   int ret = 0;
   char *pch = strtok(tmp_path, "/");
-  printf("first pch: %s\n", pch);
+  printf("first tmp_path: %s\n", tmp_path);
   while (pch != NULL && fs->itable[ret]->type == VFILE_DIR) {
     predir = (dir_t *)(fs->itable[ret]->ptr);
     if (strcmp(pch, "..") == 0) {
