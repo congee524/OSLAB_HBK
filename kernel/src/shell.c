@@ -5,30 +5,28 @@
 
 void shell_thread(void *tty_id) {
   char buf[128];
-  task_t *cur = cur_task;
   sprintf(buf, "/dev/tty%s", tty_id);
   int stdin = vfs->open(buf, O_RDONLY);
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
     char line[128], text[128];
-    kmt->spin_lock(&print_lk);
-    printf("cur_task%d->pwd: %s\n", _cpu(), cur->pwd);
-    kmt->spin_unlock(&print_lk);
-    printf("sizeof text before: %d", strlen(text));
-    sprintf(text, "(%s) [%s] $ ", buf, cur->pwd);
+    // printf("sizeof text before: %d", strlen(text));
+    sprintf(text, "(%s) [%s] $ ", buf, cur_task->pwd);
+    /*
     kmt->spin_lock(&print_lk);
     printf("text: %s", text);
     printf("sh1\n");
     printf("sizeof text: %d", strlen(text));
     kmt->spin_unlock(&print_lk);
+    */
     vfs->write(stdout, text, strlen(text));
-    printf("sh2\n");
+    // printf("sh2\n");
     int nread = vfs->read(stdin, line, strlen(text));
-    printf("sh3\n");
+    // printf("sh3\n");
     line[nread - 1] = '\0';
     sprintf(text, "Echo: %s.\n", line);
     vfs->write(stdout, text, strlen(text));
-    printf("sh4\n");
+    // printf("sh4\n");
   }
 }
 
