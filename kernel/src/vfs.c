@@ -134,6 +134,7 @@ ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 
 ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
   // TODO
+  printf("writing~!");
   file_t *cur_file = cur_task->fildes[fd];
   if (cur_file) {
     return cur_file->inode->ops->write(cur_file, buf, nbyte);
