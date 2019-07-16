@@ -101,7 +101,7 @@ int vfs_open(const char *path, int flags) {
     log("open file failed, no free fd!");
     return -1;
   }
-  filesystem_t *tmp_fs;
+  filesystem_t *tmp_fs = NULL;
   size_t tmp_mount_point_len = 0;
   for (int i = 0; i < mptable_cnt; i++) {
     if (tmp_mount_point_len < strlen(mptable[i].name)) {
