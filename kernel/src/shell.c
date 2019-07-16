@@ -1,5 +1,6 @@
 #include <common.h>
 #include <dir.h>
+#include <klib.h>
 #include <shell.h>
 
 void shell_thread(void *tty_id) {
@@ -10,11 +11,15 @@ void shell_thread(void *tty_id) {
   while (1) {
     char line[128], text[128];
     sprintf(text, "(%s) %s $ ", buf, cur_task->pwd);
+    printf("sh1\n");
     vfs->write(stdout, text, sizeof(text));
+    printf("sh2\n");
     int nread = vfs->read(stdin, line, sizeof(line));
+    printf("sh3\n");
     line[nread - 1] = '\0';
     sprintf(text, "Echo: %s.\n", line);
     vfs->write(stdout, text, sizeof(text));
+    printf("sh4\n");
   }
 }
 
