@@ -33,7 +33,7 @@ char *realpath(const char *path, char *resolvedpath) {
   }
 }
 
-inode_t *path_parse(filesystem_t *fs, const char *path) {
+int path_parse(filesystem_t *fs, const char *path) {
   // 解析中调用绝对路径转换？看实现
   if (!path) {
     log("no path!");
