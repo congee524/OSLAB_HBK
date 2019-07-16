@@ -105,10 +105,10 @@ int vfs_open(const char *path, int flags) {
   size_t tmp_mount_point_len = 0;
   printf("mptable_cnt: %d\n", mptable_cnt);
   for (int i = 0; i < mptable_cnt; i++) {
-    printf("%s\n", mptable[i].name);
-    if (tmp_mount_point_len < strlen(mptable[i].name)) {
-      tmp_mount_point_len = strlen(mptable[i].name);
-      if (strncmp(mptable[i].name, path, tmp_mount_point_len) == 0) {
+    printf("%s\n", mptable[i].mount_point);
+    if (tmp_mount_point_len < strlen(mptable[i].mount_point)) {
+      tmp_mount_point_len = strlen(mptable[i].mount_point);
+      if (strncmp(mptable[i].mount_point, path, tmp_mount_point_len) == 0) {
         log("finddddddddddd");
         tmp_fs = mptable[i].fs;
       }
