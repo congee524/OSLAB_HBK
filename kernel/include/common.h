@@ -16,6 +16,32 @@
 #define INT_MIN (-INT_MAX)
 /*printf cannot printf INT_MIN */
 #define MAX_CPU 16
+
+/*========== flags =========*/
+#define O_ACCMODE 0x00000003
+/*只读 */
+#define O_RDONLY 0x00000000
+/*只写 */
+#define O_WRONLY 0x00000001
+/*可读可写 */
+#define O_RDWR 0x00000002
+/*创建并打开，如原文件存在则删除 */
+#define O_CREAT 0x00000040
+/*确保该调用创建文件，如果文件已经存在，返回错误EEXIST */
+#define O_EXCL 0x00000080
+#define O_NOCTTY 0x00000100
+/*原文件内容舍弃 */
+#define O_TRUNC 0x00000200
+/*新写入内容在原文件后 */
+#define O_APPEND 0x00000400
+/*对设备文件，改为非阻塞 */
+#define O_NONBLOCK 0x00000800
+/*不经过缓冲取，立刻flush */
+#define O_DSYNC 0x00001000
+#define FASYNC 0x00002000
+/*如果是符号链接，返回错误ELOOP */
+#define O_NOFOLLOW 0x00020000
+/*========== flags =========*/
 typedef unsigned int uint;
 
 #define log(fmt, ...) \

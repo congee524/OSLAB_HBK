@@ -18,6 +18,8 @@ void idle(void *arg) {
   }
 }
 #ifdef ECHO_TASK
+extern void shell_thread(int tty_id);
+/*
 static void echo_task(void *arg) {
   char *name = (char *)arg;
   char line[128] = "", text[128] = "";
@@ -37,6 +39,13 @@ static void create_threads() {
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty2");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty3");
   kmt->create(pmm->alloc(sizeof(task_t)), "print", echo_task, "tty4");
+}
+*/
+static void create_threads() {
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "1");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "2");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "3");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "4");
 }
 #endif
 

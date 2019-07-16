@@ -9,16 +9,22 @@
 int devfs_iopen(file_t *file, int flags) {
   file->offset = 0;
   file->refcnt++;
+  file->flags = flags;
   return 0;
 }
 
 int devfs_iclose(file_t *file) {
+  // ?
   file->offset = 0;
   file->refcnt--;
   return 0;
 }
 
 ssize_t devfs_iread(file_t *file, char *buf, size_t size) {
+  if (file->flags & O_WRONLY) {
+    log("no access to read!");
+    return 0;
+  }
   device_t *dev = (device_t *)(file->inode->ptr);
   ssize_t nread = dev->ops->read(dev, file->offset, buf, size);
   file->offset += nread;
@@ -26,6 +32,10 @@ ssize_t devfs_iread(file_t *file, char *buf, size_t size) {
 }
 
 ssize_t devfs_iwrite(file_t *file, const char *buf, size_t size) {
+  if (!(file->flags & O_WRONLY) && !(file->flags & O_RDWR)) {
+    log("no access to write!");
+    return 0;
+  }
   device_t *dev = (device_t *)(file->inode->ptr);
   ssize_t nwrite = dev->ops->write(dev, file->offset, buf, size);
   file->offset += nwrite;
@@ -116,8 +126,8 @@ inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
   char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return NULL;
-  inode_t *ret = path_parse(resolvedpath);
-  return ret;
+  int ret = path_parse(resolvedpath);
+  return fs->itable[ret];
 }
 
 int devfs_close(inode_t *inode) {

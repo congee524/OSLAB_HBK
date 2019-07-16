@@ -5,7 +5,17 @@
 void shell_thread(int tty_id) {
   char buf[128];
   sprintf(buf, "/dev/tty%d", tty_id);
-  int stdin = vfs->open(buf, O_RONDLY);
+  int stdin = vfs->open(buf, O_RDONLY);
+  int stdout = vfs->open(buf, O_WRONLY);
+  while (1) {
+    char line[128], text[128];
+    sprintf(text, "(%s) %s $ ", name, cur_task->pwd);
+    vfs->write(stdout, text, sizeof(text));
+    int nread = vfs->read(stdin, line, sizeof(line));
+    line[nread - 1] = '\0';
+    sprintf(text, "Echo: %s.\n", line);
+    vfs->write(stdout, text, sizeof(text));
+  }
 }
 
 /*

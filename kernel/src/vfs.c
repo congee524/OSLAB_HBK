@@ -120,12 +120,24 @@ int vfs_open(const char *path, int flags) {
 
 ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
   // TODO
-  return 0;
+  file_t *cur_file = cur_task->fildes[fd];
+  if (cur_file) {
+    return cur_file->inode->ops->read(cur_file, buf, nbyte);
+  } else {
+    log("wrong fd!");
+    return -1;
+  }
 }
 
 ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
   // TODO
-  return 0;
+  file_t *cur_file = cur_task->fildes[fd];
+  if (cur_file) {
+    return cur_file->inode->ops->write(cur_file, buf, nbyte);
+  } else {
+    log("wrong fd!");
+    return -1;
+  }
 }
 
 off_t vfs_lseek(int fd, off_t offset, int whence) {

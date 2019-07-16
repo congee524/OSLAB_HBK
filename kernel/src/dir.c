@@ -6,7 +6,8 @@
 
 // TODO 记得初始化
 // dir_t *rootdirt;
-inode_t *rootdir_inode;
+extern int mptable_cnt;
+extern mptable_t mptable[];
 
 /*转换为绝对路径，还要进行路径解析 */
 char *realpath(const char *path, char *resolvedpath) {
@@ -32,7 +33,7 @@ char *realpath(const char *path, char *resolvedpath) {
   }
 }
 
-inode_t *path_parse(const char *path) {
+inode_t *path_parse(filesystem_t *fs, const char *path) {
   // 解析中调用绝对路径转换？看实现
   if (!path) {
     log("no path!");
@@ -45,15 +46,26 @@ inode_t *path_parse(const char *path) {
   想到一个严重的问题，应当根据挂载点选择根目录才对
   后面修改
    */
-
+  char *root_path;
+  for (int i = 0; i < mptable_cnt; i++) {
+    if (mptable[i].fs == fs) {
+      root_path = mptable[i].mount_point;
+      break;
+    }
+  }
+  char *tar_path = resolvedpath;
+  while (*root_path == *tar_path) {
+    root_path++;
+    tar_path++;
+  }
   char *tmp_path = pmm->alloc(MAXPATHLEN);
-  strcpy(tmp_path, path);
+  strcpy(tmp_path, tar_path);
 
   dir_t *predir;
-  inode_t *ret = rootdir_inode;
+  int ret = 0;
   char *pch = strtok(tmp_path, "/");
-  while (pch != NULL && ret->type == VFILE_DIR) {
-    predir = (dir_t *)(ret->ptr);
+  while (pch != NULL && fs->itable[ret]->type == VFILE_DIR) {
+    predir = (dir_t *)(fs->itable[ret]->ptr);
     if (strcmp(pch, "..") == 0) {
       ret = predir->pa;
     } else if (strcmp(pch, ".") == 0) {
@@ -62,7 +74,7 @@ inode_t *path_parse(const char *path) {
       int i;
       for (i = 0; i < MAXDIRITEM; i++) {
         if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
-          ret = predir->inodes[i];
+          ret = predir->inodes_ind[i];
           break;
         }
       }
