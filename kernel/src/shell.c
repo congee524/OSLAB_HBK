@@ -12,13 +12,11 @@ void shell_thread(void *tty_id) {
     char line[128], text[128];
     // printf("sizeof text before: %d", strlen(text));
     sprintf(text, "(%s) [%s] $ ", buf, cur_task->pwd);
-    /*
+
     kmt->spin_lock(&print_lk);
-    printf("text: %s", text);
-    printf("sh1\n");
-    printf("sizeof text: %d", strlen(text));
+    printf("cur pwd: %s\n", cur_task->pwd);
     kmt->spin_unlock(&print_lk);
-    */
+
     vfs->write(stdout, text, strlen(text));
     // printf("sh2\n");
     int nread = vfs->read(stdin, line, strlen(text));

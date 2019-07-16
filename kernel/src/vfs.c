@@ -27,7 +27,6 @@ void vfs_init() {
   // TODO
   // devfs_init();
   mptable_cnt = 0;
-  printf("pwd cur cpu: %d\n", _cpu());
   cur_task->pwd = pmm->alloc(MAXPATHLEN);
   strncpy(cur_task->pwd, "/dev", 4);
   kmt->spin_lock(&print_lk);
