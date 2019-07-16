@@ -30,7 +30,9 @@ void vfs_init() {
   printf("pwd cur cpu: %d\n", _cpu());
   cur_task->pwd = pmm->alloc(MAXPATHLEN);
   strncpy(cur_task->pwd, "/dev", 4);
+  kmt->spin_lock(&print_lk);
   printf("cur_task->pwd: %s\n", cur_task->pwd);
+  kmt->spin_unlock(&print_lk);
   vfs->mount("/dev", &devfs);
   // 没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
