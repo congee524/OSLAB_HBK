@@ -61,9 +61,6 @@ static void os_init() {
 #ifdef ECHO_TASK
   create_threads();
 #endif
-  //_vme_init(pmm->alloc, pmm->free);
-  dev->init();
-  // vfs->init();
 }
 /*
 void test() {
