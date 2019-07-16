@@ -42,11 +42,10 @@ static void create_threads() {
 }
 */
 static void create_threads() {
-  char buf[128];
-  for (int i = 1; i <= _ncpu(); i++) {
-    sprintf(buf, "%d", i);
-    kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, buf);
-  }
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "1");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "2");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "3");
+  kmt->create(pmm->alloc(sizeof(task_t)), "print", shell_thread, "4");
 }
 #endif
 
