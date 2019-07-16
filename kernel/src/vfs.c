@@ -30,11 +30,14 @@ void vfs_init() {
   cur_task->pwd = pmm->alloc(MAXPATHLEN);
   strncpy(cur_task->pwd, "/dev", 4);
   kmt->spin_lock(&print_lk);
-  printf("cur_task->pwd: %s\n", cur_task->pwd);
+  log("cur_task->pwd: %s\n", cur_task->pwd);
   kmt->spin_unlock(&print_lk);
   vfs->mount("/dev", &devfs);
   // 没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
+  kmt->spin_lock(&print_lk);
+  log("cur_task->pwd: %s\n", cur_task->pwd);
+  kmt->spin_unlock(&print_lk);
   return;
 }
 
@@ -100,6 +103,9 @@ int vfs_open(const char *path, int flags) {
   // TODO
   /*???????fd?????Lookup????inode????fd?inode???????fd
    */
+  kmt->spin_lock(&print_lk);
+  log("cur_task->pwd: %s\n", cur_task->pwd);
+  kmt->spin_unlock(&print_lk);
   int new_fd = find_fd(cur_task);
   if (new_fd == -1) {
     log("open file failed, no free fd!");
@@ -127,6 +133,9 @@ int vfs_open(const char *path, int flags) {
 
 ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
   // TODO
+  kmt->spin_lock(&print_lk);
+  log("cur_task->pwd: %s\n", cur_task->pwd);
+  kmt->spin_unlock(&print_lk);
   printf("reading~!\n");
   file_t *cur_file = cur_task->fildes[fd];
   if (cur_file) {
