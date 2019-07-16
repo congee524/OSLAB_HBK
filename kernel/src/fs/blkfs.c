@@ -3,6 +3,11 @@
 #include <dir.h>
 #include <vfs.h>
 
+/*
+blkfs的bitmap和目录项都存在内存中，汗。。。
+额外开一个结构体
+ */
+
 void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
   fs->dev = dev;
@@ -41,11 +46,25 @@ fsops_t blkfs_ops = {
 
 /*======= blkfs_inodeops =======*/
 
-int blkfs_iopen(file_t *file, int flags) { return 0; }
+int blkfs_iopen(file_t *file, int flags) {
+  file->refcnt++;
+  file->flags = flags;
+  file->offset = 0;
+  return 0;
+}
 
-int blkfs_iclose(file_t *file) { return 0; }
+int blkfs_iclose(file_t *file) {
+  file->refcnt--;
+  file->offset = 0;
+  return 0;
+}
 
-ssize_t blkfs_iread(file_t *file, char *buf, size_t size) {}
+ssize_t blkfs_iread(file_t *file, char *buf, size_t size) {
+  if (file->flags & O_WRONLY) {
+    log("no access to read!");
+    return 0;
+  }
+}
 
 ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {}
 

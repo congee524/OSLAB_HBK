@@ -34,7 +34,7 @@ typedef struct {
 
 struct vfile {
   int refcnt;  // 引用次数
-  uint64_t offset;
+  uint32_t offset;
   inode_t *inode;
   int flags;
 };
