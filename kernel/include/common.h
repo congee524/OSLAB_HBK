@@ -79,7 +79,7 @@ struct spinlock {
 };
 
 struct semaphore {
-  // TODO
+  // TODO:
   spinlock_t lock;
   int value;
   char name[MAXNAMELEN];

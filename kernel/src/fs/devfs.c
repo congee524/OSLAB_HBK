@@ -87,7 +87,7 @@ extern device_t *devices[];
 extern int dev_cnt;
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
-  // TODO
+  // TODO:
   // ????
   // dev->ops->init();
   fs->name = name;
@@ -124,17 +124,13 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
 }
 
 inode_t *devfs_lookup(filesystem_t *fs, const char *path, int flags) {
-  // TODO
-  // 暂时不考虑挂载的不同的文件系统，统一弄个inode出来
-  char *resolvedpath = pmm->alloc(MAXPATHLEN);
-  resolvedpath = realpath(path, resolvedpath);
-  if (!resolvedpath) return NULL;
-  int ret = path_parse(fs, resolvedpath);
+  // TODO:
+  int ret = path_parse(fs, path);
   return fs->itable[ret];
 }
 
 int devfs_close(inode_t *inode) {
-  // TODO
+  // TODO:
   return 0;
 }
 

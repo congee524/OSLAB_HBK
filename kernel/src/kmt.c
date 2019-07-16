@@ -14,7 +14,7 @@ static inline void panic(const char *s) {
 // handler
 
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&ptable.lk);
   if (cur_task) cur_task->context = *ctx;
   kmt->spin_unlock(&ptable.lk);
@@ -22,7 +22,7 @@ static _Context *kmt_context_save(_Event ev, _Context *ctx) {
 }
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&ptable.lk);
   task_t *tmp;
   if (!cur_task) {
@@ -75,7 +75,7 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
 //==========================================
 // task schedule init create teardown
 static void kmt_init() {
-  // TODO
+  // TODO:
   // ...
   /*
   for (int i = 0; i < _ncpu(); i++) {
@@ -119,7 +119,7 @@ static int task_insert(task_t *task) {
 
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&ptable.lk);
   strcpy(task->name, name);
   task->cpu = ptable.cnt_task % _ncpu();
@@ -135,7 +135,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
 }
 
 static void kmt_teardown(task_t *task) {
-  // TODO
+  // TODO:
   // problem!!!!! if the task in sleeping list
   return;
 }
@@ -284,7 +284,7 @@ void wakeup(task_t *chan) {
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
-  // TODO
+  // TODO:
   strcpy(sem->name, name);
   sem->value = value;
   char tmp[128];
@@ -294,7 +294,7 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
 }
 
 static void kmt_sem_wait(sem_t *sem) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&sem->lock);
   // log("\nkmt spin lock %s\nsem_value %d\n", sem->name, sem->value);
   // log("wait value b %d\n", sem->value);
@@ -309,7 +309,7 @@ static void kmt_sem_wait(sem_t *sem) {
 }
 
 static void kmt_sem_signal(sem_t *sem) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&sem->lock);
   // kmt->spin_lock(&ptable.lk);
   // log("\nkmt spin unlock %s\nsem_value %d\n", sem->name, sem->value);

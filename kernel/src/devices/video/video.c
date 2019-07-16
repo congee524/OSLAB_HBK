@@ -59,7 +59,7 @@ ssize_t fb_write(device_t *dev, off_t offset, const void *buf, size_t count) {
   } else if (offset < SPRITE_BRK) {
     memcpy(((uint8_t *)fb->textures) + offset, buf, count);
   } else {
-    // TODO: not remove stale sprites, and does not consider z-values
+    // TODO:: not remove stale sprites, and does not consider z-values
     _DEV_VIDEO_FBCTL_t ctl = {
       .w = TEXTURE_W,
       .h = TEXTURE_H,

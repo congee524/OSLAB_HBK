@@ -1,4 +1,4 @@
-#include <alloc.h>
+#inc : TODO:alloc.h>
 #include <common.h>
 #include <kernel.h>
 #include <klib.h>
@@ -67,7 +67,7 @@ static void merge_block(t_block pre) {
 
 static void *kalloc(size_t size) {
   kmt->spin_lock(&alloc_lk);
-  // TODO()
+  // TODO:()
 
   t_block pre, last;
   pre = last = NULL;
@@ -112,7 +112,7 @@ static void *kalloc(size_t size) {
 static void kfree(void *ptr) {
   // spin_lock(&alloc_lk);
   kmt->spin_lock(&alloc_lk);
-  // TODO()
+  // TODO:()
   if (base == NULL) {
     printf("wrong memory space!\n");
     kmt->spin_unlock(&alloc_lk);

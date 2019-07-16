@@ -1,20 +1,35 @@
-/*
 #include <common.h>
 #include <devices.h>
 #include <dir.h>
 #include <vfs.h>
 
 void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
-  // TODO
+  // TODO:
+  fs->dev = dev;
+  fs->name = name;
+  // set the root dir of blkfs
+  fs->itable[0] = pmm->alloc(sizeof(struct inode));
+  inode_t *inode = fs->itable[0];
+  inode->refcnt = 0;
+  inode->ptr = pmm->alloc(sizeof(struct DIRE));
+  inode->fs = fs;
+  inode->ops = NULL;
+  inode->type = VFILE_DIR;
+  inode->fsize = sizeof(struct DIRE);
+  dir_t *dev_root_dir = inode->ptr;
+  dev_root_dir->self = 0;
+  dev_root_dir->pa = 0;
   return;
 }
 
 inode_t *blkfs_lookup(filesystem_t *fs, const char *path, int flags) {
-  // TODO
+  // TODO:
+  int ret = path_parse(fs, path);
+  return fs->itable[ret];
 }
 
 int blkfs_close(inode_t *inode) {
-  // TODO
+  // TODO:
   return 0;
 }
 
@@ -23,9 +38,9 @@ fsops_t blkfs_ops = {
     .lookup = blkfs_lookup,
     .close = blkfs_close,
 };
-*/
+
 /*======= blkfs_inodeops =======*/
-/*
+
 int blkfs_iopen(file_t *file, int flags) { return 0; }
 
 int blkfs_iclose(file_t *file) { return 0; }
@@ -82,4 +97,3 @@ filesystem_t blkfs[2] = {
         //.dev = dev_lookup("ramdisk1"),
     },
 };
-*/

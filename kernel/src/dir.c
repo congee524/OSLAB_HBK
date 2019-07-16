@@ -4,7 +4,7 @@
 #include <klib.h>
 /*use strtok */
 
-// TODO 记得初始化
+// TODO: 记得初始化
 // dir_t *rootdirt;
 
 extern int mptable_cnt;

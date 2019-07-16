@@ -119,7 +119,7 @@ static _Context *os_trap(_Event ev, _Context *ctx) {
 }
 
 static void os_on_irq(int seq, int event, handler_t handler) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&os_trap_lk);
   handlers[cnt_handle].seq = seq;
   handlers[cnt_handle].event = event;
