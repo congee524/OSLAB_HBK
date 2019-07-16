@@ -15,6 +15,7 @@ void shell_thread(void *tty_id) {
     sprintf(text, "(%s) [%s] $ ", buf, cur->pwd);
     printf("text: %s", text);
     printf("sh1\n");
+    printf("sizeof text: %d", sizeof(text));
     vfs->write(stdout, text, sizeof(text));
     printf("sh2\n");
     int nread = vfs->read(stdin, line, sizeof(line));
