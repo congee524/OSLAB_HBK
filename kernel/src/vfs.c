@@ -109,7 +109,7 @@ int vfs_open(const char *path, int flags) {
     if (tmp_mount_point_len < strlen(mptable[i].mount_point)) {
       tmp_mount_point_len = strlen(mptable[i].mount_point);
       if (strncmp(mptable[i].mount_point, path, tmp_mount_point_len) == 0) {
-        log("finddddddddddd");
+        log("finddddddddddd\n");
         tmp_fs = mptable[i].fs;
       }
     }
