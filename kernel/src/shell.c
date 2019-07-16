@@ -9,7 +9,7 @@ void shell_thread(int tty_id) {
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
     char line[128], text[128];
-    sprintf(text, "(%s) %s $ ", name, cur_task->pwd);
+    sprintf(text, "(%s) %s $ ", buf, cur_task->pwd);
     vfs->write(stdout, text, sizeof(text));
     int nread = vfs->read(stdin, line, sizeof(line));
     line[nread - 1] = '\0';
