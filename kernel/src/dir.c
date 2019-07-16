@@ -93,5 +93,6 @@ int path_parse(filesystem_t *fs, const char *path) {
     log("%s is not a sub_direct_item in %s", pch, path);
     return -1;
   }
+  printf("ret: %d\n", ret);
   return ret;
 }
