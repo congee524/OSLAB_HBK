@@ -98,6 +98,9 @@ static void hello() {
   _putc("12345678"[_cpu()]);
   _putc('\n');
   kmt->spin_unlock(&print_lk);
+  kmt->spin_lock(&print_lk);
+  log("cur_task->pwd: %s\n", cur_task->pwd);
+  kmt->spin_unlock(&print_lk);
 }
 
 static void os_run() {
