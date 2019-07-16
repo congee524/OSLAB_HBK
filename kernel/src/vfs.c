@@ -27,11 +27,10 @@ void vfs_init() {
   // TODO
   // devfs_init();
   mptable_cnt = 0;
-  cur_pwd = pmm->alloc(MAXPATHLEN);
-  strncpy(cur_pwd, "/dev", 4);
-  kmt->spin_lock(&print_lk);
-  log("cur_pwd[%d]: %s\n", _cpu(), cur_pwd);
-  kmt->spin_unlock(&print_lk);
+  for (int i = 0; i < MAX_CPU; i++) {
+    pwds[i] = pmm->alloc(MAXPATHLEN);
+    strncpy(pwds[i], "/dev", 4);
+  }
   vfs->mount("/dev", &devfs);
   // 没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
