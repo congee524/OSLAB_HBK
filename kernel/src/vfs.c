@@ -108,7 +108,7 @@ int vfs_open(const char *path, int flags) {
   size_t tmp_mount_point_len = 0;
   // printf("mptable_cnt: %d\n", mptable_cnt);
   for (int i = 0; i < mptable_cnt; i++) {
-    printf("%s\n", mptable[i].mount_point);
+    // printf("%s\n", mptable[i].mount_point);
     if (tmp_mount_point_len < strlen(mptable[i].mount_point)) {
       tmp_mount_point_len = strlen(mptable[i].mount_point);
       if (strncmp(mptable[i].mount_point, path, tmp_mount_point_len) == 0) {
@@ -126,7 +126,7 @@ int vfs_open(const char *path, int flags) {
 
 ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
   // TODO
-  printf("reading~!\n");
+  // printf("reading~!\n");
   file_t *cur_file = cur_task->fildes[fd];
   if (cur_file) {
     return cur_file->inode->ops->read(cur_file, buf, nbyte);
@@ -138,7 +138,7 @@ ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 
 ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
   // TODO
-  printf("writing~!\n");
+  // printf("writing~!\n");
   file_t *cur_file = cur_task->fildes[fd];
   if (cur_file) {
     return cur_file->inode->ops->write(cur_file, buf, nbyte);

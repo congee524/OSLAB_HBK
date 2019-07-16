@@ -32,13 +32,13 @@ ssize_t devfs_iread(file_t *file, char *buf, size_t size) {
 }
 
 ssize_t devfs_iwrite(file_t *file, const char *buf, size_t size) {
-  printf("iwriting~\n");
+  // printf("iwriting~\n");
   if (!(file->flags & O_WRONLY) && !(file->flags & O_RDWR)) {
     log("no access to write!");
     return 0;
   }
   device_t *dev = (device_t *)(file->inode->ptr);
-  printf("dev name: %s offset: %d\n", dev->name, file->offset);
+  // printf("dev name: %s offset: %d\n", dev->name, file->offset);
   ssize_t nwrite = dev->ops->write(dev, file->offset, buf, size);
   file->offset += nwrite;
   return nwrite;
