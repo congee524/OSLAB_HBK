@@ -25,7 +25,9 @@ char *realpath(const char *path, char *resolvedpath) {
     strcpy(resolvedpath, path);
     return resolvedpath;
   } else {
+    printf("dir bef cur_task->pwd: %s", cur_task->pwd);
     strcpy(resolvedpath, cur_task->pwd);
+    printf("dir aft cur_task->pwd: %s", cur_task->pwd);
     /*多个‘/’视作一个 */
     strcat(resolvedpath, "/");
     strcat(resolvedpath, path);
