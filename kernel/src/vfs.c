@@ -104,7 +104,7 @@ int vfs_open(const char *path, int flags) {
   filesystem_t *tmp_fs = NULL;
   size_t tmp_mount_point_len = 0;
   for (int i = 0; i < mptable_cnt; i++) {
-    printf("%s\n" mptable[i].name);
+    printf("%s\n", mptable[i].name);
     if (tmp_mount_point_len < strlen(mptable[i].name)) {
       tmp_mount_point_len = strlen(mptable[i].name);
       if (strncmp(mptable[i].name, path, tmp_mount_point_len) == 0) {
