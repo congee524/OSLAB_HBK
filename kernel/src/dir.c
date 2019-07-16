@@ -60,7 +60,7 @@ int path_parse(filesystem_t *fs, const char *path) {
   }
   char *tmp_path = pmm->alloc(MAXPATHLEN);
   strcpy(tmp_path, tar_path);
-  printf("first tmp_path: %s\n", tmp_path);
+  // printf("first tmp_path: %s\n", tmp_path);
   dir_t *predir;
   int ret = 0;
   char *pch = strtok(tmp_path, "/");
@@ -74,7 +74,7 @@ int path_parse(filesystem_t *fs, const char *path) {
     } else {
       int i;
       for (i = 0; i < MAXDIRITEM; i++) {
-        printf("predir->name: %s\n", predir->names[i]);
+        // printf("predir->name: %s\n", predir->names[i]);
         if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
           ret = predir->inodes_ind[i];
           break;
@@ -85,14 +85,14 @@ int path_parse(filesystem_t *fs, const char *path) {
         return -1;
       }
     }
-    printf("bef pch: %s\n", pch);
+    // printf("bef pch: %s\n", pch);
     pch = strtok(NULL, "/");
-    printf("aft pch: %s\n", pch);
+    // printf("aft pch: %s\n", pch);
   }
   if (pch) {
     log("%s is not a sub_direct_item in %s", pch, path);
     return -1;
   }
-  printf("ret: %d\n", ret);
+  // printf("ret: %d\n", ret);
   return ret;
 }
