@@ -29,7 +29,7 @@ void vfs_init() {
   mptable_cnt = 0;
   printf("pwd cur cpu: %d\n", _cpu());
   cur_task->pwd = pmm->alloc(MAXPATHLEN);
-  strcpy(cur_task->pwd, "/dev");
+  strncpy(cur_task->pwd, "/dev", 4);
   printf("cur_task->pwd: %s\n", cur_task->pwd);
   vfs->mount("/dev", &devfs);
   // 没有实际挂载的设备，设为NULL
