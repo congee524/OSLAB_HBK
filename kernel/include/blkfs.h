@@ -9,7 +9,7 @@ typedef struct BITMAP bit_map;
 #define DIREPOINTNUM 32
 #define BLOCK_SIZE 0x80
 #define BLOCK_NUM 0x8000
-#define MAX_FSIZE (DIREPOINTNUM * BLOCK_SIZE)
+#define MAX_FSIZE (DIREPOINTNUM * BLOCK_SIZE - 1)
 
 struct BITMAP {
   uint8_t used : 1;
