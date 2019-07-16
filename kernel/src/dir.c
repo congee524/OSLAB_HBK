@@ -73,6 +73,7 @@ int path_parse(filesystem_t *fs, const char *path) {
     } else {
       int i;
       for (i = 0; i < MAXDIRITEM; i++) {
+        printf("predir->name: %s\n", predir->names[i]);
         if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
           ret = predir->inodes_ind[i];
           break;
