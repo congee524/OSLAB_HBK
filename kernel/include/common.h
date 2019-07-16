@@ -56,13 +56,13 @@ struct task {
   char name[MAXNAMELEN];
   // 文件描述符是基于线程的
   file_t *fildes[NOFILE];
-  char *pwd;
   _Context context;
   int state;
   int cpu;
   void *chan;
   struct task *next;
   struct task *prev;
+  char *pwd;
   uint8_t fence1[32];  // init with 0xcc, check overflow
   uint8_t stack[STK_SZ];
   uint8_t fence2[32];
