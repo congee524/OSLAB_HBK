@@ -38,6 +38,7 @@ ssize_t devfs_iwrite(file_t *file, const char *buf, size_t size) {
     return 0;
   }
   device_t *dev = (device_t *)(file->inode->ptr);
+  printf("dev name: %s\n", dev->name);
   ssize_t nwrite = dev->ops->write(dev, file->offset, buf, size);
   file->offset += nwrite;
   return nwrite;
