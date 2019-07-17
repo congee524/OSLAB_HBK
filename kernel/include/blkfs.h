@@ -17,6 +17,7 @@ struct BITMAP {
 
 struct blkfs_inode {
   size_t fsize;                      //文件大小
+  // mode 未实现
   uint32_t mode;                     // 文件的读写执行权限
   int link_num;                      // 文件的链接数
   int type;                          // 文件类型
