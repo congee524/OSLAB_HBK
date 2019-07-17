@@ -47,6 +47,8 @@ fsops_t blkfs_ops = {
 
 /*======= blkfs_inodeops =======*/
 
+inodeops_t blkfs_iops;
+
 int blkfs_iopen(file_t *file, int flags) {
   file->refcnt++;
   file->flags = flags;
