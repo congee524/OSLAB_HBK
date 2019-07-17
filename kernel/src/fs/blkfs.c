@@ -13,7 +13,7 @@ bit_map bitmap[BLOCK_NUM];  // indicate the block used or not
 extern inode_t *itable[];
 int find_free_bit() {
   int i;
-  for (i = 0; i < BLOCK_NUM; i++) {
+  for (i = 1; i < BLOCK_NUM; i++) {
     if (!bitmap[i].used) return i;
   }
   log("no free block!");
@@ -145,7 +145,7 @@ off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {
       file->offset += offset;
       break;
     case SEEK_END:
-      file->offset = file->inode->fsize;
+      file->offset = ((blk_inode *)(file->inode->ptr))->fsize;
       break;
     default:
       return -1;
@@ -153,9 +153,48 @@ off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {
   return file->offset;
 }
 
-int blkfs_imkdir(const char *name) { return -1; }
+int blkfs_imkdir(const char *path) { return -1; }
 
-int blkfs_irmdir(const char *name) { return -1; }
+int blkfs_irmdir(const char *path) { return -1; }
+
+int blkfs_itouch(const char *path) {
+  char fname[MAXNAMELEN];
+  int pa_dir_inode_ind = find_parent_dir(path, fname);
+  assert(itable[pa_dir_inode_ind]->type == VFILE_DIR);
+  dir_t *pa_dir = itable[pa_dir_inode_ind]->ptr;
+
+  int new_inode_ind = find_inode_ind();
+  itable[new_inode_ind] = pmm->alloc(sizeof(inode_t));
+  inode_t *inode = itable[new_inode_ind];
+  inode->fs = find_mount_point_fs(path);
+  inode->fsize = sizeof(blk_inode);
+  inode->ops = &blkfs_iops;
+  inode->refcnt = 0;
+  inode->type = VFILE_FILE;
+  inode->ptr = pmm->alloc(sizeof(blk_inode));
+  blk_inode *b_inode = inode->ptr;
+  b_inode->fsize = 0;
+  b_inode->mode = 0;
+  b_inode->link_num = 1;
+  b_inode->type = VFILE_FILE;
+  b_inode->ptr_point[0] = find_free_bit();
+
+  int pa_dir_item_ind = 0;
+  for (pa_dir_item_ind = 0; pa_dir_item_ind < MAXDIRITEM; pa_dir_item_ind++) {
+    if (!pa_dir->names[pa_dir_item_ind]) break;
+  }
+  if (pa_dir_item_ind >= MAXDIRITEM) {
+    log("parent dir has no free dir item!\n");
+    return -1;
+  }
+
+  pa_dir->names[pa_dir_item_ind] = pmm->alloc(MAXNAMELEN);
+  strcpy(pa_dir->names[pa_dir_item_ind], fname);
+  pa_dir->inodes_ind[pa_dir_item_ind] = new_inode_ind;
+  return 0;
+}
+
+int blkfs_irm(const char *path) { return -1; }
 
 int blkfs_ilink(const char *name, inode_t *inode) { return -1; }
 
@@ -169,18 +208,20 @@ inodeops_t blkfs_iops = {
     .lseek = blkfs_ilseek,
     .mkdir = blkfs_imkdir,
     .rmdir = blkfs_irmdir,
+    .touch = blkfs_itouch,
+    .rm = blkfs_irm,
     .link = blkfs_ilink,
     .unlink = blkfs_iunlink,
 };
 
 filesystem_t blkfs[2] = {
     {
-        .ops = &blkfs_ops,
+        .ops = &blkfs_ops, .iops = &blkfs_iops,
         // dev_lookup are not constant, must init in function
         //.dev = dev_lookup("ramdisk0"),
     },
     {
-        .ops = &blkfs_ops,
+        .ops = &blkfs_ops, .iops = &blkfs_iops,
         //.dev = dev_lookup("ramdisk1"),
     },
 };

@@ -14,6 +14,7 @@ typedef struct mount_point_table mptable_t;
 #define MAXINODENUM 0x10000
 
 int find_inode_ind();
+filesystem_t *find_mount_point_fs(char *path);
 
 enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 
@@ -24,6 +25,8 @@ typedef struct {
   int (*unmount)(const char *path);
   int (*mkdir)(const char *path);
   int (*rmdir)(const char *path);
+  int (*touch)(const char *path);
+  int (*rm)(const char *path);
   int (*link)(const char *oldpath, const char *newpath);
   int (*unlink)(const char *path);
   int (*open)(const char *path, int flags);
@@ -52,6 +55,7 @@ struct filesystem {
   const char *name;
   fsops_t *ops;
   device_t *dev;
+  inodeops_t *iops;
   // 我现在的实现好像不需要inode table，目录项都指向指针了
 };
 
@@ -82,6 +86,8 @@ struct inodeops {
   off_t (*lseek)(file_t *file, off_t offset, int whence);
   int (*mkdir)(const char *name);
   int (*rmdir)(const char *name);
+  int (*touch)(const char *name);
+  int (*rm)(const char *name);
   int (*link)(const char *name, inode_t *inode);
   int (*unlink)(const char *name);
   // 你可以自己设计readdir的功能

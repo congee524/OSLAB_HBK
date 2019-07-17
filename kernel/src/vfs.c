@@ -183,11 +183,14 @@ int vfs_rmdir(const char *path) {
 
 int vfs_touch(const char *path) {
   // TODO:
+  filesystem_t *fs = find_mount_point_fs(path);
+  fs->iops->touch(path);
   return 0;
 }
 
 int vfs_rm(const char *path) {
   // TODO:
+
   return 0;
 }
 

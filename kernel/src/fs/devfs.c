@@ -145,4 +145,5 @@ fsops_t devfs_ops = {
 filesystem_t devfs = {
     .ops = &devfs_ops,
     .dev = NULL,
+    .iops = &devfs_iops,
 };
