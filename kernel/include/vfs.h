@@ -92,8 +92,8 @@ https://landoflinux.com/linux_fstab.html
 https://blog.51cto.com/lspgyy/1297432
  */
 struct mount_point_table {
-  const char *mount_point; /*挂载点 */
-  filesystem_t *fs;        /*文件系统类型*/
+  char *mount_point; /*挂载点 */
+  filesystem_t *fs;  /*文件系统类型*/
   int inode_ind;
   // int options; /*设置选项 */
   // int dump; /*是否备份 */
