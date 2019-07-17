@@ -6,8 +6,8 @@
 
 // cmd_num 需要手动改！！！！！！
 #define CMDNUM 2
-static char *cmd_list[] = {"ls", "cd"};
-enum CMD_LIST { LS = 0, CD };
+static char *cmd_list[] = {"ls", "cd", "pwd"};
+enum CMD_LIST { LS = 0, CD, PWD };
 extern inode_t *itable[];
 
 int cmd_parse(char *input, char *output) {
@@ -34,7 +34,6 @@ int cmd_parse(char *input, char *output) {
           strcat(output, " ");
         }
       }
-      strcat(output, "\n");
       ret = 1;
       break;
     }
@@ -46,12 +45,18 @@ int cmd_parse(char *input, char *output) {
       ret = 0;
       break;
     }
+    case PWD: {
+      strcpy(output, cur_pwd);
+      ret = 1;
+      break;
+    }
     default: {
       strcpy(output, "Unknown cmd!");
       ret = 1;
       break;
     }
   }
+  strcat(output, "\n");
   pmm->free(tmp_cmd);
   return ret;
 }
