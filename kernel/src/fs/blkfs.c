@@ -10,6 +10,7 @@ blkfs的bitmap和目录项都存在内存中，汗。。。
 
 /*======= blkfs_helper =======*/
 bit_map bitmap[BLOCK_NUM];  // indicate the block used or not
+extern inode_t *itable[];
 int find_free_bit() {
   int i;
   for (i = 0; i < BLOCK_NUM; i++) {
