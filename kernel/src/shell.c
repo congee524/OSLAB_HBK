@@ -10,6 +10,10 @@ void shell_thread(void *tty_id) {
   sprintf(buf, "/dev/tty%s", tty_id);
   int stdin = vfs->open(buf, O_RDONLY);
   int stdout = vfs->open(buf, O_WRONLY);
+  dir_t *test = itable[1]->ptr;
+  for (int i = 0; i < MAXDIRITEM; i++) {
+    if (test->names[i]) printf("!!!%s\n", test->names[i]);
+  }
   while (1) {
     char line[128], text[128];
     sprintf(text, "(%s) [%s] $ ", buf, cur_pwd);
