@@ -34,14 +34,14 @@ char *realpath(const char *path, char *resolvedpath) {
   char *tmp = tmp_path;
   while (*tmp != '\0') {
     switch (*tmp) {
-      case '/':
+      case '/': {
         *ptr = *tmp;
         ptr++;
         *ptr = '\0';
         while (*tmp == '/') tmp++;
         break;
-
-      case '.':
+      }
+      case '.': {
         if (*(tmp + 1) == '.' && (*(tmp + 2) == '/' || *(tmp + 2) == '\0')) {
           *(--ptr) = '\0';
           while (*(ptr) != '/') {
@@ -64,8 +64,8 @@ char *realpath(const char *path, char *resolvedpath) {
           *ptr = '\0';
         }
         break;
-
-      default:
+      }
+      default: {
         while (*tmp != '\0' && *tmp != '/') {
           *ptr = *tmp;
           ptr++;
@@ -73,6 +73,7 @@ char *realpath(const char *path, char *resolvedpath) {
         }
         *ptr = '\0';
         break;
+      }
     }
   }
   if (strlen(resolvedpath) > 1 && *(--ptr) == '/') *ptr = '\0';
@@ -171,4 +172,17 @@ int find_parent_dir(const char *path, char *fname) {
   }
   pmm->free(resolvedpath);
   return oldret;
+}
+
+int dir_last_item(char *path, char *name) {
+  char tmp_path[MAXPATHLEN];
+  strcpy(tmp_path, path);
+  char *pch = strtok(tmp_path, "/");
+  if (*pch != '/')
+    strcpy(name, pch);
+  else
+    return -1;
+  while ((pch = strtok(NULL, "/")) != NULL)
+    if (*pch != '/') strcpy(name, pch);
+  return 0;
 }

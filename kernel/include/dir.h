@@ -8,6 +8,7 @@ typedef struct DIRE dir_t;
 char *realpath(const char *path, char *resolvedpath);
 int path_parse(const char *path);
 int find_parent_dir(const char *path, char *fname);
+int dir_last_item(char *path, char *name);
 
 struct DIRE {
   int self;
