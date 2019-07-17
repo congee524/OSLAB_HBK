@@ -94,7 +94,7 @@ int path_parse(const char *path) {
   int ret = 1;  // 根目录从1开始
   char *pch = strtok(resolvedpath, "/");
 
-  while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
+  while (pch && itable[ret] && itable[ret]->type == VFILE_DIR) {
     predir = (dir_t *)(itable[ret]->ptr);
     if (strcmp(pch, "..") == 0) {
       ret = predir->pa;
