@@ -74,6 +74,21 @@ int vfs_mount(const char *path, filesystem_t *fs) {
   strcpy(mptable[mptable_cnt].mount_point, resolvedpath);
   mptable[mptable_cnt++].fs = fs;
 
+  if (strcmp(path, "/") == 0 && !itable[1]) {
+    itable[1] = pmm->alloc(sizeof(inode_t));
+    inode_t *inode = itable[1];
+    inode->fs = fs;
+    inode->fsize = sizeof(dir_t);
+    inode->ops = NULL;
+    inode->ptr = pmm->alloc(sizeof(dir_t));
+    dir_t *tmp_dir = inode->ptr;
+    inode->refcnt = 0;
+    inode->type = VFILE_DIR;
+    tmp_dir->pa = 1;
+    tmp_dir->self = 1;
+    return 0;
+  }
+
   char fname[MAXNAMELEN];
   int pa_ind = find_parent_dir(resolvedpath, fname);
   assert(itable[pa_ind]->type == VFILE_DIR);
