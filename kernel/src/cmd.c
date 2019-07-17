@@ -48,6 +48,7 @@ int cmd_parse(char *input, char *output) {
     }
     default: {
       strcpy(output, "Unknown cmd!");
+      ret = 1;
       break;
     }
   }
