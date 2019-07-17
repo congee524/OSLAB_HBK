@@ -7,7 +7,8 @@
 // cmd_num 需要手动改！！！！！！
 static char *cmd_list[] = {"ls", "cd", "pwd"};
 enum CMD_LIST { LS = 0, CD, PWD };
-#define CMDNUM (sizeof(CMD_LIST) / sizeof(CMD_LIST[0]))
+#define CMDNUM 3
+
 extern inode_t *itable[];
 
 int cmd_parse(char *input, char *output) {
