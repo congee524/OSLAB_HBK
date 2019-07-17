@@ -110,6 +110,7 @@ int path_parse(const char *path) {
         }
       }
       if (i >= MAXDIRITEM) {
+        printf("ret: %d\n", ret);
         log("cannot find %s in %s!", pch, path);
         return -1;
       }
