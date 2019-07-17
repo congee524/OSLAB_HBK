@@ -37,7 +37,7 @@ char *realpath(const char *path, char *resolvedpath) {
       case '/':
         *ptr = *tmp;
         ptr++;
-        *ptr = '/0';
+        *ptr = '\0';
         while (*tmp == '/') tmp++;
         break;
 
@@ -63,7 +63,7 @@ char *realpath(const char *path, char *resolvedpath) {
             ptr++;
             tmp++;
           }
-          *ptr = '/0';
+          *ptr = '\0';
         }
         break;
 
@@ -73,7 +73,7 @@ char *realpath(const char *path, char *resolvedpath) {
           ptr++;
           tmp++;
         }
-        *ptr = '/0';
+        *ptr = '\0';
         break;
     }
   }
