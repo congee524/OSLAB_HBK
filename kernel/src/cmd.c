@@ -11,7 +11,7 @@ enum CMD_LIST { LS = 0, CD };
 extern inode_t *itable[];
 
 int cmd_parse(char *input, char *output) {
-  memset(output, '/0', sizeof(output));
+  memset(output, '\0', sizeof(output));
   char *tmp_cmd = pmm->alloc(128);
   strcpy(tmp_cmd, input);
   char *pch = strtok(tmp_cmd, " ");
