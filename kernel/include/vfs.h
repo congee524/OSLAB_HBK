@@ -14,7 +14,7 @@ typedef struct mount_point_table mptable_t;
 #define MAXINODENUM 0x10000
 
 int find_inode_ind();
-filesystem_t *find_mount_point_fs(char *path);
+filesystem_t *find_mount_point_fs(const char *path);
 
 enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 
