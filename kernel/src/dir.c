@@ -21,7 +21,6 @@ char *realpath(const char *path, char *resolvedpath) {
     return NULL;
   }
   char tmp_path[MAXPATHLEN];
-  char tmp_resopath[MAXPATHLEN];
   if (path[0] == '/') {
     strcpy(tmp_path, path);
   } else {
