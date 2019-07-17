@@ -116,7 +116,7 @@ ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {
   }
   int block_fid = file->offset / BLOCK_SIZE;
   size_t pre_block_off = file->offset - block_fid * BLOCK_SIZE;
-  char tmp_buf[size];
+  char *tmp_buf = pmm->alloc(size);
   strcpy(tmp_buf, buf);
   size_t tmp_size = size;
   while (tmp_size + pre_block_off >= BLOCK_SIZE) {
