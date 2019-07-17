@@ -15,7 +15,7 @@ void shell_thread(void *tty_id) {
   int stdin = vfs->open(buf, O_RDONLY);
   int stdout = vfs->open(buf, O_WRONLY);
   while (1) {
-    char line[128], text[128], tran[128];
+    char line[128], text[128];
     // printf("sizeof text before: %d", strlen(text));
     sprintf(text, "(%s) [%s] $ ", buf, cur_pwd);
 
