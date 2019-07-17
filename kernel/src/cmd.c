@@ -13,9 +13,9 @@ int cmd_parse(char *input, char *output) {
   char *tmp_cmd = pmm->alloc(128);
   strcpy(tmp_cmd, input);
   char *pch = strtok(tmp_cmd, " ");
-  int cmd_type = -1;
+  int cmd_type = 0;
   char *temp = NULL;
-  for (cmd_type = 0; cmd_type < CMDNUM; cmd_type) {
+  for (cmd_type = 0; cmd_type < CMDNUM; cmd_type++) {
     temp = cmd_list[cmd_type];
     if (strlen(temp) == strlen(pch) && strcmp(temp, pch) == 0) break;
   }
