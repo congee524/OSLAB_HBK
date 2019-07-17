@@ -92,9 +92,8 @@ int path_parse(const char *path) {
   // printf("first tmp_path: %s\n", tmp_path);
   dir_t *predir;
   int ret = 1;  // 根目录从1开始
-  printf("reolved parse: %s\n", resolvedpath);
   char *pch = strtok(resolvedpath, "/");
-
+  if (pch == NULL) pch = "/";
   while (pch && itable[ret] && itable[ret]->type == VFILE_DIR) {
     predir = (dir_t *)(itable[ret]->ptr);
     if (strcmp(pch, "..") == 0) {
