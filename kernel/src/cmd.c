@@ -27,6 +27,10 @@ int cmd_parse(char *input, char *output) {
   switch (cmd_type) {
     case LS: {
       pch = strtok(NULL, " ");
+      if (!pch) {
+        pch = pmm->alloc(MAXPATHLEN);
+        strcpy(pch, cur_pwd);
+      }
       int tmp_ind = path_parse(pch);
       dir_t *tmp_dir = itable[tmp_ind]->ptr;
       for (int i = 0; i < MAXDIRITEM; i++) {
