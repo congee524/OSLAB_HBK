@@ -33,14 +33,13 @@ char *realpath(const char *path, char *resolvedpath) {
   char *tmp = tmp_path;
   while (*tmp) {
     switch (*tmp) {
-      case '/': {
+      case '/':
         *ptr = *tmp;
         ptr++;
         while (*tmp == '/') tmp++;
         break;
-      }
 
-      case '.': {
+      case '.':
         if (*(tmp + 1) == '.' && *(tmp + 2) == '/') {
           *(--ptr) = '\0';
           while (*(ptr) != '/') {
@@ -59,20 +58,17 @@ char *realpath(const char *path, char *resolvedpath) {
           }
         }
         break;
-      }
 
-      default: {
+      default:
         while (*tmp != '/') {
           *ptr = *tmp;
           ptr++;
           tmp++;
         }
         break;
-      }
     }
   }
 }
-
 int path_parse(const char *path) {
   // 解析中调用绝对路径转换？看实现
   if (!path) {
