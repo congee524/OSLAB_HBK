@@ -78,7 +78,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
   int pa_ind = find_parent_dir(resolvedpath, fname);
   assert(itable[pa_ind]->type == VFILE_DIR);
   dir_t *pa_dir = itable[pa_ind]->ptr;
-  int dir_ind;
+  int dir_ind = 0;
   for (int dir_ind = 0; dir_ind < MAXDIRITEM; dir_ind++) {
     if (!pa_dir->names[dir_ind]) break;
   }
