@@ -87,7 +87,7 @@ int cmd_parse(char *input, char *output) {
         strcpy(output, "tty doesn't support cat!");
         ret = 1;
         break;
-      } else if (strncpm(tmp_name, "input", 5) == 0) {
+      } else if (strncmp(tmp_name, "input", 5) == 0) {
         strcpy(output, "input doesn't support cat!");
         ret = 1;
         break;
