@@ -13,6 +13,8 @@ typedef struct mount_point_table mptable_t;
 #define MAXMOUNTPOINT 16
 #define MAXINODENUM 0x10000
 
+int find_inode_ind();
+
 enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 
 typedef struct {
@@ -90,9 +92,9 @@ https://landoflinux.com/linux_fstab.html
 https://blog.51cto.com/lspgyy/1297432
  */
 struct mount_point_table {
-  const char *name;        /*设备名称 ramdisk0之类的*/
   const char *mount_point; /*挂载点 */
   filesystem_t *fs;        /*文件系统类型*/
+  int inode_ind;
   // int options; /*设置选项 */
   // int dump; /*是否备份 */
   // int pass; /*如何使用fsck */

@@ -25,18 +25,6 @@ void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   bitmap = 0;
   fs->dev = dev;
   fs->name = name;
-  // set the root dir of blkfs
-  fs->itable[0] = pmm->alloc(sizeof(struct inode));
-  inode_t *inode = fs->itable[0];
-  inode->refcnt = 0;
-  inode->ptr = pmm->alloc(sizeof(struct DIRE));
-  inode->fs = fs;
-  inode->ops = NULL;
-  inode->type = VFILE_DIR;
-  inode->fsize = sizeof(struct DIRE);
-  dir_t *dev_root_dir = inode->ptr;
-  dev_root_dir->self = 0;
-  dev_root_dir->pa = 0;
   return;
 }
 

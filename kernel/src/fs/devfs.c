@@ -9,6 +9,8 @@
 // from dev.c
 extern device_t *devices[];
 extern int dev_cnt;
+extern mptable_cnt;
+extern mptable_t mptable[];
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
@@ -16,23 +18,20 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // dev->ops->init();
   fs->name = name;
   fs->dev = dev;
-
+  // modddddddddddddddddddd
   // devfs直接挂载所有的设备，分配inode
   // set the root dir of devfs
-  fs->itable[0] = pmm->alloc(sizeof(struct inode));
-  inode_t *inode = fs->itable[0];
-  inode->refcnt = 0;
-  inode->ptr = pmm->alloc(sizeof(struct DIRE));
-  inode->fs = fs;
-  inode->ops = NULL;
-  inode->type = VFILE_DIR;
-  inode->fsize = sizeof(struct DIRE);
-  dir_t *dev_root_dir = inode->ptr;
-  dev_root_dir->self = 0;
-  dev_root_dir->pa = 0;
+  int root_dir_ind;
+  for (int root_dir_ind = 0; root_dir_ind < mptable_cnt; root_dir_ind++) {
+    if (mptable[root_dir_ind].fs == fs) break;
+  }
+  assert(root_dir_ind < mptable_cnt);
+
+  dir_t *dev_root_dir = itable[root_dir_ind];
   for (int i = 0; i < dev_cnt; i++) {
-    fs->itable[i + 1] = pmm->alloc(sizeof(struct inode));
-    inode_t *inode = fs->itable[i + 1];
+    int ind = find_inode_ind();
+    itable[ind] = pmm->alloc(sizeof(struct inode));
+    inode_t *inode = itable[ind];
     inode->refcnt = 0;
     inode->ptr = devices[i];
     inode->fs = fs;
@@ -42,7 +41,7 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
     dev_root_dir->names[i] = pmm->alloc(MAXNAMELEN);
     strcpy(dev_root_dir->names[i], devices[i]->name);
     // printf("dev name: %s in %d\n", dev_root_dir->names[i], i + 1);
-    dev_root_dir->inodes_ind[i] = i + 1;
+    dev_root_dir->inodes_ind[i] = ind;
   }
   return;
 }

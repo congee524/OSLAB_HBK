@@ -6,13 +6,14 @@
 typedef struct DIRE dir_t;
 
 char *realpath(const char *path, char *resolvedpath);
-int path_parse(filesystem_t *fs, const char *path);
+int path_parse(const char *path);
+int find_parent_dir(const char *path, char *fname);
 
 struct DIRE {
-  uint32_t self;
-  uint32_t pa;
+  int self;
+  int pa;
   char *names[MAXDIRITEM]; /*不要初始化, 用的时候再分配 */
-  uint32_t inodes_ind[MAXDIRITEM];
+  int inodes_ind[MAXDIRITEM];
 };
 
 // char pwd[MAXPATHLEN];

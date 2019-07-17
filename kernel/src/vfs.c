@@ -7,8 +7,8 @@
 
 /*======== global variables =======*/
 inode_t *itable[MAXINODENUM];
-// mptable_t mptable[MAXMOUNTPOINT];
-// int mptable_cnt;
+mptable_t mptable[MAXMOUNTPOINT];
+int mptable_cnt;
 /*????????????????vfs_init???? */
 
 int find_fd(task_t *curr_task) {
@@ -19,6 +19,14 @@ int find_fd(task_t *curr_task) {
     }
   }
   log("no free fd!");
+  return -1;
+}
+
+int find_inode_ind() {
+  for (int i = 0; i < MAXINODENUM; i++) {
+    if (!itable[i]) return i;
+  }
+  log("no free inode!");
   return -1;
 }
 
@@ -57,20 +65,50 @@ int vfs_mount(const char *path, filesystem_t *fs) {
     return -1;
   }
 
-  char *resolvedpath = pmm->alloc(MAXPATHLEN);
+  char *resolvedpath[MAXPATHLEN];
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return -1;
 
-  mptable[mptable_cnt].mount_point = path;
+  mptable[mptable_cnt].mount_point = pmm->alloc(MAXPATHLEN);
+  strcpy(mptable[mptable_cnt].mount_point, resolvedpath);
   mptable[mptable_cnt++].fs = fs;
+
+  char fname[MAXNAMELEN];
+  int pa_ind = find_parent_dir(resolvedpath, fname);
+  assert(itable[pa_ind]->type == VFILE_DIR);
+  dir_t *pa_dir = itable[pa_ind]->ptr;
+  int dir_ind;
+  for (int dir_ind = 0; dir_ind < MAXDIRITEM; dir_ind++) {
+    if (!pa_dir->names[dir_ind]) break;
+  }
+  assert(dir_ind < MAXDIRITEM);
+
+  pa_dir->names[dir_ind]->name = pmm->alloc(MAXNAMELEN);
+  strcpy(pa_dir->names[dir_ind]->name, fname);
+  int inode_ind = find_inode_ind();
+  pa_dir->inodes_ind[dir_ind] = inode_ind;
+  itable[inode_ind] = pmm->alloc(sizeof(struct inode));
+  inode_t *inode = itable[inode_ind];
+  inode->refcnt = 0;
+  inode->ptr = pmm->alloc(sizeof(struct DIRE));
+  inode->fs = fs;
+  inode->ops = NULL;
+  inode->type = VFILE_DIR;
+  inode->fsize = sizeof(struct DIRE);
+  dir_t *tmp_dir = inode->ptr;
+  tmp_dir->self = inode_ind;
+  tmp_dir->pa = pa_ind;
   return 0;
 }
 
 int vfs_unmount(const char *path) {
   for (int i = 0; i < mptable_cnt; i++) {
     if (strcmp(mptable[i].mount_point, path) == 0) {
+      pmm->free(mptable[i].mount_point);
       mptable[i].mount_point = mptable[--mptable_cnt].mount_point;
       mptable[i].fs = mptable[mptable_cnt].fs;
+      mptable[mptable_cnt].mount_point = NULL;
+      mptable[mptable_cnt].fs = NULL;
       return 0;
     }
   }
@@ -110,9 +148,10 @@ int vfs_open(const char *path, int flags) {
     log("open file failed, no free fd!");
     return -1;
   }
-  char *resolvedpath = pmm->alloc(MAXPATHLEN);
+  char resolvedpath[MAXPATHLEN];
   resolvedpath = realpath(path, resolvedpath);
   assert(resolvedpath);
+  /*
   filesystem_t *tmp_fs = NULL;
   size_t tmp_mount_point_len = 0;
   // printf("mptable_cnt: %d\n", mptable_cnt);
@@ -128,7 +167,11 @@ int vfs_open(const char *path, int flags) {
     }
   }
   assert(tmp_fs);
+
   inode_t *inode = tmp_fs->ops->lookup(tmp_fs, path, flags);
+  */
+  int inode_ind = path_parse(resolvedpath);
+  inode_t *inode = itable[inode_ind];
   cur_task->fildes[new_fd]->inode = inode;
   inode->ops->open(cur_task->fildes[new_fd], flags);
   return new_fd;
