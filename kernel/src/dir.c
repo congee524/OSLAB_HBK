@@ -128,7 +128,7 @@ int find_parent_dir(const char *path, char *fname) {
     log("no path!");
     return -1;
   }
-  char resolvedpath[MAXPATHLEN];
+  char resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return -1;
   // printf("first tmp_path: %s\n", tmp_path);
@@ -168,5 +168,6 @@ int find_parent_dir(const char *path, char *fname) {
     log("%s is not a sub_direct_item in %s", pch, path);
     return -1;
   }
+  pmm->free(resolvedpath);
   return oldret;
 }
