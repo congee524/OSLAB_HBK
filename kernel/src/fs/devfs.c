@@ -9,7 +9,7 @@
 // from dev.c
 extern device_t *devices[];
 extern int dev_cnt;
-extern mptable_cnt;
+extern int mptable_cnt;
 extern mptable_t mptable[];
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
