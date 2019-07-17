@@ -71,100 +71,102 @@ char *realpath(const char *path, char *resolvedpath) {
       }
     }
   }
+}
 
-  int path_parse(const char *path) {
-    // 解析中调用绝对路径转换？看实现
-    if (!path) {
-      log("no path!");
-      return -1;
-    }
-    char resolvedpath[MAXPATHLEN];
-    resolvedpath = realpath(path, resolvedpath);
-    if (!resolvedpath) return -1;
-    // printf("first tmp_path: %s\n", tmp_path);
-    dir_t *predir;
-    int ret = 1;  // 根目录从1开始
-    char *pch = strtok(resolvedpath, "/");
-    while (pch && *pch[0] == '/') pch++;
+int path_parse(const char *path) {
+  // 解析中调用绝对路径转换？看实现
+  if (!path) {
+    log("no path!");
+    return -1;
+  }
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
+  resolvedpath = realpath(path, resolvedpath);
+  if (!resolvedpath) return -1;
+  // printf("first tmp_path: %s\n", tmp_path);
+  dir_t *predir;
+  int ret = 1;  // 根目录从1开始
+  char *pch = strtok(resolvedpath, "/");
+  while (pch && *pch[0] == '/') pch++;
 
-    while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
-      predir = (dir_t *)(itable[ret]->ptr);
-      if (strcmp(pch, "..") == 0) {
-        ret = predir->pa;
-      } else if (strcmp(pch, ".") == 0) {
-        ret = predir->self;
-      } else {
-        int i;
-        for (i = 0; i < MAXDIRITEM; i++) {
-          // printf("predir->name: %s\n", predir->names[i]);
-          if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
-            ret = predir->inodes_ind[i];
-            break;
-          }
-        }
-        if (i >= MAXDIRITEM) {
-          log("cannot find %s in %s!", pch, path);
-          return -1;
+  while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
+    predir = (dir_t *)(itable[ret]->ptr);
+    if (strcmp(pch, "..") == 0) {
+      ret = predir->pa;
+    } else if (strcmp(pch, ".") == 0) {
+      ret = predir->self;
+    } else {
+      int i;
+      for (i = 0; i < MAXDIRITEM; i++) {
+        // printf("predir->name: %s\n", predir->names[i]);
+        if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
+          ret = predir->inodes_ind[i];
+          break;
         }
       }
-      // printf("bef pch: %s\n", pch);
-      pch = strtok(NULL, "/");
-      // printf("aft pch: %s\n", pch);
-      while (pch && *pch[0] == '/') pch++;
+      if (i >= MAXDIRITEM) {
+        log("cannot find %s in %s!", pch, path);
+        return -1;
+      }
     }
-    if (pch) {
-      log("%s is not a sub_direct_item in %s", pch, path);
-      return -1;
-    }
-    // printf("ret: %d\n", ret);
-    return ret;
-  }
-
-  int find_parent_dir(const char *path, char *fname) {
-    // 解析中调用绝对路径转换？看实现
-    if (!path) {
-      log("no path!");
-      return -1;
-    }
-    char resolvedpath[MAXPATHLEN];
-    resolvedpath = realpath(path, resolvedpath);
-    if (!resolvedpath) return -1;
-    // printf("first tmp_path: %s\n", tmp_path);
-    dir_t *predir;
-    int oldret = 1, ret = 1;  // 根目录从1开始
-    char *pch = strtok(resolvedpath, "/");
+    // printf("bef pch: %s\n", pch);
+    pch = strtok(NULL, "/");
+    // printf("aft pch: %s\n", pch);
     while (pch && *pch[0] == '/') pch++;
-    while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
-      oldret = ret;
-      strcpy(fname, pch);
-      predir = (dir_t *)(itable[ret]->ptr);
-      if (strcmp(pch, "..") == 0) {
-        ret = predir->pa;
-      } else if (strcmp(pch, ".") == 0) {
-        ret = predir->self;
-      } else {
-        int i;
-        for (i = 0; i < MAXDIRITEM; i++) {
-          // printf("predir->name: %s\n", predir->names[i]);
-          if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
-            ret = predir->inodes_ind[i];
-            break;
-          }
-        }
-        if (i >= MAXDIRITEM) {
-          log("cannot find %s in %s!", pch, path);
-          return -1;
+  }
+  if (pch) {
+    log("%s is not a sub_direct_item in %s", pch, path);
+    return -1;
+  }
+  // printf("ret: %d\n", ret);
+  pmm->free(resolvedpath);
+  return ret;
+}
+
+int find_parent_dir(const char *path, char *fname) {
+  // 解析中调用绝对路径转换？看实现
+  if (!path) {
+    log("no path!");
+    return -1;
+  }
+  char resolvedpath[MAXPATHLEN];
+  resolvedpath = realpath(path, resolvedpath);
+  if (!resolvedpath) return -1;
+  // printf("first tmp_path: %s\n", tmp_path);
+  dir_t *predir;
+  int oldret = 1, ret = 1;  // 根目录从1开始
+  char *pch = strtok(resolvedpath, "/");
+  while (pch && *pch[0] == '/') pch++;
+  while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
+    oldret = ret;
+    strcpy(fname, pch);
+    predir = (dir_t *)(itable[ret]->ptr);
+    if (strcmp(pch, "..") == 0) {
+      ret = predir->pa;
+    } else if (strcmp(pch, ".") == 0) {
+      ret = predir->self;
+    } else {
+      int i;
+      for (i = 0; i < MAXDIRITEM; i++) {
+        // printf("predir->name: %s\n", predir->names[i]);
+        if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
+          ret = predir->inodes_ind[i];
+          break;
         }
       }
-      // printf("bef pch: %s\n", pch);
+      if (i >= MAXDIRITEM) {
+        log("cannot find %s in %s!", pch, path);
+        return -1;
+      }
+    }
+    // printf("bef pch: %s\n", pch);
 
-      pch = strtok(NULL, "/");
-      // printf("aft pch: %s\n", pch);
-      while (pch && *pch[0] == '/') pch++;
-    }
-    if (pch) {
-      log("%s is not a sub_direct_item in %s", pch, path);
-      return -1;
-    }
-    return oldret;
+    pch = strtok(NULL, "/");
+    // printf("aft pch: %s\n", pch);
+    while (pch && *pch[0] == '/') pch++;
   }
+  if (pch) {
+    log("%s is not a sub_direct_item in %s", pch, path);
+    return -1;
+  }
+  return oldret;
+}
