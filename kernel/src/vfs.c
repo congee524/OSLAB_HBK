@@ -62,9 +62,11 @@ void vfs_init() {
   }
 
   vfs->mount("/", &blkfs[0]);
+  vfs->mount("/mnt", &blkfs[1]);
   vfs->mount("/dev", &devfs);
 
   blkfs[0].ops->init(&blkfs[0], "blkfs[0]", dev_lookup("ramdisk0"));
+  blkfs[1].ops->init(&blkfs[1], "blkfs[1]", dev_lookup("ramdisk1"));
   // devfs没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
 
@@ -73,12 +75,9 @@ void vfs_init() {
 
 int vfs_access(const char *path, int mode) {
   // TODO:
-  /*???????????????????0?? */
   return 0;
 }
 
-/*???mount point table? */
-/*?????????????????????????????? */
 int vfs_mount(const char *path, filesystem_t *fs) {
   if (mptable_cnt >= MAXMOUNTPOINT) {
     log("cannot mount more filesystem!");
@@ -110,36 +109,6 @@ int vfs_mount(const char *path, filesystem_t *fs) {
   } else {
     vfs->mkdir(resolvedpath);
   }
-  /*
-    char fname[MAXNAMELEN];
-    int pa_ind = find_parent_dir(resolvedpath, fname);
-    kmt->spin_lock(&print_lk);
-    printf("mount point %s\n", path);
-    kmt->spin_unlock(&print_lk);
-    assert(itable[pa_ind]->type == VFILE_DIR);
-    dir_t *pa_dir = itable[pa_ind]->ptr;
-    int dir_ind = 0;
-    for (int dir_ind = 0; dir_ind < MAXDIRITEM; dir_ind++) {
-      if (!pa_dir->names[dir_ind]) break;
-    }
-    assert(dir_ind < MAXDIRITEM);
-
-    pa_dir->names[dir_ind] = pmm->alloc(MAXNAMELEN);
-    strcpy(pa_dir->names[dir_ind], fname);
-    int inode_ind = find_inode_ind();
-    pa_dir->inodes_ind[dir_ind] = inode_ind;
-    itable[inode_ind] = pmm->alloc(sizeof(struct inode));
-    inode_t *inode = itable[inode_ind];
-    inode->refcnt = 0;
-    inode->ptr = pmm->alloc(sizeof(struct DIRE));
-    inode->fs = fs;
-    inode->ops = NULL;
-    inode->type = VFILE_DIR;
-    inode->fsize = sizeof(struct DIRE);
-    dir_t *tmp_dir = inode->ptr;
-    tmp_dir->self = inode_ind;
-    tmp_dir->pa = pa_ind;
-  */
   pmm->free(resolvedpath);
   return 0;
 }
