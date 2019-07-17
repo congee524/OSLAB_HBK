@@ -47,7 +47,8 @@ char *realpath(const char *path, char *resolvedpath) {
             ptr--;
           }
           tmp += 2;
-        } else if (*(tmp + 1) == '/') {
+        } else if (*(tmp + 1) == '/' || *(tmp + 1) == '\0') {
+          *(--ptr) = '\0';
           tmp++;
         } else {
           while (*tmp != '\0' && *tmp != '/') {
