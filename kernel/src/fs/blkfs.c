@@ -29,8 +29,8 @@ void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
 
 inode_t *blkfs_lookup(filesystem_t *fs, const char *path, int flags) {
   // TODO:
-  int ret = path_parse(fs, path);
-  return fs->itable[ret];
+  int ret = path_parse(path);
+  return itable[ret];
 }
 
 int blkfs_close(inode_t *inode) {
