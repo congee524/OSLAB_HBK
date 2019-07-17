@@ -11,6 +11,7 @@ extern device_t *devices[];
 extern int dev_cnt;
 extern int mptable_cnt;
 extern mptable_t mptable[];
+extern inode_t *itable[];
 
 void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
