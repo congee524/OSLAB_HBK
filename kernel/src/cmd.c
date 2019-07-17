@@ -23,7 +23,7 @@ int cmd_parse(char *input, char *output) {
   int ret = 0;
   switch (cmd_type) {
     case LS: {
-      pch = strtok(NULL " ");
+      pch = strtok(NULL, " ");
       int tmp_ind = path_parse(pch);
       dir_t *tmp_dir = itable[tmp_ind]->ptr;
       for (int i = 0; i < MAXDIRITEM; i++) {
@@ -37,7 +37,7 @@ int cmd_parse(char *input, char *output) {
       break;
     }
     case CD: {
-      pch = strtok(NULL " ");
+      pch = strtok(NULL, " ");
       output = realpath(pch, output);
       ret = 0;
       break;
