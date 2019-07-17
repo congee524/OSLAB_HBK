@@ -153,13 +153,13 @@ off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {
   return file->offset;
 }
 
-int blkfs_imkdir(const char *name) {}
+int blkfs_imkdir(const char *name) { return -1; }
 
-int blkfs_irmdir(const char *name) {}
+int blkfs_irmdir(const char *name) { return -1; }
 
-int blkfs_ilink(const char *name, inode_t *inode) {}
+int blkfs_ilink(const char *name, inode_t *inode) { return -1; }
 
-int blkfs_iunlink(const char *name) {}
+int blkfs_iunlink(const char *name) { return -1; }
 
 inodeops_t blkfs_iops = {
     .open = blkfs_iopen,
