@@ -7,7 +7,7 @@
 // TODO: 记得初始化
 // dir_t *rootdirt;
 
-dir_t *root_dir = NULL;
+extern inode_t *itable[];
 
 /*转换为绝对路径，还要进行路径解析 */
 char *realpath(const char *path, char *resolvedpath) {
@@ -111,7 +111,7 @@ int path_parse(const char *path) {
     // printf("bef pch: %s\n", pch);
     pch = strtok(NULL, "/");
     // printf("aft pch: %s\n", pch);
-    while (pch && *pch[0] == '/') pch++;
+    while (pch && *pch == '/') pch++;
   }
   if (pch) {
     log("%s is not a sub_direct_item in %s", pch, path);
@@ -135,7 +135,7 @@ int find_parent_dir(const char *path, char *fname) {
   dir_t *predir;
   int oldret = 1, ret = 1;  // 根目录从1开始
   char *pch = strtok(resolvedpath, "/");
-  while (pch && *pch[0] == '/') pch++;
+  while (pch && *pch == '/') pch++;
   while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
     oldret = ret;
     strcpy(fname, pch);
@@ -162,7 +162,7 @@ int find_parent_dir(const char *path, char *fname) {
 
     pch = strtok(NULL, "/");
     // printf("aft pch: %s\n", pch);
-    while (pch && *pch[0] == '/') pch++;
+    while (pch && *pch == '/') pch++;
   }
   if (pch) {
     log("%s is not a sub_direct_item in %s", pch, path);
