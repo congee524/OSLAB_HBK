@@ -161,7 +161,7 @@ int vfs_unmount(const char *path) {
 
 int vfs_mkdir(const char *path) {
   // TODO:
-  char resolvedpath[MAXPATHLEN];
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   filesystem_t *fs = find_mount_point_fs(resolvedpath);
   if (!fs) return -1;
@@ -172,6 +172,7 @@ int vfs_mkdir(const char *path) {
   int pa_dir_ind = find_parent_dir(resolvedpath, fname);
   if (strcmp(fname, name) != 0) {
     log("wrong path!\n");
+    pmm->free(resolvedpath);
     return -1;
   }
   assert(itable[pa_dir_ind]->type == VFILE_DIR);
@@ -184,6 +185,7 @@ int vfs_mkdir(const char *path) {
   }
   if (pa_dir_item_ind >= MAXDIRITEM) {
     log("parent dir has no free dir item!\n");
+    pmm->free(resolvedpath);
     return -1;
   }
 
@@ -201,6 +203,7 @@ int vfs_mkdir(const char *path) {
   dir_t *new_dir = inode->ptr;
   new_dir->self = inode_ind;
   new_dir->pa = pa_dir_ind;
+  pmm->free(resolvedpath);
   return 0;
 }
 
