@@ -87,6 +87,10 @@ int cmd_parse(char *input, char *output) {
         strcpy(output, "tty doesn't support cat!");
         ret = 1;
         break;
+      } else if (strncpm(tmp_name, "input", 5) == 0) {
+        strcpy(output, "input doesn't support cat!");
+        ret = 1;
+        break;
       }
       int cat_fd = vfs->open(pch, O_RDONLY);
       vfs->read(cat_fd, output, 126);
