@@ -95,7 +95,7 @@ int path_parse(const char *path) {
   char *pch = strtok(resolvedpath, "/");
   printf("pch: %s\n", pch);
   while (pch && *pch == '/') pch++;
-
+  assert(pch);
   while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
     predir = (dir_t *)(itable[ret]->ptr);
     if (strcmp(pch, "..") == 0) {
