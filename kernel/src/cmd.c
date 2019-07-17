@@ -13,7 +13,7 @@ extern inode_t *itable[];
 
 int cmd_parse(char *input, char *output) {
   memset(output, '\0', sizeof(output));
-  char *tmp_cmd = pmm->alloc(128);
+  char *tmp_cmd = pmm->alloc(1024);
   strcpy(tmp_cmd, input);
   char *pch = strtok(tmp_cmd, " ");
   int cmd_type = 0;
