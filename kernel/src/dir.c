@@ -73,7 +73,7 @@ char *realpath(const char *path, char *resolvedpath) {
         break;
     }
   }
-  *ptr = '\0';
+  *(ptr + 1) = '\0';
   return resolvedpath;
 }
 
