@@ -5,9 +5,9 @@
 #include <shell.h>
 
 // cmd_num 需要手动改！！！！！！
-#define CMDNUM 3
-static char *cmd_list[] = {"ls", "cd", "pwd"};
-enum CMD_LIST { LS = 0, CD, PWD };
+#define CMDNUM 4
+static char *cmd_list[] = {"ls", "cd", "pwd", "mkdir"};
+enum CMD_LIST { LS = 0, CD, PWD, MKDIR };
 
 extern inode_t *itable[];
 
@@ -27,12 +27,10 @@ int cmd_parse(char *input, char *output) {
   switch (cmd_type) {
     case LS: {
       pch = strtok(NULL, " ");
-      /*
       if (!pch) {
         pch = pmm->alloc(MAXPATHLEN);
         strcpy(pch, cur_pwd);
       }
-      */
       int tmp_ind = path_parse(pch);
       dir_t *tmp_dir = itable[tmp_ind]->ptr;
       for (int i = 0; i < MAXDIRITEM; i++) {
@@ -46,6 +44,10 @@ int cmd_parse(char *input, char *output) {
     }
     case CD: {
       pch = strtok(NULL, " ");
+      if (!pch) {
+        ret = 0;
+        break;
+      }
       // printf("cd: %s\n", pch);
       output = realpath(pch, output);
       strcpy(cur_pwd, output);
@@ -55,6 +57,16 @@ int cmd_parse(char *input, char *output) {
     case PWD: {
       strcpy(output, cur_pwd);
       ret = 1;
+      break;
+    }
+    case MKDIR: {
+      pch = strtok(NULL, " ");
+      if (!pch) {
+        ret = 0;
+        break;
+      }
+      vfs->mkdir(pch);
+      ret = 0;
       break;
     }
     default: {
