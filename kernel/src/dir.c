@@ -46,7 +46,6 @@ char *realpath(const char *path, char *resolvedpath) {
             *ptr = '\0';
             ptr--;
           }
-          ptr++;
           tmp += 2;
         } else if (*(tmp + 1) == '/') {
           tmp++;
