@@ -66,7 +66,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
     return -1;
   }
 
-  char *resolvedpath[MAXPATHLEN];
+  char resolvedpath[MAXPATHLEN];
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return -1;
 
