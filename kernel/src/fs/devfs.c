@@ -98,7 +98,7 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // modddddddddddddddddddd
   // devfs直接挂载所有的设备，分配inode
   // set the root dir of devfs
-  int root_dir_ind;
+  int root_dir_ind = 0;
   for (int root_dir_ind = 0; root_dir_ind < mptable_cnt; root_dir_ind++) {
     if (mptable[root_dir_ind].fs == fs) break;
   }
