@@ -104,7 +104,7 @@ static void *kalloc(size_t size) {
       }
     }
   }
-  memset(pre->data, 0, size);
+  memset((void *)&pre->data, 0, size);
   kmt->spin_unlock(&alloc_lk);
   return (void *)&pre->data;
 }
