@@ -84,7 +84,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
   }
   assert(dir_ind < MAXDIRITEM);
 
-  pa_dir->names[dir_ind]->name = pmm->alloc(MAXNAMELEN);
+  pa_dir->names[dir_ind] = pmm->alloc(MAXNAMELEN);
   strcpy(pa_dir->names[dir_ind]->name, fname);
   int inode_ind = find_inode_ind();
   pa_dir->inodes_ind[dir_ind] = inode_ind;
