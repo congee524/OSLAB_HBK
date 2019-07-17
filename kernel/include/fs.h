@@ -3,5 +3,6 @@
 
 #include <vfs.h>
 extern filesystem_t devfs;
+extern filesystem_t blkfs[2];
 
 #endif
