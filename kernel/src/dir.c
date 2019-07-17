@@ -152,8 +152,7 @@ int find_parent_dir(const char *path, char *fname) {
         }
       }
       if (i >= MAXDIRITEM) {
-        log("cannot find %s in %s!", pch, path);
-        return -1;
+        break;
       }
     }
     // printf("bef pch: %s\n", pch);
