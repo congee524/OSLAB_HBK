@@ -104,7 +104,7 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   }
   assert(root_dir_ind < mptable_cnt);
 
-  dir_t *dev_root_dir = itable[root_dir_ind];
+  dir_t *dev_root_dir = itable[root_dir_ind]->ptr;
   for (int i = 0; i < dev_cnt; i++) {
     int ind = find_inode_ind();
     itable[ind] = pmm->alloc(sizeof(struct inode));
