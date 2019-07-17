@@ -31,7 +31,7 @@ int find_inode_ind() {
   return -1;
 }
 
-filesystem_t *find_mount_point_fs(char *path) {
+filesystem_t *find_mount_point_fs(const char *path) {
   // 只接受绝对路径
   filesystem_t *tmp_fs = NULL;
   size_t pre_mp_len = 0;
