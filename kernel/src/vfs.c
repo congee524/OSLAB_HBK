@@ -66,7 +66,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
     return -1;
   }
 
-  char resolvedpath[MAXPATHLEN];
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
   if (!resolvedpath) return -1;
 
@@ -99,6 +99,8 @@ int vfs_mount(const char *path, filesystem_t *fs) {
   dir_t *tmp_dir = inode->ptr;
   tmp_dir->self = inode_ind;
   tmp_dir->pa = pa_ind;
+
+  pmm->free(resolvedpath);
   return 0;
 }
 
