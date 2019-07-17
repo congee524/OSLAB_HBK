@@ -22,7 +22,6 @@ int find_free_bit() {
 
 void blkfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
-  bitmap = 0;
   fs->dev = dev;
   fs->name = name;
   return;
