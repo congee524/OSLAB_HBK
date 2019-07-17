@@ -14,9 +14,7 @@ extern inode_t *itable[];
 int cmd_parse(char *input, char *output) {
   memset(output, '\0', sizeof(output));
   char *tmp_cmd = pmm->alloc(128);
-  printf("input: %s\n", input);
   strcpy(tmp_cmd, input);
-  printf("tmp_cmd: %s\n", tmp_cmd);
   char *pch = strtok(tmp_cmd, " ");
   int cmd_type = 0;
   char *temp = NULL;

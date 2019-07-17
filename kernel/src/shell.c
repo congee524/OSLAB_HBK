@@ -24,7 +24,9 @@ void shell_thread(void *tty_id) {
     // printf("sh2\n");
     int nread = vfs->read(stdin, line, strlen(text));
     // printf("sh3\n");
+    printf("before line: %s\n", line);
     line[nread - 1] = '\0';
+    printf("after line: %s\n", line);
     if (cmd_parse(line, text)) {
       vfs->write(stdout, text, strlen(text));
     }

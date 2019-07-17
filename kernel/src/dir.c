@@ -51,11 +51,9 @@ char *realpath(const char *path, char *resolvedpath) {
           *ptr = '\0';
           tmp += 2;
         } else if (*(tmp + 1) == '/' || *(tmp + 1) == '\0') {
-          printf(".!!!\n");
           *ptr = '\0';
           *(--ptr) = '\0';
           tmp++;
-          printf("str: %s\n", resolvedpath);
         } else {
           printf("then!\n");
           while (*tmp != '\0' && *tmp != '/') {
@@ -64,7 +62,6 @@ char *realpath(const char *path, char *resolvedpath) {
             tmp++;
           }
           *ptr = '\0';
-          printf("str: %s\n", resolvedpath);
         }
         break;
 
