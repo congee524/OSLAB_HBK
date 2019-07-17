@@ -40,7 +40,7 @@ int cmd_parse(char *input, char *output) {
     }
     case CD: {
       pch = strtok(NULL, " ");
-      // printf("cd: %s\n", pch);
+      printf("cd: %s\n", pch);
       output = realpath(pch, output);
       strcpy(cur_pwd, output);
       ret = 0;
