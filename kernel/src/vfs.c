@@ -58,7 +58,7 @@ void vfs_init() {
   mptable_cnt = 0;
   for (int i = 0; i < MAX_CPU; i++) {
     pwds[i] = pmm->alloc(MAXPATHLEN);
-    strncpy(pwds[i], "/dev", 4);
+    strncpy(pwds[i], "/", 1);
   }
 
   vfs->mount("/", &blkfs[0]);
