@@ -71,6 +71,10 @@ int devfs_imkdir(const char *name) { return -1; }
 
 int devfs_irmdir(const char *name) { return -1; }
 
+int devfs_itouch(const char *path) { return -1; }
+
+int devfs_irm(const char *path) { return -1; }
+
 int devfs_ilink(const char *name, inode_t *inode) { return -1; }
 
 int devfs_iunlink(const char *name) { return -1; }
@@ -83,6 +87,8 @@ inodeops_t devfs_iops = {
     .lseek = devfs_ilseek,
     .mkdir = devfs_imkdir,
     .rmdir = devfs_irmdir,
+    .touch = devfs_itouch,
+    .rm = devfs_irm,
     .link = devfs_ilink,
     .unlink = devfs_iunlink,
 };
