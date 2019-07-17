@@ -5,9 +5,9 @@
 #include <shell.h>
 
 // cmd_num 需要手动改！！！！！！
-#define CMDNUM 2
 static char *cmd_list[] = {"ls", "cd", "pwd"};
 enum CMD_LIST { LS = 0, CD, PWD };
+#define CMDNUM (sizeof(CMD_LIST) / sizeof(CMD_LIST[0]))
 extern inode_t *itable[];
 
 int cmd_parse(char *input, char *output) {
@@ -39,6 +39,7 @@ int cmd_parse(char *input, char *output) {
     }
     case CD: {
       pch = strtok(NULL, " ");
+      printf("cd: %s\n", pch);
       output = realpath(pch, output);
       strcpy(cur_pwd, output);
       ret = 0;
