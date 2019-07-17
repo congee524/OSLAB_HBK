@@ -29,17 +29,18 @@ int cmd_parse(char *input, char *output) {
       dir_t *tmp_dir = itable[tmp_ind]->ptr;
       for (int i = 0; i < MAXDIRITEM; i++) {
         if (tmp_dir->names[i]) {
-          strcat(text, tmp_dir->names[i]);
-          strcat(text, " ");
+          strcat(output, tmp_dir->names[i]);
+          strcat(output, " ");
         }
       }
-      strcat(text, "\n");
+      strcat(output, "\n");
       ret = 1;
       break;
     }
     case CD: {
       pch = strtok(NULL, " ");
       output = realpath(pch, output);
+      strcpy(cur_pwd, output);
       ret = 0;
       break;
     }
