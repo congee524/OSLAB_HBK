@@ -40,7 +40,7 @@ char *realpath(const char *path, char *resolvedpath) {
         break;
 
       case '.':
-        if (*(tmp + 1) == '.' && *(tmp + 2) == '/') {
+        if (*(tmp + 1) == '.' && (*(tmp + 2) == '/' || *(tmp + 2) == '\0')) {
           *(--ptr) = '\0';
           while (*(ptr) != '/') {
             *ptr = '\0';
