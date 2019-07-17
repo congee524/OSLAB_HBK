@@ -162,10 +162,6 @@ int find_parent_dir(const char *path, char *fname) {
     // printf("aft pch: %s\n", pch);
     while (pch && *pch == '/') pch++;
   }
-  if (pch) {
-    log("%s is not a sub_direct_item in %s", pch, path);
-    return -1;
-  }
   pmm->free(resolvedpath);
   return oldret;
 }
