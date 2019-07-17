@@ -181,6 +181,16 @@ int vfs_rmdir(const char *path) {
   return 0;
 }
 
+int vfs_touch(const char *path) {
+  // TODO:
+  return 0;
+}
+
+int vfs_rm(const char *path) {
+  // TODO:
+  return 0;
+}
+
 int vfs_link(const char *oldpath, const char *newpath) {
   // TODO:
   // ?oldpath?inode number??newpath?
@@ -258,6 +268,8 @@ MODULE_DEF(vfs){
     .unmount = vfs_unmount,
     .mkdir = vfs_mkdir,
     .rmdir = vfs_rmdir,
+    .touch = vfs_touch,
+    .rm = vfs_rm,
     .link = vfs_link,
     .unlink = vfs_unlink,
     .open = vfs_open,
