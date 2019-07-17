@@ -32,8 +32,8 @@ void shell_thread(void *tty_id) {
         strcat(text, tmp_dir->names[i]);
         strcat(text, " ");
       }
-      strcat(text, "\n");
     }
+    strcat(text, "\n");
     vfs->write(stdout, text, strlen(text));
     // printf("sh4\n");
   }
