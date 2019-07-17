@@ -65,9 +65,9 @@ void vfs_init() {
   vfs->mount("/mnt", &blkfs[1]);
   vfs->mount("/dev", &devfs);
 
+  // devfs没有实际挂载的设备，dev设为NULL
   blkfs[0].ops->init(&blkfs[0], "blkfs[0]", dev_lookup("ramdisk0"));
   blkfs[1].ops->init(&blkfs[1], "blkfs[1]", dev_lookup("ramdisk1"));
-  // devfs没有实际挂载的设备，设为NULL
   devfs.ops->init(&devfs, "devfs", NULL);
 
   return;
@@ -245,6 +245,9 @@ off_t vfs_lseek(int fd, off_t offset, int whence) {
 
 int vfs_close(int fd) {
   // TODO:
+  file_t *tmp_file = cur_task->fildes[fd];
+  tmp_file->inode->ops->close(tmp_file);
+  pmm->free(tmp_file);
   return 0;
 }
 

@@ -5,9 +5,9 @@
 #include <shell.h>
 
 // cmd_num 需要手动改！！！！！！
-#define CMDNUM 4
-static char *cmd_list[] = {"ls", "cd", "pwd", "mkdir"};
-enum CMD_LIST { LS = 0, CD, PWD, MKDIR };
+#define CMDNUM 5
+static char *cmd_list[] = {"ls", "cd", "pwd", "mkdir", "cat"};
+enum CMD_LIST { LS = 0, CD, PWD, MKDIR, CAT };
 
 extern inode_t *itable[];
 
@@ -67,6 +67,24 @@ int cmd_parse(char *input, char *output) {
       }
       vfs->mkdir(pch);
       ret = 0;
+      break;
+    }
+    case CAT: {
+      pch = strtok(NULL, " ");
+      if (!pch) {
+        ret = 0;
+        break;
+      }
+      int cat_file_inode_ind = path_parse(pch);
+      if (itable[cat_file_inode_ind]->type != VFILE_FILE) {
+        strcpy(output, "the file type don't support cat!");
+        ret = 1;
+        break;
+      }
+      int cat_fd = vfs->open(pch, O_RDONLY);
+      vfs->read(cat_fd, output, 126);
+      vfs->close(cat_fd);
+      ret = 1;
       break;
     }
     default: {
