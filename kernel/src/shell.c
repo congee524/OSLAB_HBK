@@ -2,6 +2,7 @@
 #include <dir.h>
 #include <klib.h>
 #include <shell.h>
+extern inode_t *itable[];
 
 void shell_thread(void *tty_id) {
   /*
@@ -23,8 +24,16 @@ void shell_thread(void *tty_id) {
     int nread = vfs->read(stdin, line, strlen(text));
     // printf("sh3\n");
     line[nread - 1] = '\0';
-    find_parent_dir(line, tran);
-    sprintf(text, "Echo: %s\n", tran);
+    int tmp_ind = path_parse(line);
+    dir_t *tmp_dir = itable[tmp_ind]->ptr;
+    strcpy(text, "Echo: ");
+    for (int i = 0; i < MAXDIRITEM; i++) {
+      if (tmp_dir->names[i]) {
+        strcat(text, tmp_dir->names[i]);
+        strcat(text, " ");
+      }
+      strcat(text, "\n");
+    }
     vfs->write(stdout, text, strlen(text));
     // printf("sh4\n");
   }

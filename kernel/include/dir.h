@@ -10,6 +10,7 @@ int path_parse(const char *path);
 int find_parent_dir(const char *path, char *fname);
 
 struct DIRE {
+  char *self_name;
   int self;
   int pa;
   char *names[MAXDIRITEM]; /*不要初始化, 用的时候再分配 */
