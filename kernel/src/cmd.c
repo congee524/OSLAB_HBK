@@ -27,10 +27,12 @@ int cmd_parse(char *input, char *output) {
   switch (cmd_type) {
     case LS: {
       pch = strtok(NULL, " ");
+      /*
       if (!pch) {
         pch = pmm->alloc(MAXPATHLEN);
         strcpy(pch, cur_pwd);
       }
+      */
       int tmp_ind = path_parse(pch);
       dir_t *tmp_dir = itable[tmp_ind]->ptr;
       for (int i = 0; i < MAXDIRITEM; i++) {
@@ -44,7 +46,7 @@ int cmd_parse(char *input, char *output) {
     }
     case CD: {
       pch = strtok(NULL, " ");
-      printf("cd: %s\n", pch);
+      // printf("cd: %s\n", pch);
       output = realpath(pch, output);
       strcpy(cur_pwd, output);
       ret = 0;
