@@ -81,6 +81,13 @@ int cmd_parse(char *input, char *output) {
         ret = 1;
         break;
       }
+      char tmp_name[MAXNAMELEN];
+      find_parent_dir(pch, tmp_name);
+      if (strncmp(tmp_name, "tty", 3)) {
+        strcpy(output, "tty doesn't support cat!");
+        ret = 1;
+        break;
+      }
       int cat_fd = vfs->open(pch, O_RDONLY);
       vfs->read(cat_fd, output, 126);
       vfs->close(cat_fd);
