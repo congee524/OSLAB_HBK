@@ -6,8 +6,9 @@
 #include <vfs.h>
 
 /*======== global variables =======*/
-mptable_t mptable[MAXMOUNTPOINT];
-int mptable_cnt;
+inode_t *itable[MAXINODENUM];
+// mptable_t mptable[MAXMOUNTPOINT];
+// int mptable_cnt;
 /*????????????????vfs_init???? */
 
 int find_fd(task_t *curr_task) {

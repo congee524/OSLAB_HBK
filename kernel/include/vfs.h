@@ -11,7 +11,7 @@ typedef struct inodeops inodeops_t;
 typedef struct mount_point_table mptable_t;
 
 #define MAXMOUNTPOINT 16
-#define MAXINODENUM 128
+#define MAXINODENUM 0x10000
 
 enum SEEKTYPE { SEEK_SET = 0, SEEK_CUR, SEEK_END };
 
@@ -51,7 +51,6 @@ struct filesystem {
   fsops_t *ops;
   device_t *dev;
   // 我现在的实现好像不需要inode table，目录项都指向指针了
-  inode_t *itable[MAXINODENUM]; /*记得在初始化时分配相应的空间 */
 };
 
 enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };

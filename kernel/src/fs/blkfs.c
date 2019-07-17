@@ -148,6 +148,19 @@ ssize_t blkfs_iwrite(file_t *file, const char *buf, size_t size) {
 
 off_t blkfs_ilseek(file_t *file, off_t offset, int whence) {
   // TODO:
+  switch (whence) {
+    case SEEK_SET:
+      file->offset = offset;
+      break;
+    case SEEK_CUR:
+      file->offset += offset;
+      break;
+    case SEEK_END:
+      file->offset = file->inode->fsize;
+      break;
+    default:
+      return -1;
+  }
   return file->offset;
 }
 
