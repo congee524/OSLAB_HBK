@@ -41,11 +41,15 @@ char *realpath(const char *path, char *resolvedpath) {
 
       case '.':
         if (*(tmp + 1) == '.' && (*(tmp + 2) == '/' || *(tmp + 2) == '\0')) {
+          printf("!!!!");
+          printf("b: %s\n", resolvedpath);
           *(--ptr) = '\0';
           while (*(ptr) != '/') {
             *ptr = '\0';
             ptr--;
+            printf("e: %s\n", resolvedpath);
           }
+          printf("a: %s\n", resolvedpath);
           tmp += 2;
         } else if (*(tmp + 1) == '/' || *(tmp + 1) == '\0') {
           *ptr = '\0';
