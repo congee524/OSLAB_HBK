@@ -75,9 +75,10 @@ int cmd_parse(char *input, char *output) {
         ret = 0;
         break;
       }
-      int cat_file_inode_ind = path_parse(pch);
-      if (itable[cat_file_inode_ind]->type != VFILE_FILE) {
-        strcpy(output, "the file type doesn't support cat!");
+      int cat_finode_ind = path_parse(pch);
+      if (itable[cat_finode_ind]->type == VFILE_DIR) {
+        realpath(pch, output);
+        strcat(output, " is a directory.");
         ret = 1;
         break;
       }
