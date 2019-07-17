@@ -85,7 +85,7 @@ int vfs_mount(const char *path, filesystem_t *fs) {
   assert(dir_ind < MAXDIRITEM);
 
   pa_dir->names[dir_ind] = pmm->alloc(MAXNAMELEN);
-  strcpy(pa_dir->names[dir_ind]->name, fname);
+  strcpy(pa_dir->names[dir_ind], fname);
   int inode_ind = find_inode_ind();
   pa_dir->inodes_ind[dir_ind] = inode_ind;
   itable[inode_ind] = pmm->alloc(sizeof(struct inode));
@@ -151,9 +151,9 @@ int vfs_open(const char *path, int flags) {
     log("open file failed, no free fd!");
     return -1;
   }
-  char resolvedpath[MAXPATHLEN];
+  char *resolvedpath = pmm->alloc(MAXPATHLEN);
   resolvedpath = realpath(path, resolvedpath);
-  assert(resolvedpath);
+  if (!resolvedpath) return -1;
   /*
   filesystem_t *tmp_fs = NULL;
   size_t tmp_mount_point_len = 0;
@@ -177,6 +177,7 @@ int vfs_open(const char *path, int flags) {
   inode_t *inode = itable[inode_ind];
   cur_task->fildes[new_fd]->inode = inode;
   inode->ops->open(cur_task->fildes[new_fd], flags);
+  pmm->free(resolvedpath);
   return new_fd;
 }
 
