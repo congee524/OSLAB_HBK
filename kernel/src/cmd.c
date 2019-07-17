@@ -77,7 +77,7 @@ int cmd_parse(char *input, char *output) {
       }
       int cat_file_inode_ind = path_parse(pch);
       if (itable[cat_file_inode_ind]->type != VFILE_FILE) {
-        strcpy(output, "the file type don't support cat!");
+        strcpy(output, "the file type doesn't support cat!");
         ret = 1;
         break;
       }
