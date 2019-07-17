@@ -23,7 +23,7 @@ void shell_thread(void *tty_id) {
     int nread = vfs->read(stdin, line, strlen(text));
     // printf("sh3\n");
     line[nread - 1] = '\0';
-    find_parent_di(line, tran);
+    find_parent_dir(line, tran);
     sprintf(text, "Echo: %s\n", tran);
     vfs->write(stdout, text, strlen(text));
     // printf("sh4\n");
