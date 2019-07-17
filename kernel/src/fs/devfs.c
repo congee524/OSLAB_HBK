@@ -98,13 +98,15 @@ void devfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // modddddddddddddddddddd
   // devfs直接挂载所有的设备，分配inode
   // set the root dir of devfs
-  int root_dir_ind = 0;
-  for (int root_dir_ind = 0; root_dir_ind < mptable_cnt; root_dir_ind++) {
-    if (mptable[root_dir_ind].fs == fs) break;
+  int mp_ind = 0;
+  for (mp_ind = 0; mp_ind < mptable_cnt; mp_ind++) {
+    if (mptable[mp_ind].fs == fs) break;
   }
-  assert(root_dir_ind < mptable_cnt);
+  assert(mp_ind < mptable_cnt);
 
-  dir_t *dev_root_dir = itable[root_dir_ind]->ptr;
+  int mp_dir_inode_ind = path_parse(mptable[mp_ind].mount_point);
+  assert(itable[mp_dir_inode_ind]->type == VFILE_DIR);
+  dir_t *dev_root_dir = itable[mp_dir_inode_ind]->ptr;
   for (int i = 0; i < dev_cnt; i++) {
     int ind = find_inode_ind();
     itable[ind] = pmm->alloc(sizeof(struct inode));

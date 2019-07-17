@@ -130,7 +130,6 @@ int path_parse(const char *path) {
 }
 
 int find_parent_dir(const char *path, char *fname) {
-  // 解析中调用绝对路径转换？看实现
   if (!path) {
     log("no path!");
     return -1;
