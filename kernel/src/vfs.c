@@ -91,6 +91,9 @@ int vfs_mount(const char *path, filesystem_t *fs) {
 
   char fname[MAXNAMELEN];
   int pa_ind = find_parent_dir(resolvedpath, fname);
+  kmt->spin_lock(&print_lk);
+  printf("mount point %s\n", path);
+  kmt->spin_unlock(&print_lk);
   assert(itable[pa_ind]->type == VFILE_DIR);
   dir_t *pa_dir = itable[pa_ind]->ptr;
   int dir_ind = 0;
