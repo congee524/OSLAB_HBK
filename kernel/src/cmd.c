@@ -95,6 +95,7 @@ int cmd_parse(char *input, char *output) {
         break;
       }
       int cat_fd = vfs->open(pch, O_RDONLY);
+      printf("tototototo read!\n");
       vfs->read(cat_fd, output, 126);
       vfs->close(cat_fd);
       ret = 1;
