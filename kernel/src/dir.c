@@ -212,9 +212,13 @@ int dir_last_item(char *path, char *name) {
         break;
       }
     }
-    // 若是目录，返回1
-    if (pch != NULL)
-      return 0;
-    else
-      return 1;
+    pch = strtok(NULL, "/");
+    // printf("aft pch: %s\n", pch);
+    while (pch && *pch == '/') pch++;
   }
+  // 若是目录，返回1
+  if (pch != NULL)
+    return 0;
+  else
+    return 1;
+}
