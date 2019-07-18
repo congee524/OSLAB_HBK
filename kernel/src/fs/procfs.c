@@ -30,7 +30,7 @@ void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
   fs->dev = dev;
   fs->name = name;
-  inode->type = VFILE_FILE;
+
   int mp_ind = 0;
   for (mp_ind = 0; mp_ind < mptable_cnt; mp_ind++) {
     if (mptable[mp_ind].fs == fs) break;
