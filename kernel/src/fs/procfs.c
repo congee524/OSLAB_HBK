@@ -3,6 +3,8 @@
 #include <dir.h>
 #include <vfs.h>
 
+extern inode_t *itable[];
+
 /*======= procfs_fsops =======*/
 
 void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
