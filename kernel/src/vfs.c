@@ -10,6 +10,10 @@
 inode_t *itable[MAXINODENUM];
 mptable_t mptable[MAXMOUNTPOINT];
 int mptable_cnt;
+
+extern filesystem_t devfs;
+extern filesystem_t blkfs[2];
+extern filesystem_t procfs;
 /*======= vfs helper ========*/
 
 int find_fd(task_t *curr_task) {
