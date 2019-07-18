@@ -178,6 +178,26 @@ int vfs_mkdir(const char *path) {
 
 int vfs_rmdir(const char *path) {
   // TODO:
+  char fname[MAXNAMELEN];
+  int inode_ind = path_parse(path);
+  int pa_inode_ind = find_parent_dir(path, fname);
+  assert(itable[inode_ind]->type == VFILE_DIR);
+  dir_t *pre_dir = itable[inode_ind]->ptr;
+  dir_t *pa_dir = itable[pa_inode_ind]->ptr;
+  for (int i = 0; i < MAXDIRITEM; i++) {
+    if (pre_dir->names[i]) pmm->free(pre_dir->names[i]);
+    pre_dir->names[i] = NULL;
+  }
+  pmm->free(pre_dir);
+  pre_dir = NULL;
+  for (int i = 0; i < MAXDIRITEM; i++) {
+    if (pa_dir->names[i] && strcpy(pa_dir->names[i], fname) == 0) {
+      pmm->free(pa_dir->names[i]);
+      pa_dir->names[i] = NULL;
+    }
+  }
+  pmm->free(itable[inode_ind]);
+  itable[inode_ind] = NULL;
   return 0;
 }
 
