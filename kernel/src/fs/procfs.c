@@ -45,6 +45,7 @@ void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   dir_t *proc_root_dir = itable[mp_dir_inode_ind]->ptr;
 
   mount_procfile(proc_root_dir, sizeof(cur_pwd), "pwd");
+  mount_procfile(proc_root_dir, 128, "cpuinfo");
   return;
 }
 
@@ -85,9 +86,10 @@ int procfs_iclose(file_t *file) {
 ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
   if (strcmp(file->inode->ptr, "pwd") == 0) {
     strcpy(buf, cur_pwd);
-    return strlen(cur_pwd);
+  } else if (strcmp(file->inode->ptr, "cpuinfo") == 0) {
+    sprintf(buf, "cpu_num: %d\ncpu_id: %d\n", _ncpu(), _cpu());
   }
-  return 0;
+  return strlen(buf);
 }
 
 ssize_t procfs_iwrite(file_t *file, const char *buf, size_t size) { return -1; }
