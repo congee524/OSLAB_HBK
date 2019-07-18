@@ -54,23 +54,7 @@ ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
 
 ssize_t procfs_iwrite(file_t *file, const char *buf, size_t size) { return -1; }
 
-off_t procfs_ilseek(file_t *file, off_t offset, int whence) {
-  // TODO:
-  switch (whence) {
-    case SEEK_SET:
-      file->offset = offset;
-      break;
-    case SEEK_CUR:
-      file->offset += offset;
-      break;
-    case SEEK_END:
-      file->offset = ((blk_inode *)(file->inode->ptr))->fsize;
-      break;
-    default:
-      return -1;
-  }
-  return file->offset;
-}
+off_t procfs_ilseek(file_t *file, off_t offset, int whence) { return -1; }
 
 int procfs_imkdir(const char *path) { return -1; }
 
