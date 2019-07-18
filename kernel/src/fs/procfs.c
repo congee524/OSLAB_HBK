@@ -67,11 +67,9 @@ fsops_t procfs_ops = {
 inodeops_t procfs_iops;
 
 int procfs_iopen(file_t *file, int flags) {
-  printf("\nwhy?");
   file->refcnt++;
   file->flags = flags;
   file->offset = 0;
-  printf("noanswer\n");
   return 0;
 }
 
