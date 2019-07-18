@@ -1,10 +1,13 @@
+#include <blkfs.h>
 #include <common.h>
+#include <devices.h>
 #include <dir.h>
 #include <vfs.h>
 
 extern inode_t *itable[];
 extern int mptable_cnt;
 extern mptable_t mptable[];
+extern bit_map bitmap[];
 
 inodeops_t procfs_iops;
 
@@ -46,6 +49,7 @@ void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
 
   mount_procfile(proc_root_dir, sizeof(cur_pwd), "pwd");
   mount_procfile(proc_root_dir, 128, "cpuinfo");
+  mount_procfile(proc_root_dir, 128, "meminfo");
   return;
 }
 
@@ -88,6 +92,12 @@ ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
     strcpy(buf, cur_pwd);
   } else if (strcmp(file->inode->ptr, "cpuinfo") == 0) {
     sprintf(buf, "cpu_num: %d\ncpu_id: %d\n", _ncpu(), _cpu());
+  } else if (strcmp(file->inode->ptr, "meminfo") == 0) {
+    int num = 0;
+    for (int i = 0; i < BLOCK_NUM; i++)
+      if (bitmap[i].used) num++;
+    sprintf(buf, "total_size: %d\ntotal block num: %d\nused block num: %d\n",
+            RD_SIZE, BLOCK_NUM, num);
   }
   return strlen(buf);
 }
