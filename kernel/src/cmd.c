@@ -4,15 +4,15 @@
 #include <klib.h>
 #include <shell.h>
 
-// cmd_num 需要手动改！！！！！！
-#define CMDNUM 8
 static char *cmd_list[] = {"ls",  "cd",    "pwd",   "mkdir",
                            "cat", "touch", "rmdir", "rm"};
+#define CMDNUM \
+    ( sizeof(cmd_list) / sizeof(cmd_list[0]) )
 enum CMD_LIST { LS = 0, CD, PWD, MKDIR, CAT, TOUCH, RMDIR, RM };
 
 extern inode_t *itable[];
 
-int cmd_parse(char *input, char *output) {
+int cmd_parse(char *input, char output[128]) {
   memset(output, '\0', sizeof(output));
   char *tmp_cmd = pmm->alloc(128);
   strcpy(tmp_cmd, input);
