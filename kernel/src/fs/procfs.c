@@ -1,9 +1,27 @@
 #include <common.h>
-#include <devices.h>
 #include <dir.h>
 #include <vfs.h>
 
 extern inode_t *itable[];
+extern int mptable_cnt;
+
+void mount_procfile(dir_t *proc_root_dir, void *ptr, size_t fsize, char *name) {
+  int ind = find_inode_ind();
+  itable[ind] = pmm->alloc(sizeof(struct inode));
+  inode_t *inode = itable[ind];
+  inode->refcnt = 0;
+  inode->ptr = ptr;
+  inode->type = VFILE_FILE;
+  inode->fsize = fsize;
+  int dir_ind = 0;
+  for (dir_ind = 0; dir_ind < MAXDIRITEM; dir_ind++) {
+    if (!proc_root_dir->names[dir_ind]) break;
+  }
+  proc_root_dir->names[dir_ind] = pmm->alloc(MAXNAMELEN);
+  strcpy(proc_root_dir->names, name);
+  proc_root_dir->inodes_ind[dir_ind] = ind;
+  return;
+}
 
 /*======= procfs_fsops =======*/
 
@@ -11,6 +29,18 @@ void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   // TODO:
   fs->dev = dev;
   fs->name = name;
+  inode->type = VFILE_FILE;
+  int mp_ind = 0;
+  for (mp_ind = 0; mp_ind < mptable_cnt; mp_ind++) {
+    if (mptable[mp_ind].fs == fs) break;
+  }
+  assert(mp_ind < mptable_cnt);
+
+  int mp_dir_inode_ind = path_parse(mptable[mp_ind].mount_point);
+  assert(itable[mp_dir_inode_ind]->type == VFILE_DIR);
+  dir_t *proc_root_dir = itable[mp_dir_inode_ind]->ptr;
+
+  mount_procfile(proc_root_dir, cur_pwd, PROC_PWD, sizeof(cur_pwd), "pwd");
   return;
 }
 
@@ -49,7 +79,8 @@ int procfs_iclose(file_t *file) {
 }
 
 ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
-  return 0;
+  strcpy(buf, file->inode->ptr);
+  return file->inode->fsize;
 }
 
 ssize_t procfs_iwrite(file_t *file, const char *buf, size_t size) { return -1; }

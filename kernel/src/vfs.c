@@ -66,11 +66,13 @@ void vfs_init() {
 
   vfs->mount("/", &blkfs[0]);
   vfs->mount("/mnt", &blkfs[1]);
+  vfs->mount("/proc", &procfs);
   vfs->mount("/dev", &devfs);
 
-  // devfs没有实际挂载的设备，dev设为NULL
+  // procfs 和 devfs没有实际挂载的设备，dev设为NULL
   blkfs[0].ops->init(&blkfs[0], "blkfs[0]", dev_lookup("ramdisk0"));
   blkfs[1].ops->init(&blkfs[1], "blkfs[1]", dev_lookup("ramdisk1"));
+  procfs.ops->init(&procfs, "procfs", NULL);
   devfs.ops->init(&devfs, "devfs", NULL);
 
   return;
