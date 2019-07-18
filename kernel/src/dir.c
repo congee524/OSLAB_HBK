@@ -79,7 +79,7 @@ char *realpath(const char *path, char *resolvedpath) {
     }
   }
   int len = strlen(resolvedpath);
-  if (len > 1 && resolvedpath[len - 1] == '/') resolvedpath[len - 1] == '\0';
+  if (len > 1 && resolvedpath[len - 1] == '/') resolvedpath[len - 1] = '\0';
   return resolvedpath;
 }
 
