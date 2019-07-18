@@ -178,7 +178,9 @@ int find_parent_dir(const char *path, char *fname) {
 
 int dir_last_item(char *path, char *name) {
   char tmp_path[MAXPATHLEN];
-  strcpy(tmp_path, path);
+  char temp_path[MAXPATHLEN];
+  realpath(path, tmp_path);
+  strcpy(temp_path, tmp_path);
   char *pch = strtok(tmp_path, "/");
   if (*pch != '/')
     strcpy(name, pch);
@@ -186,5 +188,33 @@ int dir_last_item(char *path, char *name) {
     return -1;
   while ((pch = strtok(NULL, "/")) != NULL)
     if (*pch != '/') strcpy(name, pch);
-  return 0;
-}
+
+  dir_t *predir;
+  int ret = 1;  // 根目录从1开始
+  char *pch = strtok(resolvedpath, "/");
+  while (pch && *pch == '/') pch++;
+  while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
+    predir = (dir_t *)(itable[ret]->ptr);
+    if (strcmp(pch, "..") == 0) {
+      ret = predir->pa;
+    } else if (strcmp(pch, ".") == 0) {
+      ret = predir->self;
+    } else {
+      int i;
+      for (i = 0; i < MAXDIRITEM; i++) {
+        // printf("predir->name: %s\n", predir->names[i]);
+        if (predir->names[i] && strcmp(pch, predir->names[i]) == 0) {
+          ret = predir->inodes_ind[i];
+          break;
+        }
+      }
+      if (i >= MAXDIRITEM) {
+        break;
+      }
+    }
+    // 若是目录，返回1
+    if (pch != NULL)
+      return 0;
+    else
+      return 1;
+  }

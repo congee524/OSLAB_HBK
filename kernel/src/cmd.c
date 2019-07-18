@@ -50,8 +50,14 @@ int cmd_parse(char *input, char *output) {
       }
       // printf("cd: %s\n", pch);
       output = realpath(pch, output);
-      strcpy(cur_pwd, output);
-      ret = 0;
+      char fname[MAXNAMELEN];
+      if (dir_last_item(output, fname)) {
+        sprintf(output, "%s is not a directory");
+        ret = 1;
+      } else {
+        strcpy(cur_pwd, output);
+        ret = 0;
+      }
       break;
     }
     case PWD: {
