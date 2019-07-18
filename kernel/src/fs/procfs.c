@@ -44,7 +44,7 @@ void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   assert(itable[mp_dir_inode_ind]->type == VFILE_DIR);
   dir_t *proc_root_dir = itable[mp_dir_inode_ind]->ptr;
 
-  mount_procfile(proc_root_dir, &cur_pwd, sizeof(cur_pwd), "pwd");
+  mount_procfile(proc_root_dir, cur_pwd, sizeof(cur_pwd), "pwd");
   return;
 }
 
@@ -83,7 +83,7 @@ int procfs_iclose(file_t *file) {
 }
 
 ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
-  strcpy(buf, (char *)file->inode->ptr);
+  strcpy(buf, file->inode->ptr);
   return 126;
 }
 
