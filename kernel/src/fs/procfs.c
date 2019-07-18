@@ -44,7 +44,7 @@ void procfs_init(filesystem_t *fs, const char *name, device_t *dev) {
   assert(itable[mp_dir_inode_ind]->type == VFILE_DIR);
   dir_t *proc_root_dir = itable[mp_dir_inode_ind]->ptr;
 
-  mount_procfile(proc_root_dir, cur_pwd, sizeof(cur_pwd), "pwd");
+  mount_procfile(proc_root_dir, sizeof(cur_pwd), "pwd");
   return;
 }
 
