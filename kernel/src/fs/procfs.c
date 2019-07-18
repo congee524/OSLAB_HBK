@@ -80,8 +80,8 @@ int procfs_iclose(file_t *file) {
 }
 
 ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
-  strcpy(buf, file->inode->ptr);
-  return file->inode->fsize;
+  strcpy(buf, (char *)file->inode->ptr);
+  return strlen((char *)file->inode->ptr);
 }
 
 ssize_t procfs_iwrite(file_t *file, const char *buf, size_t size) { return -1; }
