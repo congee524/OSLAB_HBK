@@ -253,8 +253,11 @@ int vfs_open(const char *path, int flags) {
   if (!resolvedpath) return -1;
   int inode_ind = path_parse(resolvedpath);
   inode_t *inode = itable[inode_ind];
+  printf("33333333333\n");
   cur_task->fildes[new_fd]->inode = inode;
+  printf("11111111111\n");
   inode->ops->open(cur_task->fildes[new_fd], flags);
+  printf("2222222222\n");
   pmm->free(resolvedpath);
   return new_fd;
 }
