@@ -85,6 +85,7 @@ int cmd_parse(char *input, char *output) {
       }
       char tmp_name[MAXNAMELEN];
       find_parent_dir(pch, tmp_name);
+      printf("tototototo str!\n");
       if (strncmp(tmp_name, "tty", 3) == 0) {
         strcpy(output, "tty doesn't support cat!");
         ret = 1;
