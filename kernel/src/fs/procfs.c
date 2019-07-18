@@ -19,7 +19,7 @@ void mount_procfile(dir_t *proc_root_dir, void *ptr, size_t fsize, char *name) {
     if (!proc_root_dir->names[dir_ind]) break;
   }
   proc_root_dir->names[dir_ind] = pmm->alloc(MAXNAMELEN);
-  strcpy(proc_root_dir->names, name);
+  strcpy(proc_root_dir->names[dir_ind], name);
   proc_root_dir->inodes_ind[dir_ind] = ind;
   return;
 }
