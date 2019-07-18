@@ -95,9 +95,10 @@ int cmd_parse(char *input, char *output) {
         break;
       }
       int cat_fd = vfs->open(pch, O_RDONLY);
+      printf("cat1: %s\n", output);
       vfs->read(cat_fd, output, 126);
       vfs->close(cat_fd);
-      printf("cat: %s\n", output);
+      printf("cat2: %s\n", output);
       ret = 1;
       break;
     }
