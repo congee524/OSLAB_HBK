@@ -143,6 +143,7 @@ int cmd_parse(char *input, char *output) {
           strcat(writein, " ");
           strcat(writein, pch);
         } else {
+          printf("pch: %s\n", pch);
           if (strcmp(pch, ">>") == 0)
             flag = 2;
           else
