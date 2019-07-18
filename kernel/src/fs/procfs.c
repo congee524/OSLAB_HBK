@@ -4,6 +4,7 @@
 
 extern inode_t *itable[];
 extern int mptable_cnt;
+extern mptable_t mptable[];
 
 void mount_procfile(dir_t *proc_root_dir, void *ptr, size_t fsize, char *name) {
   int ind = find_inode_ind();
