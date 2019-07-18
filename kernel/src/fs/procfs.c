@@ -8,12 +8,12 @@ extern mptable_t mptable[];
 
 inodeops_t procfs_iops;
 
-void mount_procfile(dir_t *proc_root_dir, void *ptr, size_t fsize, char *name) {
+void mount_procfile(dir_t *proc_root_dir, size_t fsize, char *name) {
   int ind = find_inode_ind();
   itable[ind] = pmm->alloc(sizeof(struct inode));
   inode_t *inode = itable[ind];
   inode->refcnt = 0;
-  inode->ptr = ptr;
+  inode->ptr = name;
   inode->type = VFILE_FILE;
   inode->fsize = fsize;
   inode->ops = &procfs_iops;
@@ -83,8 +83,11 @@ int procfs_iclose(file_t *file) {
 }
 
 ssize_t procfs_iread(file_t *file, char *buf, size_t size) {  // TODO:
-  strcpy(buf, file->inode->ptr);
-  return 126;
+  if (strcmp(file->inode->ptr, "pwd") == 0) {
+    strcpy(buf, cur_pwd);
+    return strlen(cur_pwd);
+  }
+  return 0;
 }
 
 ssize_t procfs_iwrite(file_t *file, const char *buf, size_t size) { return -1; }
