@@ -255,6 +255,7 @@ int vfs_open(const char *path, int flags) {
   inode_t *inode = itable[inode_ind];
   cur_task->fildes[new_fd]->inode = inode;
   printf("\n1111111");
+  assert(cur_task->fildes[new_fd]);
   inode->ops->open(cur_task->fildes[new_fd], flags);
   printf("222222\n");
   pmm->free(resolvedpath);
