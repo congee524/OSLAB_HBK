@@ -196,7 +196,7 @@ int blkfs_itouch(const char *path) {
   return 0;
 }
 
-int blkfs_irm(const char *path) { return -1; }
+int blkfs_irm(const char *path) { int inode_ind = path_parse(path); }
 
 int blkfs_ilink(const char *name, inode_t *inode) { return -1; }
 
