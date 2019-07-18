@@ -200,6 +200,7 @@ int blkfs_irm(const char *path) {
   /*int inode_ind = path_parse(path);
   inode_t *inode = itable[inode_ind];
 */
+  return -1;
 }
 
 int blkfs_ilink(const char *name, inode_t *inode) { return -1; }
