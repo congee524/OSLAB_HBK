@@ -197,10 +197,35 @@ int blkfs_itouch(const char *path) {
 }
 
 int blkfs_irm(const char *path) {
-  /*int inode_ind = path_parse(path);
+  int inode_ind = path_parse(path);
   inode_t *inode = itable[inode_ind];
-*/
-  return -1;
+  if (inode->type != VFILE_FILE) return -1;
+
+  char fname[MAXNAMELEN];
+  int pa_dir_ind = find_parent_dir(path, fname);
+  dir_t *pa_dir = itable[pa_dir_ind]->ptr;
+  for (int i = 0; i < MAXDIRITEM; i++) {
+    if (pa_dir->names[i] && strcmp(pa_dir->names[i], fname) == 0) {
+      pmm->free(pa_dir->names[i]);
+      pa_dir->names[i] = NULL;
+    }
+  }
+
+  blk_inode *b_inode = inode->ptr;
+  device_t *dev = inode->fs->dev;
+  char buf[BLOCK_SIZE] = {0};
+  int pre_bit = 0;
+  for (int i = 0; i < DIREPOINTNUM; i++) {
+    pre_bit = b_inode->ptr_point[i];
+    if (pre_bit > 0) {
+      dev->ops->write(dev, pre_bit * BLOCK_SIZE, buf, BLOCK_SIZE);
+      bitmap[pre_bit].used = 0;
+    }
+  }
+  pmm->free(b_inode);
+  pmm->free(inode);
+  itable[inode_ind] = NULL;
+  return 0;
 }
 
 int blkfs_ilink(const char *name, inode_t *inode) { return -1; }

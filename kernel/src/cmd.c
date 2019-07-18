@@ -5,9 +5,10 @@
 #include <shell.h>
 
 // cmd_num 需要手动改！！！！！！
-#define CMDNUM 7
-static char *cmd_list[] = {"ls", "cd", "pwd", "mkdir", "cat", "touch", "rmdir"};
-enum CMD_LIST { LS = 0, CD, PWD, MKDIR, CAT, TOUCH, RMDIR };
+#define CMDNUM 8
+static char *cmd_list[] = {"ls",  "cd",    "pwd",   "mkdir",
+                           "cat", "touch", "rmdir", "rm"};
+enum CMD_LIST { LS = 0, CD, PWD, MKDIR, CAT, TOUCH, RMDIR, RM };
 
 extern inode_t *itable[];
 
@@ -116,6 +117,16 @@ int cmd_parse(char *input, char *output) {
         break;
       }
       vfs->rmdir(pch);
+      ret = 0;
+      break;
+    }
+    case RM: {
+      pch = strtok(NULL, " ");
+      if (!pch) {
+        ret = 0;
+        break;
+      }
+      vfs->rm(pch);
       ret = 0;
       break;
     }
