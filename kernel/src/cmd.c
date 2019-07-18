@@ -143,7 +143,10 @@ int cmd_parse(char *input, char *output) {
           strcat(writein, " ");
           strcat(writein, pch);
         } else {
-          flag = 1;
+          if (strcmp(pch, ">>") == 0)
+            flag = 2;
+          else
+            flag = 1;
           break;
         }
       }
@@ -158,7 +161,7 @@ int cmd_parse(char *input, char *output) {
           break;
         }
         int write_fd = vfs->open(pch, O_WRONLY);
-        if (strcmp(pch, ">>") == 0) {
+        if (flag == 2) {
           printf("!!!!!zhui jia!\n");
           vfs->lseek(write_fd, 0, SEEK_END);
         }
