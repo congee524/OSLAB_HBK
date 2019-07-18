@@ -5,10 +5,10 @@
 #include <shell.h>
 
 // cmd_num 需要手动改！！！！！！
-#define CMDNUM 8
-static char *cmd_list[] = {"ls",  "cd",    "pwd",   "mkdir",
-                           "cat", "touch", "rmdir", "rm"};
-enum CMD_LIST { LS = 0, CD, PWD, MKDIR, CAT, TOUCH, RMDIR, RM };
+#define CMDNUM 9
+static char *cmd_list[] = {"ls",    "cd",    "pwd", "mkdir", "cat",
+                           "touch", "rmdir", "rm",  "echo"};
+enum CMD_LIST { LS = 0, CD, PWD, MKDIR, CAT, TOUCH, RMDIR, RM, ECHO };
 
 extern inode_t *itable[];
 
@@ -127,6 +127,26 @@ int cmd_parse(char *input, char *output) {
         break;
       }
       vfs->rm(pch);
+      ret = 0;
+      break;
+    }
+    case ECHO: {
+      pch = strtok(NULL, " ");
+      char writein[128];
+      strcpy(writein, pch);
+      pch = strtok(NULL, " ");
+      if (strcmp(pch, ">")) {
+        ret = 0;
+        break;
+      }
+      pch = strtok(NULL, " ");
+      if (!pch) {
+        ret = 0;
+        break;
+      }
+      int write_fd = vfs->open(pch, O_WRONLY);
+      vfs->write(write_fd, writein, strlen(writein));
+      vfs->close(write_fd);
       ret = 0;
       break;
     }
