@@ -1,7 +1,6 @@
 #include <common.h>
 #include <devices.h>
 #include <dir.h>
-#include <procfs.h>
 #include <vfs.h>
 
 /*======= procfs_fsops =======*/
