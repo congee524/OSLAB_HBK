@@ -137,20 +137,35 @@ int cmd_parse(char *input, char *output) {
       char writein[128];
       strcpy(writein, pch);
       pch = strtok(NULL, " ");
-      if (strcmp(pch, ">")) {
+      int flag = 0;
+      while (pch) {
+        if (strcmp(pch, ">") && strcmp(pch, ">>")) {
+          strcat(writein, " ");
+          strcat(writein, pch);
+        } else {
+          flag = 1;
+          break;
+        }
+      }
+      if (flag == 0) {
+        strcpy(output, writein);
+        ret = 1;
+        break;
+      } else {
+        pch = strtok(NULL, " ");
+        if (!pch) {
+          ret = 0;
+          break;
+        }
+        int write_fd = vfs->open(pch, O_WRONLY);
+        if (strcmp(pch, ">>") == 0) {
+          vfs->lseek(write_fd, 0, SEEK_END);
+        }
+        vfs->write(write_fd, writein, strlen(writein));
+        vfs->close(write_fd);
         ret = 0;
         break;
       }
-      pch = strtok(NULL, " ");
-      if (!pch) {
-        ret = 0;
-        break;
-      }
-      int write_fd = vfs->open(pch, O_WRONLY);
-      vfs->write(write_fd, writein, strlen(writein));
-      vfs->close(write_fd);
-      ret = 0;
-      break;
     }
     default: {
       strcpy(output, "Unknown cmd!");

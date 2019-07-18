@@ -280,6 +280,8 @@ ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
 
 off_t vfs_lseek(int fd, off_t offset, int whence) {
   // TODO:
+  file_t *cur_file = cur_task->fildes[fd];
+  cur_file->inode->ops->lseek(cur_file, offset, whence);
   return 0;
 }
 
