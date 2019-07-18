@@ -6,6 +6,8 @@ extern inode_t *itable[];
 extern int mptable_cnt;
 extern mptable_t mptable[];
 
+inodeops_t procfs_iops;
+
 void mount_procfile(dir_t *proc_root_dir, void *ptr, size_t fsize, char *name) {
   int ind = find_inode_ind();
   itable[ind] = pmm->alloc(sizeof(struct inode));
