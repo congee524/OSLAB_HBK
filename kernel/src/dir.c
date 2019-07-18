@@ -191,7 +191,7 @@ int dir_last_item(char *path, char *name) {
 
   dir_t *predir;
   int ret = 1;  // 根目录从1开始
-  char *pch = strtok(resolvedpath, "/");
+  char *pch = strtok(temp_path, "/");
   while (pch && *pch == '/') pch++;
   while (pch != NULL && itable[ret] && itable[ret]->type == VFILE_DIR) {
     predir = (dir_t *)(itable[ret]->ptr);
