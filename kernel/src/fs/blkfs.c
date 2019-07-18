@@ -92,6 +92,7 @@ ssize_t blkfs_iread(file_t *file, char *buf, size_t size) {
                  (b_inode->ptr_point[block_fid] * BLOCK_SIZE) + pre_block_off,
                  tmp_buf, tmp_size);
   file->offset += size;
+  buf[size] = '\0';
   return size;
 }
 
