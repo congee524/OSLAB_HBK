@@ -191,7 +191,7 @@ int vfs_rmdir(const char *path) {
   pmm->free(pre_dir);
   pre_dir = NULL;
   for (int i = 0; i < MAXDIRITEM; i++) {
-    if (pa_dir->names[i] && strcpy(pa_dir->names[i], fname) == 0) {
+    if (pa_dir->names[i] && strcmp(pa_dir->names[i], fname) == 0) {
       pmm->free(pa_dir->names[i]);
       pa_dir->names[i] = NULL;
     }
