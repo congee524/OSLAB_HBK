@@ -142,6 +142,7 @@ int cmd_parse(char *input, char *output) {
         if (strcmp(pch, ">") && strcmp(pch, ">>")) {
           strcat(writein, " ");
           strcat(writein, pch);
+          pch = strtok(NULL, " ");
         } else {
           if (strcmp(pch, ">>") == 0)
             flag = 2;
