@@ -4,14 +4,6 @@
 // spinlock xv6 https://github.com/pelhamnicholas/xv6
 // https://github.com/pelhamnicholas/xv6/blob/master/semaphore.c
 
-#define INT_MAX 2147483647
-#define INT_MIN (-INT_MAX)  // printf cannot printf INT_MIN
-typedef unsigned int uint;
-
-task_t *current_task[MAX_CPU];
-
-#define current (current_task[_cpu()])
-
 static inline void panic(const char *s) {
   printf("%s\n", s);
   _halt(1);
@@ -22,52 +14,52 @@ static inline void panic(const char *s) {
 // handler
 
 static _Context *kmt_context_save(_Event ev, _Context *ctx) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&ptable.lk);
-  if (current) current->context = *ctx;
+  if (cur_task) cur_task->context = *ctx;
   kmt->spin_unlock(&ptable.lk);
-  return &current->context;
+  return &cur_task->context;
 }
 
 static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&ptable.lk);
   task_t *tmp;
-  if (!current) {
+  if (!cur_task) {
     /*
     assert(tasks[_cpu()].head);
-    current = tasks[_cpu()].head;
+    cur_task = tasks[_cpu()].head;
     */
     for (tmp = ptable.tasks; tmp->next != ptable.tasks; tmp = tmp->next) {
       // log("111");
       if (tmp->cpu == _cpu() && tmp->state == RUNNABLE) {
-        current = tmp;
-        current->state = RUNNING;
+        cur_task = tmp;
+        cur_task->state = RUNNING;
         break;
       }
     }
-    if (!current) panic("no task to switch!");
+    if (!cur_task) panic("no task to switch!");
   } else {
-    tmp = current;
+    tmp = cur_task;
     do {
       tmp = tmp->next;
 
-      if (tmp == current) {
+      if (tmp == cur_task) {
         // log("switch failure\n");
         break;
       }
 
       // log("222");
     } while (tmp->cpu != _cpu() || tmp->state != RUNNABLE);
-    if (current != tmp) {
-      if (current->state == RUNNING) current->state = RUNNABLE;
-      current = tmp;
-      current->state = RUNNING;
-      // log("switch to cpu %d %s\n", current->cpu, current->name);
+    if (cur_task != tmp) {
+      if (cur_task->state == RUNNING) cur_task->state = RUNNABLE;
+      cur_task = tmp;
+      cur_task->state = RUNNING;
+      // log("switch to cpu %d %s\n", cur_task->cpu, cur_task->name);
     }
   }
   /*
-  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), current->name);
+  printf("\n[cpu-%d] Schedule: %s\n", _cpu(), cur_task->name);
   task_t *ppp = ptable.tasks;
   while (ppp->next != ptable.tasks) {
     ppp = ppp->next;
@@ -76,14 +68,14 @@ static _Context *kmt_context_switch(_Event ev, _Context *ctx) {
   printf("\n");
   */
   kmt->spin_unlock(&ptable.lk);
-  return &current->context;
+  return &cur_task->context;
 }
 
 //==========================================
 //==========================================
 // task schedule init create teardown
 static void kmt_init() {
-  // TODO
+  // TODO:
   // ...
   /*
   for (int i = 0; i < _ncpu(); i++) {
@@ -127,7 +119,7 @@ static int task_insert(task_t *task) {
 
 static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
                       void *arg) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&ptable.lk);
   strcpy(task->name, name);
   task->cpu = ptable.cnt_task % _ncpu();
@@ -143,7 +135,7 @@ static int kmt_create(task_t *task, const char *name, void (*entry)(void *arg),
 }
 
 static void kmt_teardown(task_t *task) {
-  // TODO
+  // TODO:
   // problem!!!!! if the task in sleeping list
   return;
 }
@@ -166,7 +158,7 @@ static inline uint readeflags(void) {
 
 static inline void cli(void) { asm volatile("cli"); }
 
-// Record the current call stack in pcs[] by following the %ebp chain.
+// Record the cur_task call stack in pcs[] by following the %ebp chain.
 void getcallerpcs(void *v, uint pcs[]) {
   uint *ebp;
   int i;
@@ -261,9 +253,9 @@ void sleep(task_t *chan, spinlock_t *lk) {
     panic("now sleep");
   }
   */
-  if (!current) panic("sleep");
+  if (!cur_task) panic("sleep");
   if (!lk) panic("sleep without lk");
-  task_t *t = current;
+  task_t *t = cur_task;
   t->chan = chan;
   t->state = SLEEPING;
   kmt->spin_unlock(lk);
@@ -292,7 +284,7 @@ void wakeup(task_t *chan) {
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value) {
-  // TODO
+  // TODO:
   strcpy(sem->name, name);
   sem->value = value;
   char tmp[128];
@@ -302,22 +294,22 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value) {
 }
 
 static void kmt_sem_wait(sem_t *sem) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&sem->lock);
   // log("\nkmt spin lock %s\nsem_value %d\n", sem->name, sem->value);
   // log("wait value b %d\n", sem->value);
   sem->value--;
   // log("wait value a %d\n", sem->value);
   if (sem->value < 0) {
-    sem->list[sem->end] = current;
+    sem->list[sem->end] = cur_task;
     sem->end = (sem->end + 1) % NTASK;
-    sleep(current, &sem->lock);
+    sleep(cur_task, &sem->lock);
   }
   kmt->spin_unlock(&sem->lock);
 }
 
 static void kmt_sem_signal(sem_t *sem) {
-  // TODO
+  // TODO:
   kmt->spin_lock(&sem->lock);
   // kmt->spin_lock(&ptable.lk);
   // log("\nkmt spin unlock %s\nsem_value %d\n", sem->name, sem->value);
