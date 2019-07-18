@@ -14,6 +14,7 @@ void mount_procfile(dir_t *proc_root_dir, void *ptr, size_t fsize, char *name) {
   inode->ptr = ptr;
   inode->type = VFILE_FILE;
   inode->fsize = fsize;
+  inode->ops = &procfs_iops;
   int dir_ind = 0;
   for (dir_ind = 0; dir_ind < MAXDIRITEM; dir_ind++) {
     if (!proc_root_dir->names[dir_ind]) break;

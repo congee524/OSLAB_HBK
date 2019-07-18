@@ -240,9 +240,6 @@ int vfs_unlink(const char *path) {
 }
 
 int vfs_open(const char *path, int flags) {
-  // TODO:
-  /*???????fd?????Lookup????inode????fd?inode???????fd
-   */
   int new_fd = find_fd(cur_task);
   if (new_fd == -1) {
     log("open file failed, no free fd!");
@@ -254,10 +251,7 @@ int vfs_open(const char *path, int flags) {
   int inode_ind = path_parse(resolvedpath);
   inode_t *inode = itable[inode_ind];
   cur_task->fildes[new_fd]->inode = inode;
-  printf("\n1111111");
-  assert(cur_task->fildes[new_fd]);
   inode->ops->open(cur_task->fildes[new_fd], flags);
-  printf("222222\n");
   pmm->free(resolvedpath);
   return new_fd;
 }
