@@ -14,7 +14,10 @@ extern inode_t *itable[];
 int find_free_bit() {
   int i;
   for (i = 1; i < BLOCK_NUM; i++) {
-    if (!bitmap[i].used) return i;
+    if (!bitmap[i].used) {
+      bitmap[i].used = 1;
+      return i;
+    }
   }
   log("no free block!");
   return -1;
@@ -181,6 +184,7 @@ int blkfs_itouch(const char *path) {
   b_inode->link_num = 1;
   b_inode->type = VFILE_FILE;
   b_inode->ptr_point[0] = find_free_bit();
+  bit_map[b_inode->ptr_point[0]].used = 1;
 
   int pa_dir_item_ind = 0;
   for (pa_dir_item_ind = 0; pa_dir_item_ind < MAXDIRITEM; pa_dir_item_ind++) {
