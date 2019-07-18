@@ -59,7 +59,7 @@ struct filesystem {
   // 我现在的实现好像不需要inode table，目录项都指向指针了
 };
 
-enum FILETYPE { VFILE_FILE = 0, VFILE_DIR, VFILE_PIPE };
+enum FILETYPE { VFILE_FILE = 1, VFILE_DIR, VFILE_PIPE };
 
 struct inode {
   int refcnt;  // 硬链接数 unlink link create需要关注

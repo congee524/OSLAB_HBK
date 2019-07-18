@@ -50,13 +50,13 @@ int cmd_parse(char *input, char *output) {
       }
       // printf("cd: %s\n", pch);
       output = realpath(pch, output);
-      char fname[MAXNAMELEN];
-      if (dir_last_item(output, fname)) {
-        sprintf(output, "%s is not a directory");
-        ret = 1;
-      } else {
+      int cd_finode_ind = path_parse(pch);
+      if (itable[cd_finode_ind]->type == VFILE_DIR) {
         strcpy(cur_pwd, output);
         ret = 0;
+      } else {
+        sprintf(output, "%s is not a directory");
+        ret = 1;
       }
       break;
     }
