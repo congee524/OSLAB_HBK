@@ -1,7 +1,6 @@
 #include <common.h>
 #include <devices.h>
 #include <dir.h>
-#include <fs.h>
 #include <klib.h>
 #include <vfs.h>
 // from dev.c
