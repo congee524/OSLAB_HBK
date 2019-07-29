@@ -34,26 +34,22 @@ int filter(const struct dirent *dir) {
     for (i = 0; i < n; i++) {
         if (!isdigit(dir->d_name[i]))
             return 0;
-        else
-            return 1;
     }
-    return 0;
+    return 1;
 }
 
 int get_id(char *str, const char *name) {
     int ind = 0;
     int len = strlen(str), name_len = strlen(name);
-    char id[128];
     // printf("%d\n", name_len);
     // printf("%s\n", name);
     if (strncmp(str, name, name_len) == 0) {
         while(ind < len && (str[ind] < '0' || str[ind] > '9')) {
             ind++;
         }
-        for (int i = 0; ind + i < len; i++) {
-            id[i] = str[ind + i];
-        }
-        return atoi(id);
+        int ret;
+        sscanf(str+ind,"%d",&ret);
+        return ret;
     } else {
         return -1;
     }
@@ -149,11 +145,10 @@ int main(int argc, char *argv[]) {
 
     FILE *fp;
     char pid_path[128], name[128], str[1024];
-    int pid = -1, ppid = -1, tmp, j, k, cnt = 0;
+    int pid = -1, ppid = -1, tmp, k, cnt = 0;
     for (int i = 0; i < total; i++) {
-        strcpy(pid_path, "/proc/");
-        strcat(pid_path, namelist[i]->d_name);
-        strcat(pid_path, "/status");
+
+        assert(snprintf(pid_path,sizeof(pid_path)-1,"/proc/%s/status",namelist[i]->d_name)>0);
         // printf("%s\n", pid_path);
 
         fp = fopen(pid_path, "r");
@@ -173,7 +168,8 @@ int main(int argc, char *argv[]) {
             // many wrong: space is in the 'a' to 'Z'
             if (strncmp(str, "Name", 4) == 0) {
                 tmp = strlen(str);
-                k = 4, j = 0;
+                str[tmp-1]='\0';//'\n' -> '\0'
+                k = 4;
                 // printf("str: %s\n", str);
                 while(k < tmp\
                         && !(str[k] >= 'a' && str[k] <= 'z')\
@@ -181,10 +177,7 @@ int main(int argc, char *argv[]) {
                     k++;
                 }
                 // printf("len: %d, k: %d\n", tmp, k);
-                for (j = 0; k + j < tmp; j++) {
-                    name[j] = str[k + j];
-                }
-                name[j - 1] = '\0';
+                strcpy(name,str+k);
                 // printf("%s", str);
                 // printf("name: %s", name);
             }
